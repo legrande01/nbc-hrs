@@ -29,6 +29,9 @@ interface HotelSearchProps {
   onSearch?: (value: HotelSearchValue) => void;
   className?: string;
   showTrustIndicators?: boolean;
+  /** Pre-fills the form, e.g. when editing an existing search. */
+  defaultValue?: Partial<HotelSearchValue>;
+  submitLabel?: string;
 }
 
 function FieldLabel({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
@@ -43,12 +46,18 @@ function FieldLabel({ htmlFor, children }: { htmlFor: string; children: React.Re
  * Reusable hotel search widget.
  * Presentation only — search execution is delegated through onSearch.
  */
-export function HotelSearch({ onSearch, className, showTrustIndicators = true }: HotelSearchProps) {
-  const [destination, setDestination] = useState("");
-  const [checkIn, setCheckIn] = useState<Date | undefined>();
-  const [checkOut, setCheckOut] = useState<Date | undefined>();
-  const [guests, setGuests] = useState("2");
-  const [rooms, setRooms] = useState("1");
+export function HotelSearch({
+  onSearch,
+  className,
+  showTrustIndicators = true,
+  defaultValue,
+  submitLabel = "Search",
+}: HotelSearchProps) {
+  const [destination, setDestination] = useState(defaultValue?.destination ?? "");
+  const [checkIn, setCheckIn] = useState<Date | undefined>(defaultValue?.checkIn);
+  const [checkOut, setCheckOut] = useState<Date | undefined>(defaultValue?.checkOut);
+  const [guests, setGuests] = useState(defaultValue?.guests ?? "2");
+  const [rooms, setRooms] = useState(defaultValue?.rooms ?? "1");
 
   return (
     <div className={cn("w-full", className)}>
@@ -173,7 +182,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
 
           <Button type="submit" variant="scarlet" size="xl" className="h-13 w-full gap-2 px-10 text-base shadow-card lg:w-auto">
             <Search aria-hidden="true" />
-            Search
+            {submitLabel}
           </Button>
         </div>
       </form>
