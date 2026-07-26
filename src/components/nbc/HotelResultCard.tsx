@@ -20,7 +20,7 @@ export function HotelResultCard({ hotel, className }: HotelResultCardProps) {
   return (
     <article
       className={cn(
-        "group grid overflow-hidden rounded-xl border border-border/70 bg-card shadow-card transition-shadow hover:shadow-elevated md:grid-cols-[18rem_minmax(0,1fr)] lg:grid-cols-[22rem_minmax(0,1fr)]",
+        "group grid overflow-hidden rounded-xl border border-border/70 bg-card shadow-card transition-all duration-500 ease-out hover:-translate-y-0.5 hover:shadow-elevated md:grid-cols-[18rem_minmax(0,1fr)] lg:grid-cols-[22rem_minmax(0,1fr)]",
         className,
       )}
     >
@@ -31,20 +31,29 @@ export function HotelResultCard({ hotel, className }: HotelResultCardProps) {
           width={1200}
           height={900}
           loading="lazy"
-          className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
         />
-        <p className="absolute left-4 top-4 rounded-full bg-background/92 px-3 py-1 text-xs font-medium text-nbc-royal backdrop-blur-sm">
-          {hotel.personality}
-        </p>
       </div>
 
-      <div className="flex min-w-0 flex-col gap-5 p-6 lg:p-7">
-        <div className="grid min-w-0 gap-2">
+      <div className="flex min-w-0 flex-col gap-6 p-6 lg:p-7">
+        <div className="grid min-w-0 gap-2.5">
+          <p className="nbc-eyebrow w-fit rounded-full bg-secondary/60 px-2.5 py-1 text-[0.625rem] text-nbc-royal">
+            {hotel.personality}
+          </p>
+
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-            <h3 className="min-w-0 truncate text-xl font-semibold text-foreground">{hotel.name}</h3>
-            <p className="flex shrink-0 items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-sm font-semibold text-secondary-foreground">
+            <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">
+              {hotel.name}
+            </h3>
+            <p className="flex shrink-0 items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-sm font-semibold text-secondary-foreground">
               <Star aria-hidden="true" className="size-3.5 fill-nbc-gold text-nbc-gold" />
               {hotel.rating.toFixed(1)}
+              <span aria-hidden="true" className="text-muted-foreground">
+                ·
+              </span>
+              <span className="font-medium text-muted-foreground">
+                {hotel.reviewCount} Reviews
+              </span>
               <span className="sr-only">out of 5</span>
             </p>
           </div>
@@ -69,8 +78,6 @@ export function HotelResultCard({ hotel, className }: HotelResultCardProps) {
             <span aria-hidden="true">·</span>
             <span className="truncate">{propertyTypeLabels[hotel.propertyType]}</span>
           </p>
-
-          <p className="text-xs text-muted-foreground">{hotel.reviewCount} guest reviews</p>
         </div>
 
         <ul className="flex flex-wrap gap-2" aria-label={`${hotel.name} amenities`}>
@@ -97,8 +104,8 @@ export function HotelResultCard({ hotel, className }: HotelResultCardProps) {
             <p className="mt-0.5 text-xs text-muted-foreground">per night</p>
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-            <Button variant="outline">View Details</Button>
-            <Button variant="default">Find Your Stay</Button>
+            <Button variant="default">View Details</Button>
+            <Button variant="outline">Find Your Stay</Button>
           </div>
         </div>
       </div>
