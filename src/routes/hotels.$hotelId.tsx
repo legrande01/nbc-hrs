@@ -314,7 +314,7 @@ function PropertyDetailsPage() {
               description="The essentials that shape your stay."
             />
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {property.policies.map((policy) => {
                 const Icon = policy.icon;
                 return (
