@@ -1,3 +1,15 @@
+import { MapPin, Star } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { amenityMeta } from "@/lib/nbc-amenities";
+import type { Hotel } from "@/lib/nbc-content";
+import { cn } from "@/lib/utils";
+
+interface HotelCardProps {
+  hotel: Hotel;
+  className?: string;
+}
+
 function formatPrice(amount: number, currency: string) {
   return `${currency} ${new Intl.NumberFormat("en-US").format(amount)}`;
 }
