@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Apple, ArrowRight, Play } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { GlobalNav } from "@/components/nbc/GlobalNav";
 import { GlobalFooter } from "@/components/nbc/GlobalFooter";
 import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { Hero } from "@/components/nbc/Hero";
+import { HotelSearch } from "@/components/nbc/HotelSearch";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { DestinationCard } from "@/components/nbc/DestinationCard";
 import { HotelCard } from "@/components/nbc/HotelCard";
@@ -42,6 +43,8 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeExperience() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <AnnouncementBar />
@@ -54,6 +57,22 @@ function HomeExperience() {
           supporting="Wake to the Indian Ocean, watch the plains turn gold at dusk, and rest in hotels chosen with care. NBC Hospitality brings Tanzania's finest stays together — verified, welcoming and secured by NBC."
           primaryCta="Find Your Stay"
           secondaryCta="Explore Destinations"
+          search={
+            <HotelSearch
+              onSearch={(value) =>
+                navigate({
+                  to: "/hotels",
+                  search: {
+                    destination: value.destination,
+                    checkIn: value.checkIn ? value.checkIn.toISOString().slice(0, 10) : "",
+                    checkOut: value.checkOut ? value.checkOut.toISOString().slice(0, 10) : "",
+                    guests: Number(value.guests),
+                    rooms: Number(value.rooms),
+                  },
+                })
+              }
+            />
+          }
         />
 
         {/* Featured destinations */}
@@ -89,9 +108,11 @@ function HomeExperience() {
               title="Stays worth planning a journey around"
               description="A selection of accredited properties, chosen for their location, service and consistency."
               action={
-                <Button variant="outline" size="lg" className="gap-2">
-                  Browse all hotels
-                  <ArrowRight aria-hidden="true" />
+                <Button asChild variant="outline" size="lg" className="gap-2">
+                  <Link to="/hotels">
+                    Browse all hotels
+                    <ArrowRight aria-hidden="true" />
+                  </Link>
                 </Button>
               }
             />
