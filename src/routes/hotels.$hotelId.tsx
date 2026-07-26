@@ -111,58 +111,64 @@ function PropertyDetailsPage() {
 
         {/* Property overview — description, location, highlights & amenities */}
         <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow={property.positioning}
-            title="Property overview"
-            description="What defines this property and everything available during your stay."
-          />
-
-          <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
-            <div className="grid h-fit content-start gap-8">
-              <div>
-                <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">About This Property</h3>
-                <div className="mt-4 grid gap-5">
-                  {property.overview.map((paragraph) => (
-                    <p key={paragraph.slice(0, 24)} className="text-base leading-relaxed text-muted-foreground">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
+          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+            <div className="grid content-start gap-10">
+              <div className="min-w-0 max-w-2xl">
+                <p className="nbc-eyebrow text-nbc-scarlet">{property.positioning}</p>
+                <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl">
+                  Property overview
+                </h2>
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                  What defines this property and everything available during your stay.
+                </p>
               </div>
 
-              <div>
-                <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Property Location</h3>
-                <div className="mt-4 flex items-start gap-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
-                    <MapPin aria-hidden="true" className="size-4.5" strokeWidth={1.5} />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-base font-semibold leading-snug text-foreground">{hotel.name}</p>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{property.address}</p>
+              <div className="grid h-fit content-start gap-8">
+                <div>
+                  <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">About This Property</h3>
+                  <div className="mt-4 grid gap-5">
+                    {property.overview.map((paragraph) => (
+                      <p key={paragraph.slice(0, 24)} className="text-base leading-relaxed text-muted-foreground">
+                        {paragraph}
+                      </p>
+                    ))}
                   </div>
                 </div>
-              </div>
 
-              <div>
-                <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Nearby Landmarks & Attractions</h3>
-                <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-                  {property.nearby.map((place) => {
-                    const Icon = nearbyIcons[place.kind];
-                    return (
-                      <li key={place.id} className="flex items-start gap-3">
-                        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
-                          <Icon aria-hidden="true" className="size-4" strokeWidth={1.5} />
-                        </span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold leading-snug text-foreground">{place.label}</p>
-                          <p className="mt-0.5 text-xs text-muted-foreground">
-                            {place.kind} · {place.distance} away
-                          </p>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
+                <div>
+                  <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Property Location</h3>
+                  <div className="mt-4 flex items-start gap-3">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
+                      <MapPin aria-hidden="true" className="size-4.5" strokeWidth={1.5} />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-base font-semibold leading-snug text-foreground">{hotel.name}</p>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{property.address}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Nearby Landmarks & Attractions</h3>
+                  <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+                    {property.nearby.map((place) => {
+                      const Icon = nearbyIcons[place.kind];
+                      return (
+                        <li key={place.id} className="flex items-start gap-3">
+                          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
+                            <Icon aria-hidden="true" className="size-4" strokeWidth={1.5} />
+                          </span>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold leading-snug text-foreground">{place.label}</p>
+                            <p className="mt-0.5 text-xs text-muted-foreground">
+                              {place.kind} · {place.distance} away
+                            </p>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
             </div>
 
