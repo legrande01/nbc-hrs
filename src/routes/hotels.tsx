@@ -83,7 +83,7 @@ function HotelDiscoveryPage() {
   const update = useCallback(
     (patch: Partial<DiscoverySearch>, resetPage = true) => {
       navigate({
-        search: (prev) => ({ ...prev, ...patch, ...(resetPage ? { page: 1 } : {}) }),
+        search: (prev: DiscoverySearch) => ({ ...prev, ...patch, ...(resetPage ? { page: 1 } : {}) }),
         replace: true,
       });
     },
