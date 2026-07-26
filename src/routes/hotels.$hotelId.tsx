@@ -117,7 +117,7 @@ function PropertyDetailsPage() {
             description="What defines this property and everything available during your stay."
           />
 
-          <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+          <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
             <div className="grid h-fit content-start gap-8 rounded-2xl border border-border/70 bg-card p-7 shadow-card">
               <div>
                 <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">About This Property</h3>
