@@ -1,9 +1,11 @@
 import type { LucideIcon } from "lucide-react";
 import {
   BadgeCheck,
+  Gem,
   HandHeart,
+  Landmark,
+  LockKeyhole,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 
 import destDar from "@/assets/dest-dar.jpg";
@@ -45,11 +47,14 @@ export interface Destination {
   propertyCount: number;
   image: string;
   blurb: string;
+  /** Short inspirational line shown on the destination card. */
+  tagline: string;
 }
 
 export const featuredDestinations: Destination[] = [
   {
     id: "dar-es-salaam",
+    tagline: "Where business meets coastal luxury.",
     name: "Dar es Salaam",
     region: "Coastal Tanzania",
     propertyCount: 48,
@@ -58,6 +63,7 @@ export const featuredDestinations: Destination[] = [
   },
   {
     id: "zanzibar",
+    tagline: "White sand beaches and unforgettable sunsets.",
     name: "Zanzibar",
     region: "Zanzibar Archipelago",
     propertyCount: 36,
@@ -66,6 +72,7 @@ export const featuredDestinations: Destination[] = [
   },
   {
     id: "arusha",
+    tagline: "Gateway to Tanzania\'s iconic safari adventures.",
     name: "Arusha",
     region: "Northern Highlands",
     propertyCount: 24,
@@ -74,6 +81,7 @@ export const featuredDestinations: Destination[] = [
   },
   {
     id: "dodoma",
+    tagline: "Experience Tanzania\'s growing capital city.",
     name: "Dodoma",
     region: "Central Tanzania",
     propertyCount: 12,
@@ -82,6 +90,7 @@ export const featuredDestinations: Destination[] = [
   },
   {
     id: "mwanza",
+    tagline: "Discover breathtaking lakeside experiences.",
     name: "Mwanza",
     region: "Lake Zone",
     propertyCount: 18,
@@ -99,8 +108,22 @@ export interface Hotel {
   priceFrom: number;
   currency: string;
   description: string;
+  /** Compact amenity keys rendered as chips on the hotel card. */
+  amenities: AmenityKey[];
   image: string;
 }
+
+export type AmenityKey =
+  | "wifi"
+  | "breakfast"
+  | "pool"
+  | "ocean-view"
+  | "shuttle"
+  | "parking"
+  | "restaurant"
+  | "fitness"
+  | "spa"
+  | "safari";
 
 export const featuredHotels: Hotel[] = [
   {
@@ -113,6 +136,7 @@ export const featuredHotels: Hotel[] = [
     currency: "TZS",
     description:
       "A calm city retreat above the harbour, minutes from the business district.",
+    amenities: ["wifi", "breakfast", "parking", "fitness"],
     image: hotel1,
   },
   {
@@ -125,6 +149,7 @@ export const featuredHotels: Hotel[] = [
     currency: "TZS",
     description:
       "Swahili arches, private terraces and an unbroken view of the reef.",
+    amenities: ["ocean-view", "pool", "breakfast", "spa"],
     image: hotel2,
   },
   {
@@ -137,6 +162,7 @@ export const featuredHotels: Hotel[] = [
     currency: "TZS",
     description:
       "Stone and timber suites overlooking the plains, built for slow evenings.",
+    amenities: ["safari", "restaurant", "wifi", "shuttle"],
     image: hotel3,
   },
 ];
@@ -154,28 +180,28 @@ export const valuePropositions: ValueProposition[] = [
     title: "Verified Hotels",
     description:
       "Every property is reviewed and accredited before it joins the NBC Hospitality network.",
-    icon: BadgeCheck,
+    icon: ShieldCheck,
   },
   {
     id: "payments",
     title: "Secure Payments",
     description:
       "Stays are settled through NBC's protected payment infrastructure, end to end.",
-    icon: ShieldCheck,
+    icon: LockKeyhole,
   },
   {
     id: "premium",
     title: "Premium Hospitality",
     description:
       "A curated standard of service, consistent from the coast to the highlands.",
-    icon: Sparkles,
+    icon: Gem,
   },
   {
     id: "trust",
     title: "Trusted by NBC",
     description:
       "Backed by the National Bank of Commerce and a century of Tanzanian trust.",
-    icon: HandHeart,
+    icon: Landmark,
   },
 ];
 

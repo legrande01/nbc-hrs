@@ -15,12 +15,12 @@ export function ValueCard({ value, className }: ValueCardProps) {
   return (
     <article
       className={cn(
-        "flex min-w-0 flex-col gap-4 rounded-xl border border-border/70 bg-card p-7 transition-shadow hover:shadow-card",
+        "flex min-w-0 flex-col gap-4 rounded-xl border border-border/70 bg-card p-8 transition-shadow hover:shadow-card",
         className,
       )}
     >
-      <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-secondary text-nbc-royal">
-        <Icon aria-hidden="true" className="size-5" />
+      <span className="grid size-12 shrink-0 place-items-center rounded-full border border-nbc-royal/15 bg-secondary/60 text-nbc-royal">
+        <Icon aria-hidden="true" className="size-5" strokeWidth={1.5} />
       </span>
       <h3 className="text-lg font-semibold text-foreground">{value.title}</h3>
       <p className="text-sm leading-relaxed text-muted-foreground">{value.description}</p>

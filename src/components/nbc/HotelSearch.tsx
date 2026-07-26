@@ -57,9 +57,9 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
           event.preventDefault();
           onSearch?.({ destination, checkIn, checkOut, guests, rooms });
         }}
-        className="rounded-xl border border-border/60 bg-background/95 p-4 shadow-elevated backdrop-blur-md sm:p-6"
+        className="rounded-2xl border border-border/50 bg-background/97 p-5 shadow-elevated ring-1 ring-nbc-royal/5 backdrop-blur-md sm:p-7 lg:p-8"
       >
-        <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr_1fr_0.9fr_0.8fr_auto] lg:items-end">
+        <div className="grid gap-5 lg:grid-cols-[1.6fr_1fr_1fr_0.9fr_0.8fr_auto] lg:items-end">
           <div className="grid min-w-0 gap-2">
             <FieldLabel htmlFor="destination">Destination</FieldLabel>
             <div className="relative">
@@ -72,7 +72,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
                 value={destination}
                 onChange={(event) => setDestination(event.target.value)}
                 placeholder="Where would you like to stay?"
-                className="h-11 pl-9"
+                className="h-13 pl-9 text-base"
               />
             </div>
           </div>
@@ -86,7 +86,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
                   type="button"
                   variant="outline"
                   className={cn(
-                    "h-11 w-full justify-start gap-2 font-normal",
+                    "h-13 w-full justify-start gap-2 text-base font-normal",
                     !checkIn && "text-muted-foreground",
                   )}
                 >
@@ -115,7 +115,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
                   type="button"
                   variant="outline"
                   className={cn(
-                    "h-11 w-full justify-start gap-2 font-normal",
+                    "h-13 w-full justify-start gap-2 text-base font-normal",
                     !checkOut && "text-muted-foreground",
                   )}
                 >
@@ -141,7 +141,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
           <div className="grid min-w-0 gap-2">
             <FieldLabel htmlFor="guests">Guests</FieldLabel>
             <Select value={guests} onValueChange={setGuests}>
-              <SelectTrigger id="guests" className="h-11">
+              <SelectTrigger id="guests" className="h-13 text-base">
                 <Users aria-hidden="true" className="size-4 text-muted-foreground" />
                 <SelectValue />
               </SelectTrigger>
@@ -158,7 +158,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
           <div className="grid min-w-0 gap-2">
             <FieldLabel htmlFor="rooms">Rooms</FieldLabel>
             <Select value={rooms} onValueChange={setRooms}>
-              <SelectTrigger id="rooms" className="h-11">
+              <SelectTrigger id="rooms" className="h-13 text-base">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -171,7 +171,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
             </Select>
           </div>
 
-          <Button type="submit" variant="scarlet" className="h-11 gap-2 px-8">
+          <Button type="submit" variant="scarlet" size="xl" className="h-13 w-full gap-2 px-10 text-base shadow-card lg:w-auto">
             <Search aria-hidden="true" />
             Search
           </Button>
@@ -179,7 +179,7 @@ export function HotelSearch({ onSearch, className, showTrustIndicators = true }:
       </form>
 
       {showTrustIndicators && (
-        <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+        <ul className="mt-7 grid gap-3 sm:grid-cols-3">
           {searchTrustIndicators.map(({ id, label, icon: Icon }) => (
             <li key={id} className="flex min-w-0 items-center gap-2.5 text-primary-foreground">
               <Icon aria-hidden="true" className="size-4 shrink-0 text-nbc-gold" />

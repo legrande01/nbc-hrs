@@ -21,8 +21,8 @@ export function GlobalFooter() {
     <footer className="relative isolate overflow-hidden bg-nbc-royal-deep text-primary-foreground">
       <GiraffePattern opacity={0.07} />
 
-      <div className="relative mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-        <div className="grid gap-10 border-b border-primary-foreground/15 pb-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div className="relative mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-24">
+        <div className="grid gap-12 border-b border-primary-foreground/12 pb-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <div className="min-w-0">
             <NbcLogo variant="card" height={38} />
             <p className="mt-6 max-w-md text-sm leading-relaxed text-primary-foreground/75">
@@ -31,19 +31,19 @@ export function GlobalFooter() {
             </p>
           </div>
           <div className="min-w-0">
-            <h2 className="text-lg font-semibold">Stay in the know</h2>
-            <NewsletterForm tone="onDark" className="mt-4" />
+            <h2 className="text-xl font-semibold tracking-tight">Stay in the know</h2>
+            <NewsletterForm tone="onDark" className="mt-5" />
           </div>
         </div>
 
         <nav
           aria-label="Footer"
-          className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-5"
+          className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5"
         >
           {footerGroups.map((group) => (
             <div key={group.title} className="min-w-0">
-              <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-gold">{group.title}</h3>
-              <ul className="mt-5 space-y-3">
+              <h3 className="nbc-eyebrow text-[0.625rem] tracking-[0.18em] text-nbc-gold">{group.title}</h3>
+              <ul className="mt-6 space-y-3.5">
                 {group.links.map((link) => (
                   <li key={link}>
                     <button
@@ -59,7 +59,7 @@ export function GlobalFooter() {
           ))}
         </nav>
 
-        <div className="grid gap-6 border-t border-primary-foreground/15 pt-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+        <div className="grid gap-6 border-t border-primary-foreground/12 pt-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
           <div className="min-w-0 space-y-4">
             <ul className="flex flex-wrap gap-x-6 gap-y-2">
               {legalLinks.map((link) => (
