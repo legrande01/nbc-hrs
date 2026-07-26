@@ -185,61 +185,72 @@ function PropertyDetailsPage() {
           </div>
         </section>
 
+        {/* Room categories — immediately after the gallery */}
+        <section id="room-types" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16 lg:px-8 lg:py-20">
+          <SectionHeading
+            eyebrow="Room Types"
+            title="Available room categories"
+            description="A preview of what is available. Choose your exact room and rate in the next step."
+          />
 
-        {/* Room types preview */}
-        <section id="room-types" className="border-y border-border bg-secondary/25 scroll-mt-24">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {property.rooms.map((room) => (
+              <RoomPreviewCard
+                key={room.id}
+                room={room}
+                currency={hotel.currency}
+                onViewRooms={scrollToRooms}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Location & nearby — unified block */}
+        <section className="border-y border-border bg-secondary/25">
           <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
             <SectionHeading
-              eyebrow="Room Types"
-              title="Room categories at this property"
-              description="A preview of what is available. Choose your exact room and rate in the next step."
+              eyebrow="Location"
+              title="Where you will be staying"
+              description="Address, nearby attractions, airport and business district distances in one place."
             />
 
-            <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {property.rooms.map((room) => (
-                <RoomPreviewCard
-                  key={room.id}
-                  room={room}
-                  currency={hotel.currency}
-                  onViewRooms={scrollToRooms}
-                />
-              ))}
+            <div className="mt-10 grid gap-8 rounded-2xl border border-border/70 bg-card p-7 shadow-card lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-12 lg:p-9">
+              <div className="grid h-fit content-start gap-3">
+                <span className="flex size-11 items-center justify-center rounded-full bg-secondary text-nbc-royal">
+                  <MapPin aria-hidden="true" className="size-5" strokeWidth={1.5} />
+                </span>
+                <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Property Address</h3>
+                <p className="text-base font-semibold leading-snug text-foreground">{hotel.name}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">{property.address}</p>
+              </div>
+
+              <div className="min-w-0">
+                <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">What is nearby</h3>
+                <ul className="mt-4 grid gap-x-10 gap-y-5 sm:grid-cols-2">
+                  {property.nearby.map((place) => {
+                    const Icon = nearbyIcons[place.kind];
+                    return (
+                      <li key={place.id} className="grid grid-cols-[auto_minmax(0,1fr)] gap-4">
+                        <span className="flex size-10 items-center justify-center rounded-full bg-secondary text-nbc-royal">
+                          <Icon aria-hidden="true" className="size-4.5" strokeWidth={1.5} />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold leading-snug text-foreground">
+                            {place.label}
+                          </p>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {place.kind} · {place.distance} away
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Location */}
-        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Location"
-            title="Where you will be staying"
-            description={property.address}
-          />
-
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {property.nearby.map((place) => {
-              const Icon = nearbyIcons[place.kind];
-              return (
-                <article
-                  key={place.id}
-                  className="grid gap-3 rounded-xl border border-border/70 bg-card p-6 shadow-card"
-                >
-                  <span className="flex size-11 items-center justify-center rounded-full bg-secondary text-nbc-royal">
-                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.5} />
-                  </span>
-                  <p className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">{place.kind}</p>
-                  <h3 className="text-base font-semibold leading-snug text-foreground">
-                    {place.label}
-                  </h3>
-                  <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <MapPin aria-hidden="true" className="size-4" strokeWidth={1.75} />
-                    {place.distance} away
-                  </p>
-                </article>
-              );
-            })}
-          </div>
-        </section>
 
         {/* Guest reviews preview */}
         <section className="border-y border-border bg-secondary/25">
