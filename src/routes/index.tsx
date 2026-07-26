@@ -49,8 +49,9 @@ function HomeExperience() {
 
       <main className="flex-1">
         <Hero
-          headline="Every Journey Deserves an Exceptional Stay!"
-          supporting="From the Indian Ocean to the northern highlands, NBC Hospitality brings together verified hotels, secure payments and a standard of service you can rely on."
+          eyebrow="NBC Hospitality"
+          headline="Every journey deserves an exceptional stay"
+          supporting="Wake to the Indian Ocean, watch the plains turn gold at dusk, and rest in hotels chosen with care. NBC Hospitality brings Tanzania's finest stays together — verified, welcoming and secured by NBC."
           primaryCta="Find Your Stay"
           secondaryCta="Explore Destinations"
         />
