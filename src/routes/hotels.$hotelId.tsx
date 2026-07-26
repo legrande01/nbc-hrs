@@ -109,87 +109,82 @@ function PropertyDetailsPage() {
       <main className="flex-1">
         <PropertyHero hotel={hotel} onViewRooms={scrollToRooms} onShare={shareProperty} />
 
-        {/* Property overview */}
+        {/* Property overview — description, highlights & key amenities */}
         <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-            <div className="min-w-0">
-              <SectionHeading eyebrow={property.positioning} title="About this property" />
-              <div className="mt-6 grid gap-5">
-                {property.overview.map((paragraph) => (
-                  <p key={paragraph.slice(0, 24)} className="text-base leading-relaxed text-muted-foreground">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+          <SectionHeading
+            eyebrow={property.positioning}
+            title="Property overview"
+            description="What defines this property and everything available during your stay."
+          />
+
+          <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+            <div className="min-w-0 grid gap-5 content-start">
+              {property.overview.map((paragraph) => (
+                <p key={paragraph.slice(0, 24)} className="text-base leading-relaxed text-muted-foreground">
+                  {paragraph}
+                </p>
+              ))}
             </div>
 
-            <ul className="grid h-fit gap-4 rounded-2xl border border-border/70 bg-secondary/30 p-7">
-              {property.highlights.map((highlight) => (
-                <li key={highlight} className="flex items-start gap-3 text-sm text-foreground">
-                  <Sparkles
-                    aria-hidden="true"
-                    className="mt-0.5 size-4 shrink-0 text-nbc-scarlet"
-                    strokeWidth={1.75}
-                  />
-                  {highlight}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+            <div className="grid h-fit gap-7 rounded-2xl border border-border/70 bg-secondary/30 p-7">
+              <div>
+                <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Property Highlights</h3>
+                <ul className="mt-4 grid gap-3">
+                  {property.highlights.map((highlight) => (
+                    <li key={highlight} className="flex items-start gap-3 text-sm text-foreground">
+                      <Sparkles
+                        aria-hidden="true"
+                        className="mt-0.5 size-4 shrink-0 text-nbc-scarlet"
+                        strokeWidth={1.75}
+                      />
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-        {/* Amenities & services */}
-        <section className="border-y border-border bg-secondary/25">
-          <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-            <SectionHeading
-              eyebrow="Amenities & Services"
-              title="Everything available during your stay"
-              description="Only the facilities and services offered by this property are shown."
-            />
-
-            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {property.serviceAmenities.map((key) => {
-                const { label, icon: Icon } = amenityMeta[key];
-                return (
-                  <li
-                    key={key}
-                    className="flex items-center gap-4 rounded-xl border border-border/70 bg-card p-5 shadow-card"
-                  >
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
-                      <Icon aria-hidden="true" className="size-5" strokeWidth={1.5} />
-                    </span>
-                    <span className="min-w-0 truncate text-sm font-medium text-foreground">
-                      {label}
-                    </span>
-                  </li>
-                );
-              })}
-              {property.extraServices.map((service) => (
-                <li
-                  key={service}
-                  className="flex items-center gap-4 rounded-xl border border-border/70 bg-card p-5 shadow-card"
-                >
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
-                    <ConciergeBell aria-hidden="true" className="size-5" strokeWidth={1.5} />
-                  </span>
-                  <span className="min-w-0 truncate text-sm font-medium text-foreground">
-                    {service}
-                  </span>
-                </li>
-              ))}
-            </ul>
+              <div>
+                <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Key Amenities & Services</h3>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {property.serviceAmenities.map((key) => {
+                    const { label, icon: Icon } = amenityMeta[key];
+                    return (
+                      <li
+                        key={key}
+                        className="flex items-center gap-2 rounded-full border border-border/70 bg-card px-3.5 py-2 text-xs font-medium text-foreground shadow-card"
+                      >
+                        <Icon aria-hidden="true" className="size-4 text-nbc-royal" strokeWidth={1.5} />
+                        {label}
+                      </li>
+                    );
+                  })}
+                  {property.extraServices.map((service) => (
+                    <li
+                      key={service}
+                      className="flex items-center gap-2 rounded-full border border-border/70 bg-card px-3.5 py-2 text-xs font-medium text-foreground shadow-card"
+                    >
+                      <ConciergeBell aria-hidden="true" className="size-4 text-nbc-royal" strokeWidth={1.5} />
+                      {service}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Gallery */}
-        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Property Gallery"
-            title="Look around before you arrive"
-            description="Browse the spaces guests use most, from the lobby to the pool terrace."
-          />
-          <PropertyGallery className="mt-10" images={property.gallery} />
+        <section className="border-y border-border bg-secondary/25">
+          <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+            <SectionHeading
+              eyebrow="Property Gallery"
+              title="Look around before you arrive"
+              description="Browse the spaces guests use most, from the lobby to the pool terrace."
+            />
+            <PropertyGallery className="mt-10" images={property.gallery} />
+          </div>
         </section>
+
 
         {/* Room types preview */}
         <section id="room-types" className="border-y border-border bg-secondary/25 scroll-mt-24">
