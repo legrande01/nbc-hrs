@@ -26,6 +26,8 @@ import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { PropertyHero } from "@/components/nbc/PropertyHero";
 import { PropertyGallery } from "@/components/nbc/PropertyGallery";
 import { RoomPreviewCard } from "@/components/nbc/RoomPreviewCard";
+import { ReviewCarousel } from "@/components/nbc/ReviewCarousel";
+
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { getPropertyDetail } from "@/lib/nbc-property";
 
