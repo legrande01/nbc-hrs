@@ -142,3 +142,176 @@
     color: var(--color-foreground);
   }
 }
+
+/* =====================================================================
+   NBC HOSPITALITY — Official brand layer
+   Typography: Montreal (official NBC typeface)
+   Colours: NBC Brand Manual & Design Standards v2.0
+   ===================================================================== */
+
+@font-face {
+  font-family: "Montreal";
+  src: url("/__l5e/assets-v1/5abdc509-6e98-4f11-9dd9-206d0f165a48/Montreal-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montreal";
+  src: url("/__l5e/assets-v1/ca49b8e7-c74f-45f9-8f0c-41b33c3b369b/Montreal-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montreal";
+  src: url("/__l5e/assets-v1/4f525828-b07a-449a-89a1-7f9d1e6ef05c/Montreal-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montreal";
+  src: url("/__l5e/assets-v1/b4eafbb1-c29e-4eb4-99af-ada5e236f86f/Montreal-DemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montreal";
+  src: url("/__l5e/assets-v1/ca39122c-b7a8-4e50-8795-d167ca1007f7/Montreal-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --radius: 0.25rem;
+
+  /* NBC official palette */
+  --nbc-royal: oklch(0.3796 0.1354 266.53);
+  --nbc-royal-deep: oklch(0.3082 0.1112 266.53);
+  --nbc-royal-soft: oklch(0.9498 0.0186 266.53);
+  --nbc-scarlet: oklch(0.5665 0.2282 27.93);
+  --nbc-gold: oklch(0.8292 0.1643 82.47);
+  --nbc-orange: oklch(0.6915 0.1718 47.76);
+  --nbc-emerald: oklch(0.5035 0.138 142.82);
+  --nbc-violet: oklch(0.3624 0.1193 317.15);
+  --nbc-burgundy: oklch(0.3682 0.139 25.11);
+  --nbc-true-black: oklch(0.1386 0.0203 81.45);
+  --nbc-sand: oklch(0.9762 0.006 85);
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2 0.015 266);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.015 266);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.015 266);
+  --primary: var(--nbc-royal);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: var(--nbc-royal-soft);
+  --secondary-foreground: var(--nbc-royal);
+  --muted: var(--nbc-sand);
+  --muted-foreground: oklch(0.505 0.019 266);
+  --accent: var(--nbc-scarlet);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: var(--nbc-scarlet);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.912 0.008 266);
+  --input: oklch(0.9 0.008 266);
+  --ring: var(--nbc-royal);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.2 0.015 266);
+  --sidebar-primary: var(--nbc-royal);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: var(--nbc-royal-soft);
+  --sidebar-accent-foreground: var(--nbc-royal);
+  --sidebar-border: oklch(0.912 0.008 266);
+  --sidebar-ring: var(--nbc-royal);
+
+  --shadow-elevated: 0 24px 60px -30px color-mix(in oklab, var(--nbc-royal) 45%, transparent);
+  --shadow-card: 0 12px 32px -18px color-mix(in oklab, var(--nbc-true-black) 40%, transparent);
+  --gradient-royal: linear-gradient(135deg, var(--nbc-royal-deep), var(--nbc-royal));
+  --gradient-veil: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--nbc-true-black) 55%, transparent) 0%,
+    color-mix(in oklab, var(--nbc-true-black) 25%, transparent) 45%,
+    color-mix(in oklab, var(--nbc-royal-deep) 78%, transparent) 100%
+  );
+  --gradient-card-veil: linear-gradient(
+    180deg,
+    transparent 30%,
+    color-mix(in oklab, var(--nbc-true-black) 70%, transparent) 100%
+  );
+}
+
+.dark {
+  --background: oklch(0.18 0.03 266);
+  --foreground: oklch(0.975 0.005 266);
+  --card: oklch(0.23 0.04 266);
+  --card-foreground: oklch(0.975 0.005 266);
+  --popover: oklch(0.23 0.04 266);
+  --popover-foreground: oklch(0.975 0.005 266);
+  --primary: oklch(0.75 0.11 266);
+  --primary-foreground: oklch(0.18 0.03 266);
+  --secondary: oklch(0.28 0.045 266);
+  --secondary-foreground: oklch(0.975 0.005 266);
+  --muted: oklch(0.28 0.045 266);
+  --muted-foreground: oklch(0.72 0.02 266);
+  --accent: var(--nbc-scarlet);
+  --accent-foreground: oklch(1 0 0);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.75 0.11 266);
+}
+
+@theme inline {
+  --font-sans: "Montreal", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montreal", ui-sans-serif, system-ui, sans-serif;
+  --color-nbc-royal: var(--nbc-royal);
+  --color-nbc-royal-deep: var(--nbc-royal-deep);
+  --color-nbc-royal-soft: var(--nbc-royal-soft);
+  --color-nbc-scarlet: var(--nbc-scarlet);
+  --color-nbc-gold: var(--nbc-gold);
+  --color-nbc-orange: var(--nbc-orange);
+  --color-nbc-emerald: var(--nbc-emerald);
+  --color-nbc-violet: var(--nbc-violet);
+  --color-nbc-burgundy: var(--nbc-burgundy);
+  --color-nbc-true-black: var(--nbc-true-black);
+  --color-nbc-sand: var(--nbc-sand);
+  --shadow-elevated: var(--shadow-elevated);
+  --shadow-card: var(--shadow-card);
+}
+
+@layer base {
+  body {
+    font-family: "Montreal", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@utility nbc-veil {
+  background-image: var(--gradient-veil);
+}
+
+@utility nbc-card-veil {
+  background-image: var(--gradient-card-veil);
+}
+
+@utility nbc-royal-gradient {
+  background-image: var(--gradient-royal);
+}
+
+@utility nbc-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+@utility nbc-pattern {
+  background-image: url("/__l5e/assets-v1/426c1336-5264-484c-afc5-2b8a60b067fe/nbc-giraffe-pattern.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
