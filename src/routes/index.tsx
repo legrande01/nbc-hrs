@@ -49,7 +49,7 @@ function HomeExperience() {
 
       <main className="flex-1">
         <Hero
-          headline="Tanzania, beautifully hosted."
+          headline="Every Journey Deserves an Exceptional Stay!"
           supporting="From the Indian Ocean to the northern highlands, NBC Hospitality brings together verified hotels, secure payments and a standard of service you can rely on."
           primaryCta="Find Your Stay"
           secondaryCta="Explore Destinations"
