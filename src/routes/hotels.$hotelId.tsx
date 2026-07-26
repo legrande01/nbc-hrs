@@ -5,9 +5,7 @@ import {
   ConciergeBell,
   MapPin,
   Plane,
-  Quote,
   Sparkles,
-  Star,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
