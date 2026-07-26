@@ -251,10 +251,10 @@ function PropertyDetailsPage() {
           </div>
         </section>
 
-
         {/* Guest reviews preview */}
-        <section className="border-y border-border bg-secondary/25">
+        <section>
           <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+
             <SectionHeading
               eyebrow="Guest Reviews"
               title="What guests say"
