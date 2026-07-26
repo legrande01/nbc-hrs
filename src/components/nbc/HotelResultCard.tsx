@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -104,7 +105,11 @@ export function HotelResultCard({ hotel, className }: HotelResultCardProps) {
             <p className="mt-0.5 text-xs text-muted-foreground">per night</p>
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-            <Button variant="default">View Details</Button>
+            <Button variant="default" asChild>
+              <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }}>
+                View Details
+              </Link>
+            </Button>
             <Button variant="outline">Find Your Stay</Button>
           </div>
         </div>

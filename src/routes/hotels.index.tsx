@@ -37,7 +37,7 @@ import {
 
 const PAGE_SIZE = 5;
 
-export const Route = createFileRoute("/hotels")({
+export const Route = createFileRoute("/hotels/")({
   validateSearch: (search: Record<string, unknown>) => parseDiscoverySearch(search),
   component: HotelDiscoveryPage,
   errorComponent: ({ error }) => (
