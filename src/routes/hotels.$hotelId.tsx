@@ -260,54 +260,13 @@ function PropertyDetailsPage() {
               action={<Button variant="outline">View All Reviews</Button>}
             />
 
-            <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)]">
-              <div className="grid h-fit content-start gap-3 rounded-2xl border border-border/70 bg-card p-7 shadow-card">
-                <p className="text-5xl font-semibold tracking-tight text-foreground">
-                  {hotel.rating.toFixed(1)}
-                </p>
-                <p className="flex items-center gap-1" aria-hidden="true">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star
-                      key={index}
-                      className={
-                        index < Math.round(hotel.rating)
-                          ? "size-4 fill-nbc-gold text-nbc-gold"
-                          : "size-4 text-muted-foreground/40"
-                      }
-                    />
-                  ))}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Based on {hotel.reviewCount} verified guest reviews
-                </p>
-              </div>
+            <ReviewCarousel
+              className="mt-10"
+              reviews={property.reviews}
+              rating={hotel.rating}
+              reviewCount={hotel.reviewCount}
+            />
 
-              <ul className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {property.reviews.map((review) => (
-                  <li
-                    key={review.id}
-                    className="grid content-start gap-4 rounded-xl border border-border/70 bg-card p-6 shadow-card"
-                  >
-                    <Quote
-                      aria-hidden="true"
-                      className="size-5 text-nbc-scarlet"
-                      strokeWidth={1.5}
-                    />
-                    <p className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
-                      <Star aria-hidden="true" className="size-3.5 fill-nbc-gold text-nbc-gold" />
-                      {review.rating.toFixed(1)}
-                    </p>
-                    <h3 className="text-base font-semibold leading-snug text-foreground">
-                      {review.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{review.body}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {review.guest} · {review.origin} · Stayed {review.stayedOn}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </section>
 
