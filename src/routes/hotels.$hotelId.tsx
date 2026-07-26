@@ -312,32 +312,38 @@ function PropertyDetailsPage() {
           </div>
         </section>
 
-        {/* Policies */}
-        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Property Policies"
-            title="Good to know before you arrive"
-          />
+        {/* Policies — collapsed by default */}
+        <section className="border-y border-border bg-secondary/25">
+          <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+            <SectionHeading
+              eyebrow="Property Policies"
+              title="Good to know before you arrive"
+              description="Expand only the policies you need."
+            />
 
-          <dl className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-            {property.policies.map((policy) => {
-              const Icon = policy.icon;
-              return (
-                <div key={policy.id} className="grid grid-cols-[auto_minmax(0,1fr)] gap-4">
-                  <span className="flex size-10 items-center justify-center rounded-full bg-secondary text-nbc-royal">
-                    <Icon aria-hidden="true" className="size-4.5" strokeWidth={1.5} />
-                  </span>
-                  <div className="min-w-0">
-                    <dt className="text-sm font-semibold text-foreground">{policy.label}</dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            <Accordion type="multiple" className="mt-10">
+              {property.policies.map((policy) => {
+                const Icon = policy.icon;
+                return (
+                  <AccordionItem key={policy.id} value={policy.id}>
+                    <AccordionTrigger className="text-left text-base font-semibold text-foreground">
+                      <span className="flex items-center gap-4">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
+                          <Icon aria-hidden="true" className="size-4.5" strokeWidth={1.5} />
+                        </span>
+                        {policy.label}
+                      </span>
+                    </AccordionTrigger>
+                    <AccordionContent className="pl-14 text-sm leading-relaxed text-muted-foreground">
                       {policy.value}
-                    </dd>
-                  </div>
-                </div>
-              );
-            })}
-          </dl>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </div>
         </section>
+
 
         {/* FAQ */}
         <section className="border-y border-border bg-secondary/25">
