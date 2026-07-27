@@ -1,5 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  redirect,
+} from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
@@ -10,21 +15,34 @@ import { GlobalFooter } from "@/components/nbc/GlobalFooter";
 import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
-import { AvailabilityPanel } from "@/components/nbc/AvailabilityPanel";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
 import {
   buildTotals,
   checkOccupancy,
   getRoomSelectionData,
+  isCompleteStay,
   nightsBetween,
   parseRoomSelectionSearch,
-  type RoomSelectionSearch,
 } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
   validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  /**
+   * Defensive guard only. In the normal journey Hotel Details always collects
+   * availability before navigating here, so this never fires.
+   */
+  beforeLoad: ({ params, search }) => {
+    if (!isCompleteStay(search)) {
+      throw redirect({
+        to: "/hotels/$hotelId",
+        params: { hotelId: params.hotelId },
+        search,
+      });
+    }
+  },
   loader: ({ params }) => {
+
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();
     return { name: data.property.hotel.name };
