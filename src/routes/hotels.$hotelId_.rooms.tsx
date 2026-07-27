@@ -12,6 +12,7 @@ import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
+import { parseDiscoverySearch } from "@/lib/nbc-discovery-filters";
 import {
   buildTotals,
   checkOccupancy,
@@ -98,12 +99,12 @@ function RoomSelectionPage() {
   const editSearch = useCallback(() => {
     navigate({
       to: "/hotels",
-      search: {
+      search: parseDiscoverySearch({
         checkIn: search.checkIn,
         checkOut: search.checkOut,
         guests: search.adults + search.children,
         rooms: search.rooms,
-      },
+      }),
     });
   }, [navigate, search]);
 

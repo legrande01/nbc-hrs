@@ -28,6 +28,7 @@ import { ReviewCarousel } from "@/components/nbc/ReviewCarousel";
 
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { getPropertyDetail } from "@/lib/nbc-property";
+import { parseRoomSelectionSearch } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId")({
   loader: ({ params }) => {
@@ -81,7 +82,11 @@ function PropertyDetailsPage() {
   const navigate = useNavigate();
 
   const goToRoomSelection = useCallback(() => {
-    navigate({ to: "/hotels/$hotelId/rooms", params: { hotelId }, search: {} });
+    navigate({
+      to: "/hotels/$hotelId/rooms",
+      params: { hotelId },
+      search: parseRoomSelectionSearch({}),
+    });
   }, [navigate, hotelId]);
 
   const shareProperty = useCallback(async () => {
