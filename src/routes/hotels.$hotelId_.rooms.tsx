@@ -114,9 +114,8 @@ function RoomSelectionPage() {
     });
   }, []);
 
-  const continueToGuestDetails = useCallback(() => {
+  const continueReservation = useCallback(() => {
     toast.success("Rooms reserved for this session. Guest Details opens in the next module.");
-
   }, []);
 
   if (!data) throw notFound();
@@ -191,7 +190,7 @@ function RoomSelectionPage() {
               onIncrement={increment}
               onDecrement={decrement}
               onClear={clear}
-              onContinue={continueToGuestDetails}
+              onContinue={continueReservation}
             />
           </div>
         </section>
@@ -216,9 +215,9 @@ function RoomSelectionPage() {
                 variant="scarlet"
                 size="xl"
                 disabled={totals.roomCount === 0}
-                onClick={continueToGuestDetails}
+                onClick={continueReservation}
               >
-                Continue to Guest Details
+                Continue Reservation
               </Button>
               <Button variant="outlineOnDark" size="xl" asChild>
                 <Link to="/hotels/$hotelId" params={{ hotelId }} search={search}>
