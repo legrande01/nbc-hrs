@@ -216,7 +216,7 @@ function RoomSelectionPage() {
                 disabled={totals.roomCount === 0}
                 onClick={continueToGuestDetails}
               >
-                Continue to Guest Details
+                Continue to checkout
               </Button>
               <Button variant="outlineOnDark" size="xl" asChild>
                 <Link to="/hotels/$hotelId" params={{ hotelId }}>Back to Property</Link>

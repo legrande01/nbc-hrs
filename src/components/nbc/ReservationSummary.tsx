@@ -129,7 +129,7 @@ export function ReservationSummary({
       </dl>
 
       <Button size="xl" disabled={empty} onClick={onContinue}>
-        Continue to Guest Details
+        Continue to checkout
       </Button>
       <p className="text-xs leading-relaxed text-muted-foreground">
         You are reserving room categories. Physical room numbers are assigned by the hotel at
