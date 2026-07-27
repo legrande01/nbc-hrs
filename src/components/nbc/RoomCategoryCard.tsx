@@ -89,64 +89,79 @@ export function RoomCategoryCard({
         )}
       </div>
 
-      <div className="grid content-start gap-5 p-6 lg:p-7">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="text-2xl font-semibold tracking-tight text-foreground">{room.name}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Room category · physical room assigned at check-in
-            </p>
+      <div className="grid content-start gap-6 p-6 lg:p-8">
+        {/* Room information */}
+        <div className="grid gap-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="text-2xl font-semibold tracking-tight text-foreground">{room.name}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Room category · physical room assigned at check-in
+              </p>
+            </div>
+            {hasDates && <AvailabilityBadge room={room} />}
           </div>
-          {hasDates && <AvailabilityBadge room={room} />}
+
+          <ul className="grid gap-2.5 text-sm text-muted-foreground sm:grid-cols-2">
+            <li className="flex items-center gap-2">
+              <Maximize2 aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
+              {room.sizeSqm} sqm
+            </li>
+            <li className="flex items-center gap-2">
+              <BedDouble aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
+              {room.bedType}
+            </li>
+            <li className="flex items-center gap-2">
+              <Users aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
+              Max {room.maxAdults} adults
+              {room.maxChildren > 0 ? ` · ${room.maxChildren} children` : ""}
+            </li>
+            <li className="flex items-center gap-2">
+              <Croissant aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
+              {room.breakfast}
+            </li>
+          </ul>
         </div>
 
-        <ul className="grid gap-2.5 text-sm text-muted-foreground sm:grid-cols-2">
-          <li className="flex items-center gap-2">
-            <Maximize2 aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
-            {room.sizeSqm} sqm
-          </li>
-          <li className="flex items-center gap-2">
-            <BedDouble aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
-            {room.bedType}
-          </li>
-          <li className="flex items-center gap-2">
-            <Users aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
-            Max {room.maxAdults} adults
-            {room.maxChildren > 0 ? ` · ${room.maxChildren} children` : ""}
-          </li>
-          <li className="flex items-center gap-2">
-            <Croissant aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
-            {room.breakfast}
-          </li>
-        </ul>
-
-        <ul className="flex flex-wrap gap-2" aria-label={`${room.name} amenities`}>
-          {room.amenities.map((key) => {
-            const { label, icon: Icon } = amenityMeta[key];
-            return (
-              <li
-                key={key}
-                className="flex min-w-0 items-center gap-1.5 rounded-full border border-border/70 bg-secondary/40 px-2.5 py-1 text-xs font-medium text-muted-foreground"
-              >
-                <Icon aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.75} />
-                <span className="truncate">{label}</span>
-              </li>
-            );
-          })}
-        </ul>
-
-        <p className="flex items-start gap-2 text-sm text-nbc-emerald">
-          <ShieldCheck aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={1.75} />
-          {room.cancellation}
-        </p>
-
-        {room.promotion && (
-          <p className="flex items-start gap-2 rounded-xl bg-secondary/50 px-4 py-3 text-sm text-foreground">
-            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-nbc-scarlet" strokeWidth={2} />
-            <span>
-              <span className="font-semibold">{room.promotion.label}:</span> {room.promotion.detail}
-            </span>
+        {/* Included benefits */}
+        <div className="grid gap-3 border-t border-border/60 pt-5">
+          <p className="nbc-eyebrow text-[0.5625rem] text-muted-foreground">Included Benefits</p>
+          <ul className="flex flex-wrap gap-2" aria-label={`${room.name} amenities`}>
+            {room.amenities.map((key) => {
+              const { label, icon: Icon } = amenityMeta[key];
+              return (
+                <li
+                  key={key}
+                  className="flex min-w-0 items-center gap-1.5 rounded-full border border-border/70 bg-secondary/40 px-2.5 py-1 text-xs font-medium text-muted-foreground"
+                >
+                  <Icon aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.75} />
+                  <span className="truncate">{label}</span>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="flex items-start gap-2 text-sm text-nbc-emerald">
+            <ShieldCheck aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={1.75} />
+            {room.cancellation}
           </p>
+        </div>
+
+        {/* Promotion */}
+        {room.promotion && (
+          <div className="grid gap-3 border-t border-border/60 pt-5">
+            <p className="nbc-eyebrow text-[0.5625rem] text-muted-foreground">Promotion</p>
+            <p className="flex items-start gap-2 rounded-xl bg-secondary/50 px-4 py-3 text-sm text-foreground">
+              <Check
+                aria-hidden="true"
+                className="mt-0.5 size-4 shrink-0 text-nbc-scarlet"
+                strokeWidth={2}
+              />
+              <span>
+                <span className="font-semibold">{room.promotion.label}:</span>{" "}
+                {room.promotion.detail}
+              </span>
+            </p>
+          </div>
         )}
 
         {!occupancy.fits && (
@@ -159,7 +174,9 @@ export function RoomCategoryCard({
           </p>
         )}
 
-        <div className="mt-1 grid gap-4 border-t border-border pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+        {/* Pricing + primary action */}
+        <div className="grid gap-4 rounded-xl bg-secondary/30 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+
           <div>
             <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">From</p>
             <p className="mt-1 flex flex-wrap items-baseline gap-2">
