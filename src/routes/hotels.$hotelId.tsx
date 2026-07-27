@@ -25,17 +25,24 @@ import { PropertyHero } from "@/components/nbc/PropertyHero";
 import { PropertyGallery } from "@/components/nbc/PropertyGallery";
 import { RoomPreviewCard } from "@/components/nbc/RoomPreviewCard";
 import { ReviewCarousel } from "@/components/nbc/ReviewCarousel";
+import { AvailabilityModal } from "@/components/nbc/AvailabilityModal";
 
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { getPropertyDetail } from "@/lib/nbc-property";
-import { parseRoomSelectionSearch } from "@/lib/nbc-room-selection";
+import {
+  isCompleteStay,
+  parseRoomSelectionSearch,
+  type RoomSelectionSearch,
+} from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId")({
+  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
   loader: ({ params }) => {
     const property = getPropertyDetail(params.hotelId);
     if (!property) throw notFound();
     return { name: property.hotel.name, positioning: property.positioning };
   },
+
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
