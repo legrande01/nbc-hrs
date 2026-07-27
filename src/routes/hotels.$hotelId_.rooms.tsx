@@ -96,17 +96,12 @@ function RoomSelectionPage() {
     });
   }, []);
 
-  const editSearch = useCallback(() => {
-    navigate({
-      to: "/hotels",
-      search: parseDiscoverySearch({
-        checkIn: search.checkIn,
-        checkOut: search.checkOut,
-        guests: search.adults + search.children,
-        rooms: search.rooms,
-      }),
-    });
-  }, [navigate, search]);
+  const runAvailabilityCheck = useCallback(
+    (value: RoomSelectionSearch) => {
+      navigate({ to: "/hotels/$hotelId/rooms", params: { hotelId }, search: value });
+    },
+    [navigate, hotelId],
+  );
 
   const continueToGuestDetails = useCallback(() => {
     toast.success("Rooms reserved for this session. Guest Details opens in the next module.");
@@ -142,91 +137,101 @@ function RoomSelectionPage() {
               rooms are assigned by the hotel at check-in.
             </p>
 
-            <BookingSummaryBar
-              className="mt-8"
-              hotelName={hotel.name}
-              search={search}
-              nights={nights}
-              onEdit={editSearch}
-            />
+            {hasDates && (
+              <BookingSummaryBar
+                className="mt-8"
+                hotelName={hotel.name}
+                search={search}
+                nights={nights}
+              />
+            )}
           </div>
         </section>
 
-        {/* Available room categories + live reservation summary */}
-        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Available Rooms"
-            title={`${categories.length} room categories at ${hotel.name}`}
-            description={
-              hasDates
-                ? "Rates shown are for your selected dates and include applicable promotions."
-                : "Add your dates to see live availability and the exact price for your stay."
-            }
-          />
+        {hasDates ? (
+          <>
+            {/* Available room categories + live reservation summary */}
+            <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+              <SectionHeading
+                eyebrow="Available Rooms"
+                title={`${categories.length} room categories at ${hotel.name}`}
+                description="Rates shown are for your selected dates and include applicable promotions."
+              />
 
-          <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-            <div className="grid gap-6">
-              {categories.map((room) => (
-                <RoomCategoryCard
-                  key={room.id}
-                  room={room}
+              <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+                <div className="grid gap-8">
+                  {categories.map((room) => (
+                    <RoomCategoryCard
+                      key={room.id}
+                      room={room}
+                      currency={hotel.currency}
+                      nights={nights}
+                      hasDates={hasDates}
+                      occupancy={checkOccupancy(room, search)}
+                      quantity={selection[room.id] ?? 0}
+                      onAdd={() => increment(room.id)}
+                      onRemove={() => decrement(room.id)}
+                    />
+                  ))}
+                </div>
+
+                <ReservationSummary
+                  className="lg:sticky lg:top-24"
+                  totals={totals}
                   currency={hotel.currency}
                   nights={nights}
-                  hasDates={hasDates}
-                  occupancy={checkOccupancy(room, search)}
-                  quantity={selection[room.id] ?? 0}
-                  onAdd={() => increment(room.id)}
-                  onRemove={() => decrement(room.id)}
+                  onIncrement={increment}
+                  onDecrement={decrement}
+                  onClear={clear}
+                  onContinue={continueToGuestDetails}
                 />
-              ))}
-            </div>
+              </div>
+            </section>
 
-            <ReservationSummary
-              className="lg:sticky lg:top-24"
-              totals={totals}
-              currency={hotel.currency}
-              nights={nights}
-              onIncrement={increment}
-              onDecrement={decrement}
-              onClear={clear}
-              onContinue={continueToGuestDetails}
+            {/* Continue CTA */}
+            <section className="relative isolate overflow-hidden nbc-royal-gradient">
+              <GiraffePattern opacity={0.07} />
+              <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-8 lg:py-20">
+                <div className="min-w-0">
+                  <p className="nbc-eyebrow text-nbc-gold">Almost there</p>
+                  <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
+                    Happy with your selection?
+                  </h2>
+                  <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/75">
+                    {totals.roomCount > 0
+                      ? `${totals.roomCount} ${totals.roomCount === 1 ? "room" : "rooms"} ready to reserve at ${hotel.name}.`
+                      : `Select at least one room category to continue with your stay at ${hotel.name}.`}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+                  <Button
+                    variant="scarlet"
+                    size="xl"
+                    disabled={totals.roomCount === 0}
+                    onClick={continueToGuestDetails}
+                  >
+                    Continue to checkout
+                  </Button>
+                  <Button variant="outlineOnDark" size="xl" asChild>
+                    <Link to="/hotels/$hotelId" params={{ hotelId }}>Back to Property</Link>
+                  </Button>
+                </div>
+              </div>
+            </section>
+          </>
+        ) : (
+          <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+            <AvailabilityPanel
+              hotelName={hotel.name}
+              defaultValue={search}
+              onCheck={runAvailabilityCheck}
             />
-          </div>
-        </section>
-
-        {/* Continue CTA */}
-        <section className="relative isolate overflow-hidden nbc-royal-gradient">
-          <GiraffePattern opacity={0.07} />
-          <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-8 lg:py-20">
-            <div className="min-w-0">
-              <p className="nbc-eyebrow text-nbc-gold">Almost there</p>
-              <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
-                Happy with your selection?
-              </h2>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/75">
-                {totals.roomCount > 0
-                  ? `${totals.roomCount} ${totals.roomCount === 1 ? "room" : "rooms"} ready to reserve at ${hotel.name}.`
-                  : `Select at least one room category to continue with your stay at ${hotel.name}.`}
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
-              <Button
-                variant="scarlet"
-                size="xl"
-                disabled={totals.roomCount === 0}
-                onClick={continueToGuestDetails}
-              >
-                Continue to checkout
-              </Button>
-              <Button variant="outlineOnDark" size="xl" asChild>
-                <Link to="/hotels/$hotelId" params={{ hotelId }}>Back to Property</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       <GlobalFooter />
     </div>
   );
 }
+
