@@ -69,7 +69,16 @@ function ReservationDetailsPage() {
     [session, profile],
   );
 
+  const [draft, setDraft] = useState<ReservationOwner>(initialOwner);
+  const [ownerValid, setOwnerValid] = useState(false);
+
+  const handleOwnerChange = useCallback((owner: ReservationOwner, valid: boolean) => {
+    setDraft(owner);
+    setOwnerValid(valid);
+  }, []);
+
   const validSession = session && session.propertyId === hotelId && session.roomLines.length > 0;
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
