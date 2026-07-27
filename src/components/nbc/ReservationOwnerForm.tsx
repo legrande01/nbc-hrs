@@ -1,6 +1,5 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { ComplianceNotice } from "@/components/nbc/ComplianceNotice";
 import type { ReservationOwner } from "@/lib/nbc-booking-flow";
+import { cn } from "@/lib/utils";
 
 const countries = [
   "Tanzania",
@@ -31,26 +31,37 @@ const countries = [
 
 interface ReservationOwnerFormProps {
   initial: ReservationOwner;
-  onSubmit: (owner: ReservationOwner) => void;
+  /** Emits the current draft and whether every mandatory field is complete. */
+  onChange: (owner: ReservationOwner, valid: boolean) => void;
+  className?: string;
 }
 
-function Group({
-  eyebrow,
+/** Validation lives next to the shape it validates so the CTA can react to it. */
+export function validateOwner(owner: ReservationOwner): Record<string, string> {
+  const errors: Record<string, string> = {};
+  if (!owner.fullName.trim()) errors.fullName = "Please enter the reservation owner's full name.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(owner.email.trim())) {
+    errors.email = "Please enter a valid email address.";
+  }
+  if (owner.phone.trim().length < 9) errors.phone = "Please enter a reachable phone number.";
+  if (!owner.country) errors.country = "Please select a country.";
+  return errors;
+}
+
+function Section({
   title,
   description,
   children,
 }: {
-  eyebrow: string;
   title: string;
   description: string;
   children: React.ReactNode;
 }) {
   return (
-    <fieldset className="grid gap-5 rounded-2xl border border-border/70 bg-card p-6 shadow-card">
+    <fieldset className="grid gap-5">
       <legend className="sr-only">{title}</legend>
       <div>
-        <p className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">{eyebrow}</p>
-        <h2 className="mt-2 text-lg font-semibold tracking-tight text-foreground">{title}</h2>
+        <h2 className="text-lg font-semibold tracking-tight text-foreground">{title}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{description}</p>
       </div>
       {children}
@@ -59,41 +70,52 @@ function Group({
 }
 
 /**
- * Collects only what the reservation owner must provide.
+ * Collects only what the reservation owner must provide, as one unified card.
  * Guest assignment and room assignment stay with Reception at check-in.
+ * The primary action lives in the Reservation Summary, so this form has none.
  */
-export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerFormProps) {
+export function ReservationOwnerForm({ initial, onChange, className }: ReservationOwnerFormProps) {
   const [owner, setOwner] = useState<ReservationOwner>(initial);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const errors = validateOwner(owner);
+
+  useEffect(() => {
+    onChange(owner, Object.keys(validateOwner(owner)).length === 0);
+  }, [owner, onChange]);
 
   function set<K extends keyof ReservationOwner>(key: K, value: ReservationOwner[K]) {
     setOwner((prev) => ({ ...prev, [key]: value }));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const next: Record<string, string> = {};
-    if (!owner.fullName.trim()) next.fullName = "Please enter the reservation owner's full name.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(owner.email.trim())) {
-      next.email = "Please enter a valid email address.";
-    }
-    if (owner.phone.trim().length < 9) next.phone = "Please enter a reachable phone number.";
-    if (!owner.country) next.country = "Please select a country.";
+  function blur(key: string) {
+    setTouched((prev) => ({ ...prev, [key]: true }));
+  }
 
-    setErrors(next);
-    if (Object.keys(next).length > 0) return;
-    onSubmit({
-      ...owner,
-      fullName: owner.fullName.trim(),
-      email: owner.email.trim(),
-      phone: owner.phone.trim(),
-    });
+  function errorFor(key: string) {
+    return touched[key] ? errors[key] : undefined;
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="grid gap-6">
-      <Group
-        eyebrow="Step 1"
+    <form
+      noValidate
+      onSubmit={(event) => event.preventDefault()}
+      className={cn(
+        "grid gap-10 rounded-2xl border border-border/70 bg-card p-6 shadow-card sm:p-8",
+        className,
+      )}
+    >
+      <div>
+        <p className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Your Details</p>
+        <h2 className="mt-2 text-xl font-semibold tracking-tight text-foreground">
+          Reservation details
+        </h2>
+        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+          Everything we need to confirm your stay, in one place.
+        </p>
+      </div>
+
+      <Section
         title="Contact Information"
         description="We use these details to send your booking confirmation and to reach you about your stay."
       >
@@ -105,10 +127,11 @@ export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerForm
               value={owner.fullName}
               autoComplete="name"
               onChange={(event) => set("fullName", event.target.value)}
-              aria-invalid={Boolean(errors.fullName)}
+              onBlur={() => blur("fullName")}
+              aria-invalid={Boolean(errorFor("fullName"))}
             />
-            {errors.fullName ? (
-              <p className="text-xs text-destructive">{errors.fullName}</p>
+            {errorFor("fullName") ? (
+              <p className="text-xs text-destructive">{errorFor("fullName")}</p>
             ) : null}
           </div>
 
@@ -120,9 +143,12 @@ export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerForm
               value={owner.email}
               autoComplete="email"
               onChange={(event) => set("email", event.target.value)}
-              aria-invalid={Boolean(errors.email)}
+              onBlur={() => blur("email")}
+              aria-invalid={Boolean(errorFor("email"))}
             />
-            {errors.email ? <p className="text-xs text-destructive">{errors.email}</p> : null}
+            {errorFor("email") ? (
+              <p className="text-xs text-destructive">{errorFor("email")}</p>
+            ) : null}
           </div>
 
           <div className="grid gap-2">
@@ -134,15 +160,17 @@ export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerForm
               value={owner.phone}
               autoComplete="tel"
               onChange={(event) => set("phone", event.target.value)}
-              aria-invalid={Boolean(errors.phone)}
+              onBlur={() => blur("phone")}
+              aria-invalid={Boolean(errorFor("phone"))}
             />
-            {errors.phone ? <p className="text-xs text-destructive">{errors.phone}</p> : null}
+            {errorFor("phone") ? (
+              <p className="text-xs text-destructive">{errorFor("phone")}</p>
+            ) : null}
           </div>
         </div>
-      </Group>
+      </Section>
 
-      <Group
-        eyebrow="Step 2"
+      <Section
         title="Traveller Information"
         description="Helps the hotel prepare for your arrival and lets us communicate in your language."
       >
@@ -150,7 +178,7 @@ export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerForm
           <div className="grid gap-2">
             <Label htmlFor="country">Country / nationality</Label>
             <Select value={owner.country} onValueChange={(value) => set("country", value)}>
-              <SelectTrigger id="country" aria-invalid={Boolean(errors.country)}>
+              <SelectTrigger id="country" aria-invalid={Boolean(errorFor("country"))}>
                 <SelectValue placeholder="Select country" />
               </SelectTrigger>
               <SelectContent>
@@ -161,7 +189,9 @@ export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerForm
                 ))}
               </SelectContent>
             </Select>
-            {errors.country ? <p className="text-xs text-destructive">{errors.country}</p> : null}
+            {errorFor("country") ? (
+              <p className="text-xs text-destructive">{errorFor("country")}</p>
+            ) : null}
           </div>
 
           <div className="grid gap-2">
@@ -183,10 +213,9 @@ export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerForm
             </p>
           </div>
         </div>
-      </Group>
+      </Section>
 
-      <Group
-        eyebrow="Optional"
+      <Section
         title="Arrival &amp; Preferences"
         description="Optional details the hotel will do its best to accommodate."
       >
@@ -214,15 +243,9 @@ export function ReservationOwnerForm({ initial, onSubmit }: ReservationOwnerForm
             </p>
           </div>
         </div>
-      </Group>
+      </Section>
 
       <ComplianceNotice />
-
-      <div className="flex justify-end">
-        <Button type="submit" size="xl">
-          Continue to Payment
-        </Button>
-      </div>
     </form>
   );
 }
