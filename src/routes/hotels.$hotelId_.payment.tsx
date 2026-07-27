@@ -78,10 +78,16 @@ function PaymentPage() {
     useBookingFlow();
 
   const [selected, setSelected] = useState<PaymentMethodId | undefined>(session?.paymentMethodId);
-  const [phone, setPhone] = useState(session?.owner?.phone ?? "");
-  const [cardNumber, setCardNumber] = useState("");
-  const [instalments, setInstalments] = useState(3);
   const [processing, setProcessing] = useState(false);
+  const [details, setDetails] = useState<PaymentDetailsState>({
+    phone: session?.owner?.phone ?? "",
+    cardNumber: "",
+    cardName: session?.owner?.fullName ?? "",
+    cardExpiry: "",
+    cardCvc: "",
+    instalments: 3,
+    carrier: "M-Pesa",
+  });
 
   const exclusive = useMemo(() => methodsInGroup("nbc-exclusive"), []);
   const everyone = useMemo(() => methodsInGroup("everyone"), []);
@@ -89,121 +95,30 @@ function PaymentPage() {
   const valid = session && session.propertyId === hotelId && session.roomLines.length > 0;
   const total = session?.pricing.total ?? 0;
   const currency = session?.pricing.currency ?? "TZS";
+  const selectedMethod = selected ? getPaymentMethod(selected) : undefined;
 
-  function confirm(method: PaymentMethod) {
-    if (!session) return;
+  function setDetail<K extends keyof PaymentDetailsState>(key: K, value: PaymentDetailsState[K]) {
+    setDetails((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function finalize() {
+    if (!session || !selectedMethod) return;
     setProcessing(true);
-    selectPayment(method.id);
+    selectPayment(selectedMethod.id);
     const outcome = buildPaymentOutcome({
-      method,
+      method: selectedMethod,
       amount: total,
       currency,
       profile,
-      phone: method.id === "mobile-money" ? phone : undefined,
-      cardLast4: method.id === "card" ? cardNumber.replace(/\D/g, "").slice(-4) : undefined,
-      instalmentCount: instalments,
+      phone: selectedMethod.id === "mobile-money" ? details.phone : undefined,
+      cardLast4:
+        selectedMethod.id === "card"
+          ? details.cardNumber.replace(/\D/g, "").slice(-4)
+          : undefined,
+      instalmentCount: details.instalments,
     });
     confirmSession(outcome);
     navigate({ to: "/hotels/$hotelId/confirmation", params: { hotelId }, search });
-  }
-
-  function renderPanel(method: PaymentMethod) {
-    const eligible = isMethodEligible(method, profile, nbcAccountLinked);
-    if (!eligible) return null;
-
-    return (
-      <div className="grid gap-5">
-        {method.id === "bnpl" ? (
-          <div className="grid gap-3">
-            <Label htmlFor="instalments">Instalment plan</Label>
-            <div className="flex flex-wrap gap-2">
-              {[3, 6, 12].map((count) => (
-                <button
-                  key={count}
-                  type="button"
-                  onClick={() => setInstalments(count)}
-                  aria-pressed={instalments === count}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                    instalments === count
-                      ? "border-transparent bg-primary text-primary-foreground"
-                      : "border-border bg-background text-foreground hover:bg-secondary"
-                  }`}
-                >
-                  {count} months
-                </button>
-              ))}
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {formatPrice(Math.round(total / instalments), currency)} per month · first payment
-              due next month.
-            </p>
-          </div>
-        ) : null}
-
-        {method.id === "save-to-buy" && profile.savingsGoal ? (
-          <div className="grid gap-1.5">
-            <p className="text-sm font-medium text-foreground">{profile.savingsGoal.name}</p>
-            <p className="text-sm text-muted-foreground">
-              {formatPrice(profile.savingsGoal.saved, currency)} saved of{" "}
-              {formatPrice(profile.savingsGoal.target, currency)}. This reservation draws{" "}
-              {formatPrice(total, currency)}.
-            </p>
-          </div>
-        ) : null}
-
-        {method.id === "loyalty-points" ? (
-          <p className="text-sm text-muted-foreground">
-            You have {profile.loyaltyPoints.toLocaleString("en-GB")} points. This reservation
-            redeems {Math.round(total / profile.loyaltyPointValue).toLocaleString("en-GB")} points.
-          </p>
-        ) : null}
-
-        {method.id === "mobile-money" ? (
-          <div className="grid max-w-sm gap-2">
-            <Label htmlFor="momo-phone">Mobile money number</Label>
-            <Input
-              id="momo-phone"
-              type="tel"
-              placeholder="+255 700 000 000"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-            />
-            <p className="text-xs text-muted-foreground">
-              You will receive a USSD push to approve the payment.
-            </p>
-          </div>
-        ) : null}
-
-        {method.id === "card" ? (
-          <div className="grid max-w-sm gap-2">
-            <Label htmlFor="card-number">Card number</Label>
-            <Input
-              id="card-number"
-              inputMode="numeric"
-              placeholder="0000 0000 0000 0000"
-              value={cardNumber}
-              onChange={(event) => setCardNumber(event.target.value)}
-            />
-            <p className="text-xs text-muted-foreground">
-              Card details are placeholders in this preview build.
-            </p>
-          </div>
-        ) : null}
-
-        {method.id === "control-number" ? (
-          <p className="text-sm text-muted-foreground">
-            We will generate a control number and hold your rooms for 48 hours. Pay at any NBC
-            branch, agent or through your bank app.
-          </p>
-        ) : null}
-
-        <div>
-          <Button size="lg" disabled={processing} onClick={() => confirm(method)}>
-            {method.cta} · {formatPrice(total, currency)}
-          </Button>
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -236,52 +151,78 @@ function PaymentPage() {
         <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
           {valid ? (
             <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-              <div className="grid gap-12">
-                <div>
-                  <GroupHeading
-                    title="NBC Exclusive Ways to Pay"
-                    description="Flexible options available to NBC customers."
-                  />
-                  {!nbcAccountLinked ? (
-                    <LinkNbcAccountCard className="mb-5" onLink={linkNbcAccount} />
-                  ) : null}
+              <div className="grid gap-8">
+                <div className="grid gap-8 rounded-2xl border border-border/70 bg-card p-6 shadow-card sm:p-8">
+                  <div>
+                    <p className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Step A</p>
+                    <h2 className="mt-2 text-xl font-semibold tracking-tight text-foreground">
+                      Choose Payment Method
+                    </h2>
+                  </div>
+
                   <div className="grid gap-4">
-                    {exclusive.map((method) => (
-                      <PaymentMethodCard
-                        key={method.id}
-                        method={method}
-                        selected={selected === method.id}
-                        eligible={isMethodEligible(method, profile, nbcAccountLinked)}
-                        onSelect={() => setSelected(method.id)}
-                      >
-                        {renderPanel(method)}
-                      </PaymentMethodCard>
-                    ))}
+                    <GroupHeading
+                      title="NBC Exclusive"
+                      description="Flexible ways to pay, available to NBC customers."
+                    />
+                    {!nbcAccountLinked ? <LinkNbcAccountCard onLink={linkNbcAccount} /> : null}
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                      {exclusive.map((method) => (
+                        <PaymentMethodCard
+                          key={method.id}
+                          method={method}
+                          selected={selected === method.id}
+                          eligible={isMethodEligible(method, profile, nbcAccountLinked)}
+                          onSelect={() => setSelected(method.id)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4">
+                    <GroupHeading
+                      title="Available to Everyone"
+                      description="Standard payment options for all guests."
+                    />
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                      {everyone.map((method) => (
+                        <PaymentMethodCard
+                          key={method.id}
+                          method={method}
+                          selected={selected === method.id}
+                          eligible
+                          onSelect={() => setSelected(method.id)}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <GroupHeading
-                    title="Available to Everyone"
-                    description="Standard payment options for all guests."
-                  />
-                  <div className="grid gap-4">
-                    {everyone.map((method) => (
-                      <PaymentMethodCard
-                        key={method.id}
-                        method={method}
-                        selected={selected === method.id}
-                        eligible
-                        onSelect={() => setSelected(method.id)}
-                      >
-                        {renderPanel(method)}
-                      </PaymentMethodCard>
-                    ))}
-                  </div>
-                </div>
+                <PaymentDetailsPanel
+                  method={selectedMethod}
+                  profile={profile}
+                  total={total}
+                  currency={currency}
+                  value={details}
+                  onChange={setDetail}
+                />
               </div>
 
-              <ReservationReview className="lg:sticky lg:top-24" session={session} modifiable />
+              <ReservationReview
+                className="lg:sticky lg:top-24"
+                session={session}
+                modifiable
+                action={{
+                  label: processing ? "Processing…" : "Finalize Payment",
+                  disabled: !selectedMethod || processing,
+                  onClick: finalize,
+                }}
+                actionHint={
+                  selectedMethod
+                    ? undefined
+                    : "Select a payment method to finalize your reservation."
+                }
+              />
             </div>
           ) : (
             <div className="mx-auto max-w-xl rounded-2xl border border-border/70 bg-card p-8 text-center shadow-card">
@@ -305,3 +246,4 @@ function PaymentPage() {
     </div>
   );
 }
+
