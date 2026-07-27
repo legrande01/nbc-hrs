@@ -114,14 +114,8 @@ function RoomSelectionPage() {
     });
   }, []);
 
-  const runAvailabilityCheck = useCallback(
-    (value: RoomSelectionSearch) => {
-      navigate({ to: "/hotels/$hotelId/rooms", params: { hotelId }, search: value });
-    },
-    [navigate, hotelId],
-  );
-
   const continueToGuestDetails = useCallback(() => {
+
     toast.success("Rooms reserved for this session. Guest Details opens in the next module.");
   }, []);
 
