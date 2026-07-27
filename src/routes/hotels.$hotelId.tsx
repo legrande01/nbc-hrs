@@ -375,7 +375,18 @@ function PropertyDetailsPage() {
         </section>
       </main>
 
+      <AvailabilityModal
+        open={availabilityOpen}
+        onOpenChange={setAvailabilityOpen}
+        defaultValue={search}
+        onConfirm={(value) => {
+          setAvailabilityOpen(false);
+          openRoomSelection(value);
+        }}
+      />
+
       <GlobalFooter />
+
     </div>
   );
 }
