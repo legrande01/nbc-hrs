@@ -84,17 +84,31 @@ const nearbyIcons = {
 
 function PropertyDetailsPage() {
   const { hotelId } = Route.useParams();
+  const search = Route.useSearch();
   const property = useMemo(() => getPropertyDetail(hotelId), [hotelId]);
 
   const navigate = useNavigate();
+  const [availabilityOpen, setAvailabilityOpen] = useState(false);
 
+  const openRoomSelection = useCallback(
+    (value: RoomSelectionSearch) => {
+      navigate({ to: "/hotels/$hotelId/rooms", params: { hotelId }, search: value });
+    },
+    [navigate, hotelId],
+  );
+
+  /**
+   * Availability gate: continue straight through when the stay context is
+   * complete, otherwise collect it in the modal first.
+   */
   const goToRoomSelection = useCallback(() => {
-    navigate({
-      to: "/hotels/$hotelId/rooms",
-      params: { hotelId },
-      search: parseRoomSelectionSearch({}),
-    });
-  }, [navigate, hotelId]);
+    if (isCompleteStay(search)) {
+      openRoomSelection(search);
+      return;
+    }
+    setAvailabilityOpen(true);
+  }, [search, openRoomSelection]);
+
 
   const shareProperty = useCallback(async () => {
     if (typeof window === "undefined") return;
