@@ -10,15 +10,16 @@ import { GlobalFooter } from "@/components/nbc/GlobalFooter";
 import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
+import { AvailabilityPanel } from "@/components/nbc/AvailabilityPanel";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
-import { parseDiscoverySearch } from "@/lib/nbc-discovery-filters";
 import {
   buildTotals,
   checkOccupancy,
   getRoomSelectionData,
   nightsBetween,
   parseRoomSelectionSearch,
+  type RoomSelectionSearch,
 } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
