@@ -109,7 +109,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
             <Button variant="default" asChild>
-              <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }}>
+              <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }} search={stay ?? {}}>
                 View Details
               </Link>
             </Button>
