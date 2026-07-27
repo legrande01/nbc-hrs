@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import {
   Building2,
   ConciergeBell,
@@ -28,6 +28,7 @@ import { ReviewCarousel } from "@/components/nbc/ReviewCarousel";
 
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { getPropertyDetail } from "@/lib/nbc-property";
+import { parseRoomSelectionSearch } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId")({
   loader: ({ params }) => {
@@ -78,9 +79,15 @@ function PropertyDetailsPage() {
   const { hotelId } = Route.useParams();
   const property = useMemo(() => getPropertyDetail(hotelId), [hotelId]);
 
-  const scrollToRooms = useCallback(() => {
-    document.getElementById("room-types")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  const navigate = useNavigate();
+
+  const goToRoomSelection = useCallback(() => {
+    navigate({
+      to: "/hotels/$hotelId/rooms",
+      params: { hotelId },
+      search: parseRoomSelectionSearch({}),
+    });
+  }, [navigate, hotelId]);
 
   const shareProperty = useCallback(async () => {
     if (typeof window === "undefined") return;
@@ -107,7 +114,7 @@ function PropertyDetailsPage() {
       <GlobalNav />
 
       <main className="flex-1">
-        <PropertyHero hotel={hotel} onViewRooms={scrollToRooms} onShare={shareProperty} />
+        <PropertyHero hotel={hotel} onViewRooms={goToRoomSelection} onShare={shareProperty} />
 
         {/* Property overview — description, location, highlights & amenities */}
         <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
@@ -245,7 +252,7 @@ function PropertyDetailsPage() {
                 key={room.id}
                 room={room}
                 currency={hotel.currency}
-                onViewRooms={scrollToRooms}
+                onViewRooms={goToRoomSelection}
               />
             ))}
           </div>
@@ -336,7 +343,7 @@ function PropertyDetailsPage() {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
-              <Button variant="scarlet" size="xl" onClick={scrollToRooms}>
+              <Button variant="scarlet" size="xl" onClick={goToRoomSelection}>
                 View Available Rooms
               </Button>
               <Button variant="outlineOnDark" size="xl" asChild>

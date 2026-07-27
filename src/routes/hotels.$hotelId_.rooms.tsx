@@ -1,0 +1,232 @@
+import { useCallback, useMemo, useState } from "react";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import { AnnouncementBar } from "@/components/nbc/AnnouncementBar";
+import { GlobalNav } from "@/components/nbc/GlobalNav";
+import { GlobalFooter } from "@/components/nbc/GlobalFooter";
+import { GiraffePattern } from "@/components/nbc/GiraffePattern";
+import { SectionHeading } from "@/components/nbc/SectionHeading";
+import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
+import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
+import { ReservationSummary } from "@/components/nbc/ReservationSummary";
+import { parseDiscoverySearch } from "@/lib/nbc-discovery-filters";
+import {
+  buildTotals,
+  checkOccupancy,
+  getRoomSelectionData,
+  nightsBetween,
+  parseRoomSelectionSearch,
+} from "@/lib/nbc-room-selection";
+
+export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
+  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  loader: ({ params }) => {
+    const data = getRoomSelectionData(params.hotelId);
+    if (!data) throw notFound();
+    return { name: data.property.hotel.name };
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData) {
+      return {
+        meta: [
+          { title: "Rooms Unavailable — NBC Hospitality" },
+          { name: "robots", content: "noindex" },
+        ],
+      };
+    }
+    const title = `Choose Your Room — ${loaderData.name} | NBC Hospitality`;
+    const description = `Compare available room categories, rates, inclusions and promotions at ${loaderData.name}, then build your reservation.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
+  notFoundComponent: () => (
+    <div className="p-16 text-center text-muted-foreground">
+      We could not find rooms for that property.
+    </div>
+  ),
+  errorComponent: ({ error }) => (
+    <div role="alert" className="p-16 text-center text-muted-foreground">
+      {error.message}
+    </div>
+  ),
+  component: RoomSelectionPage,
+});
+
+function RoomSelectionPage() {
+  const { hotelId } = Route.useParams();
+  const search = Route.useSearch();
+  const navigate = useNavigate();
+
+  const data = useMemo(() => getRoomSelectionData(hotelId), [hotelId]);
+  const [selection, setSelection] = useState<Record<string, number>>({});
+
+  const nights = nightsBetween(search.checkIn, search.checkOut);
+  const hasDates = nights > 0;
+
+  const increment = useCallback((roomId: string) => {
+    setSelection((prev) => ({ ...prev, [roomId]: (prev[roomId] ?? 0) + 1 }));
+  }, []);
+
+  const decrement = useCallback((roomId: string) => {
+    setSelection((prev) => {
+      const next = { ...prev };
+      const quantity = (next[roomId] ?? 0) - 1;
+      if (quantity <= 0) delete next[roomId];
+      else next[roomId] = quantity;
+      return next;
+    });
+  }, []);
+
+  const clear = useCallback((roomId: string) => {
+    setSelection((prev) => {
+      const next = { ...prev };
+      delete next[roomId];
+      return next;
+    });
+  }, []);
+
+  const editSearch = useCallback(() => {
+    navigate({
+      to: "/hotels",
+      search: parseDiscoverySearch({
+        checkIn: search.checkIn,
+        checkOut: search.checkOut,
+        guests: search.adults + search.children,
+        rooms: search.rooms,
+      }),
+    });
+  }, [navigate, search]);
+
+  const continueToGuestDetails = useCallback(() => {
+    toast.success("Rooms reserved for this session. Guest Details opens in the next module.");
+  }, []);
+
+  if (!data) throw notFound();
+
+  const { property, categories } = data;
+  const { hotel } = property;
+  const totals = buildTotals(categories, selection, nights);
+
+  return (
+    <div className="flex min-h-dvh flex-col bg-background">
+      <AnnouncementBar />
+      <GlobalNav />
+
+      <main className="flex-1">
+        {/* Booking summary */}
+        <section className="relative isolate overflow-hidden border-b border-border bg-secondary/25">
+          <div className="mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-12">
+            <Button variant="ghost" size="sm" asChild className="-ml-3 gap-2 text-muted-foreground">
+              <Link to="/hotels/$hotelId" params={{ hotelId }}>
+                <ArrowLeft aria-hidden="true" />
+                Back to {hotel.name}
+              </Link>
+            </Button>
+
+            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl">
+              Choose your room
+            </h1>
+            <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              Compare room categories for your stay. Select one category or mix several — physical
+              rooms are assigned by the hotel at check-in.
+            </p>
+
+            <BookingSummaryBar
+              className="mt-8"
+              hotelName={hotel.name}
+              search={search}
+              nights={nights}
+              onEdit={editSearch}
+            />
+          </div>
+        </section>
+
+        {/* Available room categories + live reservation summary */}
+        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+          <SectionHeading
+            eyebrow="Available Rooms"
+            title={`${categories.length} room categories at ${hotel.name}`}
+            description={
+              hasDates
+                ? "Rates shown are for your selected dates and include applicable promotions."
+                : "Add your dates to see live availability and the exact price for your stay."
+            }
+          />
+
+          <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+            <div className="grid gap-6">
+              {categories.map((room) => (
+                <RoomCategoryCard
+                  key={room.id}
+                  room={room}
+                  currency={hotel.currency}
+                  nights={nights}
+                  hasDates={hasDates}
+                  occupancy={checkOccupancy(room, search)}
+                  quantity={selection[room.id] ?? 0}
+                  onAdd={() => increment(room.id)}
+                  onRemove={() => decrement(room.id)}
+                />
+              ))}
+            </div>
+
+            <ReservationSummary
+              className="lg:sticky lg:top-24"
+              totals={totals}
+              currency={hotel.currency}
+              nights={nights}
+              onIncrement={increment}
+              onDecrement={decrement}
+              onClear={clear}
+              onContinue={continueToGuestDetails}
+            />
+          </div>
+        </section>
+
+        {/* Continue CTA */}
+        <section className="relative isolate overflow-hidden nbc-royal-gradient">
+          <GiraffePattern opacity={0.07} />
+          <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-8 lg:py-20">
+            <div className="min-w-0">
+              <p className="nbc-eyebrow text-nbc-gold">Almost there</p>
+              <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
+                Happy with your selection?
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/75">
+                {totals.roomCount > 0
+                  ? `${totals.roomCount} ${totals.roomCount === 1 ? "room" : "rooms"} ready to reserve at ${hotel.name}.`
+                  : `Select at least one room category to continue with your stay at ${hotel.name}.`}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+              <Button
+                variant="scarlet"
+                size="xl"
+                disabled={totals.roomCount === 0}
+                onClick={continueToGuestDetails}
+              >
+                Continue to Guest Details
+              </Button>
+              <Button variant="outlineOnDark" size="xl" asChild>
+                <Link to="/hotels/$hotelId" params={{ hotelId }}>Back to Property</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <GlobalFooter />
+    </div>
+  );
+}
