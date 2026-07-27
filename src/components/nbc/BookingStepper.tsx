@@ -2,10 +2,9 @@ import { Check } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-export type BookingStepId = "rooms" | "reservation" | "payment" | "confirmation";
+export type BookingStepId = "reservation" | "payment" | "confirmation";
 
 const steps: { id: BookingStepId; label: string }[] = [
-  { id: "rooms", label: "Room Selection" },
   { id: "reservation", label: "Reservation Details" },
   { id: "payment", label: "Payment" },
   { id: "confirmation", label: "Confirmation" },
