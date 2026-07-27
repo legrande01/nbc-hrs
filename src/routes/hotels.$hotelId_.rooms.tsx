@@ -16,7 +16,6 @@ import { GlobalFooter } from "@/components/nbc/GlobalFooter";
 import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
-import { BookingStepper } from "@/components/nbc/BookingStepper";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
 import { useBookingFlow } from "@/lib/nbc-booking-flow";
@@ -168,7 +167,7 @@ function RoomSelectionPage() {
               rooms are assigned by the hotel at check-in.
             </p>
 
-            <BookingStepper current="rooms" className="mt-8" />
+
 
             <BookingSummaryBar
               className="mt-8"
