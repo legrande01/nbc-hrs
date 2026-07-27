@@ -168,7 +168,7 @@ function RoomSelectionPage() {
               rooms are assigned by the hotel at check-in.
             </p>
 
-            <BookingStepper current="rooms" className="mt-8" />
+
 
             <BookingSummaryBar
               className="mt-8"
