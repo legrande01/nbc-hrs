@@ -174,8 +174,9 @@ export function RoomCategoryCard({
           </p>
         )}
 
+        {/* Pricing + primary action */}
+        <div className="grid gap-4 rounded-xl bg-secondary/30 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
 
-        <div className="mt-1 grid gap-4 border-t border-border pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
           <div>
             <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">From</p>
             <p className="mt-1 flex flex-wrap items-baseline gap-2">
