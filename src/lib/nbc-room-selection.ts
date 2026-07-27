@@ -77,6 +77,16 @@ export function nightsBetween(checkIn: string, checkOut: string): number {
   return diff > 0 ? diff : 0;
 }
 
+/**
+ * Single definition of a valid booking context. Hotel Details uses it to decide
+ * whether to open the Availability modal; Room Selection uses it as a guard.
+ */
+export function isCompleteStay(search: RoomSelectionSearch): boolean {
+  return nightsBetween(search.checkIn, search.checkOut) > 0 && search.adults >= 1 && search.rooms >= 1;
+}
+
+
+
 export function formatStayDate(value: string): string {
   if (!value) return "Not selected";
   const date = new Date(value);

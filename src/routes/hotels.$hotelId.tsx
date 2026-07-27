@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import {
   Building2,
@@ -25,17 +25,24 @@ import { PropertyHero } from "@/components/nbc/PropertyHero";
 import { PropertyGallery } from "@/components/nbc/PropertyGallery";
 import { RoomPreviewCard } from "@/components/nbc/RoomPreviewCard";
 import { ReviewCarousel } from "@/components/nbc/ReviewCarousel";
+import { AvailabilityModal } from "@/components/nbc/AvailabilityModal";
 
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { getPropertyDetail } from "@/lib/nbc-property";
-import { parseRoomSelectionSearch } from "@/lib/nbc-room-selection";
+import {
+  isCompleteStay,
+  parseRoomSelectionSearch,
+  type RoomSelectionSearch,
+} from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId")({
+  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
   loader: ({ params }) => {
     const property = getPropertyDetail(params.hotelId);
     if (!property) throw notFound();
     return { name: property.hotel.name, positioning: property.positioning };
   },
+
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
@@ -77,17 +84,31 @@ const nearbyIcons = {
 
 function PropertyDetailsPage() {
   const { hotelId } = Route.useParams();
+  const search = Route.useSearch();
   const property = useMemo(() => getPropertyDetail(hotelId), [hotelId]);
 
   const navigate = useNavigate();
+  const [availabilityOpen, setAvailabilityOpen] = useState(false);
 
+  const openRoomSelection = useCallback(
+    (value: RoomSelectionSearch) => {
+      navigate({ to: "/hotels/$hotelId/rooms", params: { hotelId }, search: value });
+    },
+    [navigate, hotelId],
+  );
+
+  /**
+   * Availability gate: continue straight through when the stay context is
+   * complete, otherwise collect it in the modal first.
+   */
   const goToRoomSelection = useCallback(() => {
-    navigate({
-      to: "/hotels/$hotelId/rooms",
-      params: { hotelId },
-      search: parseRoomSelectionSearch({}),
-    });
-  }, [navigate, hotelId]);
+    if (isCompleteStay(search)) {
+      openRoomSelection(search);
+      return;
+    }
+    setAvailabilityOpen(true);
+  }, [search, openRoomSelection]);
+
 
   const shareProperty = useCallback(async () => {
     if (typeof window === "undefined") return;
@@ -354,7 +375,18 @@ function PropertyDetailsPage() {
         </section>
       </main>
 
+      <AvailabilityModal
+        open={availabilityOpen}
+        onOpenChange={setAvailabilityOpen}
+        defaultValue={search}
+        onConfirm={(value) => {
+          setAvailabilityOpen(false);
+          openRoomSelection(value);
+        }}
+      />
+
       <GlobalFooter />
+
     </div>
   );
 }

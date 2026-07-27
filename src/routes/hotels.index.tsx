@@ -266,7 +266,18 @@ function HotelDiscoveryPage() {
                 ) : (
                   <div className="grid gap-6">
                     {visible.map((hotel) => (
-                      <HotelResultCard key={hotel.id} hotel={hotel} />
+                      <HotelResultCard
+                        key={hotel.id}
+                        hotel={hotel}
+                        stay={{
+                          checkIn: search.checkIn,
+                          checkOut: search.checkOut,
+                          adults: search.guests,
+                          children: 0,
+                          rooms: search.rooms,
+                        }}
+                      />
+
                     ))}
                   </div>
                 )}

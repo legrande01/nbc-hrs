@@ -1,5 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  redirect,
+} from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
@@ -10,21 +15,34 @@ import { GlobalFooter } from "@/components/nbc/GlobalFooter";
 import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
-import { AvailabilityPanel } from "@/components/nbc/AvailabilityPanel";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
 import {
   buildTotals,
   checkOccupancy,
   getRoomSelectionData,
+  isCompleteStay,
   nightsBetween,
   parseRoomSelectionSearch,
-  type RoomSelectionSearch,
 } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
   validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  /**
+   * Defensive guard only. In the normal journey Hotel Details always collects
+   * availability before navigating here, so this never fires.
+   */
+  beforeLoad: ({ params, search }) => {
+    if (!isCompleteStay(search)) {
+      throw redirect({
+        to: "/hotels/$hotelId",
+        params: { hotelId: params.hotelId },
+        search,
+      });
+    }
+  },
   loader: ({ params }) => {
+
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();
     return { name: data.property.hotel.name };
@@ -67,13 +85,12 @@ export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
 function RoomSelectionPage() {
   const { hotelId } = Route.useParams();
   const search = Route.useSearch();
-  const navigate = useNavigate();
 
   const data = useMemo(() => getRoomSelectionData(hotelId), [hotelId]);
   const [selection, setSelection] = useState<Record<string, number>>({});
 
   const nights = nightsBetween(search.checkIn, search.checkOut);
-  const hasDates = nights > 0;
+
 
   const increment = useCallback((roomId: string) => {
     setSelection((prev) => ({ ...prev, [roomId]: (prev[roomId] ?? 0) + 1 }));
@@ -97,15 +114,9 @@ function RoomSelectionPage() {
     });
   }, []);
 
-  const runAvailabilityCheck = useCallback(
-    (value: RoomSelectionSearch) => {
-      navigate({ to: "/hotels/$hotelId/rooms", params: { hotelId }, search: value });
-    },
-    [navigate, hotelId],
-  );
-
   const continueToGuestDetails = useCallback(() => {
     toast.success("Rooms reserved for this session. Guest Details opens in the next module.");
+
   }, []);
 
   if (!data) throw notFound();
@@ -138,101 +149,90 @@ function RoomSelectionPage() {
               rooms are assigned by the hotel at check-in.
             </p>
 
-            {hasDates && (
-              <BookingSummaryBar
-                className="mt-8"
-                hotelName={hotel.name}
-                search={search}
-                nights={nights}
-              />
-            )}
+            <BookingSummaryBar
+              className="mt-8"
+              hotelName={hotel.name}
+              search={search}
+              nights={nights}
+            />
           </div>
         </section>
 
-        {hasDates ? (
-          <>
-            {/* Available room categories + live reservation summary */}
-            <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-              <SectionHeading
-                eyebrow="Available Rooms"
-                title={`${categories.length} room categories at ${hotel.name}`}
-                description="Rates shown are for your selected dates and include applicable promotions."
-              />
+        {/* Available room categories + live reservation summary */}
+        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+          <SectionHeading
+            eyebrow="Available Rooms"
+            title={`${categories.length} room categories at ${hotel.name}`}
+            description="Rates shown are for your selected dates and include applicable promotions."
+          />
 
-              <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-                <div className="grid gap-8">
-                  {categories.map((room) => (
-                    <RoomCategoryCard
-                      key={room.id}
-                      room={room}
-                      currency={hotel.currency}
-                      nights={nights}
-                      hasDates={hasDates}
-                      occupancy={checkOccupancy(room, search)}
-                      quantity={selection[room.id] ?? 0}
-                      onAdd={() => increment(room.id)}
-                      onRemove={() => decrement(room.id)}
-                    />
-                  ))}
-                </div>
-
-                <ReservationSummary
-                  className="lg:sticky lg:top-24"
-                  totals={totals}
+          <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+            <div className="grid gap-8">
+              {categories.map((room) => (
+                <RoomCategoryCard
+                  key={room.id}
+                  room={room}
                   currency={hotel.currency}
                   nights={nights}
-                  onIncrement={increment}
-                  onDecrement={decrement}
-                  onClear={clear}
-                  onContinue={continueToGuestDetails}
+                  hasDates
+                  occupancy={checkOccupancy(room, search)}
+                  quantity={selection[room.id] ?? 0}
+                  onAdd={() => increment(room.id)}
+                  onRemove={() => decrement(room.id)}
                 />
-              </div>
-            </section>
+              ))}
+            </div>
 
-            {/* Continue CTA */}
-            <section className="relative isolate overflow-hidden nbc-royal-gradient">
-              <GiraffePattern opacity={0.07} />
-              <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-8 lg:py-20">
-                <div className="min-w-0">
-                  <p className="nbc-eyebrow text-nbc-gold">Almost there</p>
-                  <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
-                    Happy with your selection?
-                  </h2>
-                  <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/75">
-                    {totals.roomCount > 0
-                      ? `${totals.roomCount} ${totals.roomCount === 1 ? "room" : "rooms"} ready to reserve at ${hotel.name}.`
-                      : `Select at least one room category to continue with your stay at ${hotel.name}.`}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
-                  <Button
-                    variant="scarlet"
-                    size="xl"
-                    disabled={totals.roomCount === 0}
-                    onClick={continueToGuestDetails}
-                  >
-                    Continue to checkout
-                  </Button>
-                  <Button variant="outlineOnDark" size="xl" asChild>
-                    <Link to="/hotels/$hotelId" params={{ hotelId }}>Back to Property</Link>
-                  </Button>
-                </div>
-              </div>
-            </section>
-          </>
-        ) : (
-          <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-            <AvailabilityPanel
-              hotelName={hotel.name}
-              defaultValue={search}
-              onCheck={runAvailabilityCheck}
+            <ReservationSummary
+              className="lg:sticky lg:top-24"
+              totals={totals}
+              currency={hotel.currency}
+              nights={nights}
+              onIncrement={increment}
+              onDecrement={decrement}
+              onClear={clear}
+              onContinue={continueToGuestDetails}
             />
-          </section>
-        )}
+          </div>
+        </section>
+
+        {/* Continue CTA */}
+        <section className="relative isolate overflow-hidden nbc-royal-gradient">
+          <GiraffePattern opacity={0.07} />
+          <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-8 lg:py-20">
+            <div className="min-w-0">
+              <p className="nbc-eyebrow text-nbc-gold">Almost there</p>
+              <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
+                Happy with your selection?
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/75">
+                {totals.roomCount > 0
+                  ? `${totals.roomCount} ${totals.roomCount === 1 ? "room" : "rooms"} ready to reserve at ${hotel.name}.`
+                  : `Select at least one room category to continue with your stay at ${hotel.name}.`}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+              <Button
+                variant="scarlet"
+                size="xl"
+                disabled={totals.roomCount === 0}
+                onClick={continueToGuestDetails}
+              >
+                Continue to Guest Details
+              </Button>
+              <Button variant="outlineOnDark" size="xl" asChild>
+                <Link to="/hotels/$hotelId" params={{ hotelId }} search={search}>
+                  Back to Property
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
 
       <GlobalFooter />
     </div>
   );
 }
+
 

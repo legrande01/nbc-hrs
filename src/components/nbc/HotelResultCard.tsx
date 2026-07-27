@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 
 interface HotelResultCardProps {
   hotel: DiscoveryHotel;
+  /** Stay context carried forward into Hotel Details so the CTA can skip the modal. */
+  stay?: { checkIn: string; checkOut: string; adults: number; children: number; rooms: number };
   className?: string;
 }
 
@@ -17,7 +19,8 @@ interface HotelResultCardProps {
  * Standard horizontal search-result card used across the platform.
  * Optimised for side-by-side comparison rather than storytelling.
  */
-export function HotelResultCard({ hotel, className }: HotelResultCardProps) {
+export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps) {
+
   return (
     <article
       className={cn(
@@ -106,7 +109,7 @@ export function HotelResultCard({ hotel, className }: HotelResultCardProps) {
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
             <Button variant="default" asChild>
-              <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }}>
+              <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }} search={stay ?? {}}>
                 View Details
               </Link>
             </Button>
