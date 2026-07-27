@@ -3,8 +3,6 @@ import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-ro
 import { ArrowLeft, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { AnnouncementBar } from "@/components/nbc/AnnouncementBar";
 import { GlobalNav } from "@/components/nbc/GlobalNav";
 import { GlobalFooter } from "@/components/nbc/GlobalFooter";
@@ -12,16 +10,20 @@ import { BookingStepper } from "@/components/nbc/BookingStepper";
 import { ReservationReview } from "@/components/nbc/ReservationReview";
 import { PaymentMethodCard } from "@/components/nbc/PaymentMethodCard";
 import { LinkNbcAccountCard } from "@/components/nbc/LinkNbcAccountCard";
-import { formatPrice } from "@/lib/nbc-discovery-filters";
+import {
+  PaymentDetailsPanel,
+  type PaymentDetailsState,
+} from "@/components/nbc/PaymentDetailsPanel";
 import { getRoomSelectionData, parseRoomSelectionSearch } from "@/lib/nbc-room-selection";
 import { useBookingFlow } from "@/lib/nbc-booking-flow";
 import {
   buildPaymentOutcome,
+  getPaymentMethod,
   isMethodEligible,
   methodsInGroup,
-  type PaymentMethod,
   type PaymentMethodId,
 } from "@/lib/nbc-payments";
+
 
 export const Route = createFileRoute("/hotels/$hotelId_/payment")({
   validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
