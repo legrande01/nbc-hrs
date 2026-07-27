@@ -1,48 +1,94 @@
-## Goal
-
-Make Room Selection a strict comparison screen that always receives a valid booking context. All availability collection moves to Hotel Details via a modal.
+## Flow and routes
 
 ```text
-Home → Discovery (search) → Hotel Details (sell + availability modal) → Room Selection (compare) → Guest Details
+/hotels/$hotelId/rooms          Room Selection      (exists)
+/hotels/$hotelId/reservation    Reservation Details (new)
+/hotels/$hotelId/payment        Payment             (new)
+/hotels/$hotelId/confirmation   Confirmation        (new)
 ```
 
-## What changes
+Each step inherits the same stay search params (`checkIn`, `checkOut`, `adults`, `children`, `rooms`) and uses the same defensive `beforeLoad` guard pattern already on Room Selection — invalid context redirects one step back, never forward. A shared `BookingStepper` header gives the four routes a single-flow feel.
 
-### 1. Hotel Details becomes the availability gate
-- `/hotels/$hotelId` gains `validateSearch` so it can carry `checkIn`, `checkOut`, `adults`, `children`, `rooms` forward from Discovery (discovery result cards pass the active search when linking to a property).
-- Every "Book Now" / "View Available Rooms" CTA (hero, room preview cards, bottom CTA) routes through one shared handler:
-  - Valid dates present → navigate straight to `/hotels/$hotelId/rooms` with those params.
-  - Dates missing or invalid → open the Availability modal.
+## Booking session (not form state)
 
-### 2. New Availability modal
-- New `src/components/nbc/AvailabilityModal.tsx` — a dialog reusing the field layout from `AvailabilityPanel`: check-in, check-out, adults, children, rooms.
-- Guest-focused copy:
-  - Title: "Choose your stay dates"
-  - Subtitle: "Select your travel dates and guests to view available rooms."
-  - Primary action: "View Available Rooms"
-- Validation: check-out after check-in, at least 1 adult, at least 1 room. Submit navigates to Room Selection with the collected params; the modal never renders room results.
-- Pre-fills from any partial params in the URL, otherwise sensible defaults.
-- `AvailabilityPanel.tsx` is removed once the modal replaces it (its field markup is lifted into a shared internal form).
+`src/lib/nbc-booking-flow.tsx` models a **booking session / draft reservation**, not temporary form state, so backend reservation locking is additive later:
 
-### 3. Room Selection becomes strict
-In `src/routes/hotels.$hotelId_.rooms.tsx`:
-- Remove the `AvailabilityPanel` render path, the `runAvailabilityCheck` handler, and the `hasDates` conditional branching.
-- Add a `beforeLoad` guard as **defensive programming only** — it validates the booking context and, if invalid, redirects back to `/hotels/$hotelId` carrying any existing params. In the normal journey this never fires, because Hotel Details always collects availability before navigating. No empty state, no search form, no placeholder page on this route.
-- The page body renders unconditionally: read-only Booking Summary header → room category cards → reservation summary → continue CTA.
+- `sessionId`, `createdAt`, `expiresAt` (hold window), `status: draft | pending_payment | confirmed | expired`
+- `stay` (dates, occupancy), `propertyId`, `roomLines` (category, quantity, rate snapshot)
+- `pricing` snapshot (subtotal, taxes, total, currency) — rates captured at selection time, as a real hold would
+- `owner`, `paymentOutcome`
+- Actions shaped like future server calls: `startSession`, `updateOwner`, `selectPayment`, `confirmSession`, `releaseSession`
 
-### 4. CTA rename
-- "Continue to checkout" becomes **"Continue to Guest Details"** in both `ReservationSummary.tsx` (sticky sidebar) and the bottom CTA in the rooms route.
+In-memory React context this sprint; the same interface later backed by a server function with no component changes.
 
-### 5. Shared stay-context helper
-- Add `isCompleteStay(search)` to `src/lib/nbc-room-selection.ts`, used by both the Hotel Details CTA handler and the Room Selection guard, so "valid booking context" is defined once.
+## Step 1 — Reservation Details
+
+Deliberately minimal. No guest assignment, no room assignment — those belong to Reception. The form is organised into two labelled groups:
+
+**Contact Information**
+- Full Name
+- Email
+- Phone
+
+**Traveller Information**
+- Country / Nationality
+- Preferred Language (English / Swahili) — stored on the session for future multilingual communications
+
+**Optional**: estimated arrival time, special requests (free text).
+
+Plus a compliance notice — all staying guests must present a valid government-issued ID at check-in, per Tanzanian regulations — and a sticky read-only reservation summary reused from `ReservationSummary`. CTA: "Continue to Payment".
+
+## Step 2 — Payment
+
+Two visually separated groups.
+
+**NBC Exclusive**
+1. Buy Now Pay Later (BNPL)
+2. Save to Buy (S2B)
+3. Loyalty Points
+
+**Available to Everyone**
+1. Mobile Money (USSD Push)
+2. Card Payment
+3. Control Number
+
+Exclusive methods are always visible (option B). Without a linked NBC account each shows its benefit line, is non-selectable, and a shared "Link NBC Account" card carries the action — an invitation, never an error state.
+
+Selecting a method expands an inline panel with only that method's fields: instalment preview (BNPL), savings-goal progress and drawdown (S2B), points balance and conversion (Loyalty), phone number (Mobile Money), card fields (Card), reference preview (Control Number).
+
+The reservation summary on this screen is **strictly read-only** — no quantity steppers, no date or occupancy editing. A single "Modify reservation" link returns the guest to the Reservation step, which is the only place stay details can change. NBC-linked state comes from `src/lib/nbc-profile.ts`, a demo profile shaped like a real user profile — no artificial UI toggle.
+
+CTA label varies by method ("Confirm & Pay", "Confirm with Points", "Generate Control Number").
+
+## Step 3 — Booking Confirmation
+
+One route driven by a single `PaymentOutcome`:
+
+| Method | Status | Headline |
+| --- | --- | --- |
+| Mobile Money / Card | paid | Reservation Confirmed & Paid |
+| Control Number | pending | Reservation Confirmed — Awaiting Payment |
+| BNPL | financed | Reservation Confirmed — Financed by NBC |
+| Save to Buy | paid | Reservation Confirmed — Paid from your savings goal |
+| Loyalty Points | paid | Reservation Confirmed — Paid with loyalty points |
+
+Shared shell: booking reference, hotel and stay summary, room lines, amount, reservation owner, the ID-at-check-in notice, plus actions — download/print, add to calendar, **"Email Booking Confirmation Again"** (stubbed session action with success toast, ready for backend), view booking, back to home. A method-specific block slots in: BNPL instalment schedule, Control Number with deadline and where to pay, S2B goal drawdown, Loyalty points redeemed and remaining balance.
+
+## New files
+
+- `src/lib/nbc-booking-flow.tsx` — booking session context, lifecycle, step guards
+- `src/lib/nbc-payments.ts` — ordered method catalogue, eligibility, outcome types
+- `src/lib/nbc-profile.ts` — demo profile with NBC-link state
+- `src/components/nbc/BookingStepper.tsx`
+- `src/components/nbc/ReservationOwnerForm.tsx`
+- `src/components/nbc/ComplianceNotice.tsx`
+- `src/components/nbc/PaymentMethodCard.tsx`
+- `src/components/nbc/LinkNbcAccountCard.tsx`
+- `src/components/nbc/ConfirmationHeader.tsx` + per-method detail blocks
+- Three new routes as listed above
+
+All extend existing NBC tokens and components — no new colour, type, or spacing decisions.
 
 ## Not in scope
 
-Guest Details, Payment, Confirmation. No changes to Discovery filtering logic beyond forwarding the active search into property links.
-
-## Technical notes
-
-- Room Selection keeps `validateSearch: parseRoomSelectionSearch`; the guard uses `throw redirect(...)` from `@tanstack/react-router` in `beforeLoad`.
-- Hotel Details keeps its existing `head()` metadata; adding `validateSearch` does not affect SSR or prerender.
-- Modal open state is local `useState` in the Hotel Details route component, passed to hero and room preview cards through their existing CTA callbacks — no new global state.
-- Date fields use the shadcn datepicker with `pointer-events-auto` on the calendar so it stays interactive inside the dialog.
+Real payment processing, real NBC account linking/auth, persistence, outbound email, and the Hotel/NBC Operations platforms.

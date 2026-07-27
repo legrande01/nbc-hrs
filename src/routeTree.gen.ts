@@ -13,6 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
 import { Route as HotelsHotelIdRoomsRouteImport } from './routes/hotels.$hotelId_.rooms'
+import { Route as HotelsHotelIdReservationRouteImport } from './routes/hotels.$hotelId_.reservation'
+import { Route as HotelsHotelIdPaymentRouteImport } from './routes/hotels.$hotelId_.payment'
+import { Route as HotelsHotelIdConfirmationRouteImport } from './routes/hotels.$hotelId_.confirmation'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,17 +37,40 @@ const HotelsHotelIdRoomsRoute = HotelsHotelIdRoomsRouteImport.update({
   path: '/hotels/$hotelId/rooms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HotelsHotelIdReservationRoute =
+  HotelsHotelIdReservationRouteImport.update({
+    id: '/hotels/$hotelId_/reservation',
+    path: '/hotels/$hotelId/reservation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const HotelsHotelIdPaymentRoute = HotelsHotelIdPaymentRouteImport.update({
+  id: '/hotels/$hotelId_/payment',
+  path: '/hotels/$hotelId/payment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HotelsHotelIdConfirmationRoute =
+  HotelsHotelIdConfirmationRouteImport.update({
+    id: '/hotels/$hotelId_/confirmation',
+    path: '/hotels/$hotelId/confirmation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
+  '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
+  '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId/rooms': typeof HotelsHotelIdRoomsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels': typeof HotelsIndexRoute
+  '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
+  '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
+  '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId/rooms': typeof HotelsHotelIdRoomsRoute
 }
 export interface FileRoutesById {
@@ -52,18 +78,38 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/hotels/$hotelId_/confirmation': typeof HotelsHotelIdConfirmationRoute
+  '/hotels/$hotelId_/payment': typeof HotelsHotelIdPaymentRoute
+  '/hotels/$hotelId_/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId_/rooms': typeof HotelsHotelIdRoomsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hotels/$hotelId' | '/hotels/' | '/hotels/$hotelId/rooms'
+  fullPaths:
+    | '/'
+    | '/hotels/$hotelId'
+    | '/hotels/'
+    | '/hotels/$hotelId/confirmation'
+    | '/hotels/$hotelId/payment'
+    | '/hotels/$hotelId/reservation'
+    | '/hotels/$hotelId/rooms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hotels/$hotelId' | '/hotels' | '/hotels/$hotelId/rooms'
+  to:
+    | '/'
+    | '/hotels/$hotelId'
+    | '/hotels'
+    | '/hotels/$hotelId/confirmation'
+    | '/hotels/$hotelId/payment'
+    | '/hotels/$hotelId/reservation'
+    | '/hotels/$hotelId/rooms'
   id:
     | '__root__'
     | '/'
     | '/hotels/$hotelId'
     | '/hotels/'
+    | '/hotels/$hotelId_/confirmation'
+    | '/hotels/$hotelId_/payment'
+    | '/hotels/$hotelId_/reservation'
     | '/hotels/$hotelId_/rooms'
   fileRoutesById: FileRoutesById
 }
@@ -71,6 +117,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
   HotelsIndexRoute: typeof HotelsIndexRoute
+  HotelsHotelIdConfirmationRoute: typeof HotelsHotelIdConfirmationRoute
+  HotelsHotelIdPaymentRoute: typeof HotelsHotelIdPaymentRoute
+  HotelsHotelIdReservationRoute: typeof HotelsHotelIdReservationRoute
   HotelsHotelIdRoomsRoute: typeof HotelsHotelIdRoomsRoute
 }
 
@@ -104,6 +153,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsHotelIdRoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotels/$hotelId_/reservation': {
+      id: '/hotels/$hotelId_/reservation'
+      path: '/hotels/$hotelId/reservation'
+      fullPath: '/hotels/$hotelId/reservation'
+      preLoaderRoute: typeof HotelsHotelIdReservationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hotels/$hotelId_/payment': {
+      id: '/hotels/$hotelId_/payment'
+      path: '/hotels/$hotelId/payment'
+      fullPath: '/hotels/$hotelId/payment'
+      preLoaderRoute: typeof HotelsHotelIdPaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hotels/$hotelId_/confirmation': {
+      id: '/hotels/$hotelId_/confirmation'
+      path: '/hotels/$hotelId/confirmation'
+      fullPath: '/hotels/$hotelId/confirmation'
+      preLoaderRoute: typeof HotelsHotelIdConfirmationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -111,18 +181,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
   HotelsIndexRoute: HotelsIndexRoute,
+  HotelsHotelIdConfirmationRoute: HotelsHotelIdConfirmationRoute,
+  HotelsHotelIdPaymentRoute: HotelsHotelIdPaymentRoute,
+  HotelsHotelIdReservationRoute: HotelsHotelIdReservationRoute,
   HotelsHotelIdRoomsRoute: HotelsHotelIdRoomsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
