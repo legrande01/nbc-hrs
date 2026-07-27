@@ -115,8 +115,8 @@ function RoomSelectionPage() {
   }, []);
 
   const continueToGuestDetails = useCallback(() => {
-
     toast.success("Rooms reserved for this session. Guest Details opens in the next module.");
+
   }, []);
 
   if (!data) throw notFound();
