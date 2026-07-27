@@ -85,13 +85,12 @@ export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
 function RoomSelectionPage() {
   const { hotelId } = Route.useParams();
   const search = Route.useSearch();
-  const navigate = useNavigate();
 
   const data = useMemo(() => getRoomSelectionData(hotelId), [hotelId]);
   const [selection, setSelection] = useState<Record<string, number>>({});
 
   const nights = nightsBetween(search.checkIn, search.checkOut);
-  const hasDates = nights > 0;
+
 
   const increment = useCallback((roomId: string) => {
     setSelection((prev) => ({ ...prev, [roomId]: (prev[roomId] ?? 0) + 1 }));
