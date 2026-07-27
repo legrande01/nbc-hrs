@@ -4,6 +4,7 @@ import {
   Link,
   notFound,
   redirect,
+  useNavigate,
 } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
@@ -15,8 +16,10 @@ import { GlobalFooter } from "@/components/nbc/GlobalFooter";
 import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
+import { BookingStepper } from "@/components/nbc/BookingStepper";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
+import { useBookingFlow } from "@/lib/nbc-booking-flow";
 import {
   buildTotals,
   checkOccupancy,
@@ -85,6 +88,8 @@ export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
 function RoomSelectionPage() {
   const { hotelId } = Route.useParams();
   const search = Route.useSearch();
+  const navigate = useNavigate();
+  const { startSession } = useBookingFlow();
 
   const data = useMemo(() => getRoomSelectionData(hotelId), [hotelId]);
   const [selection, setSelection] = useState<Record<string, number>>({});
@@ -115,8 +120,23 @@ function RoomSelectionPage() {
   }, []);
 
   const continueReservation = useCallback(() => {
-    toast.success("Rooms reserved for this session. Guest Details opens in the next module.");
-  }, []);
+    if (!data) return;
+    const selectionTotals = buildTotals(data.categories, selection, nights);
+    if (selectionTotals.roomCount === 0) {
+      toast.error("Select at least one room category to continue.");
+      return;
+    }
+    startSession({
+      propertyId: hotelId,
+      propertyName: data.property.hotel.name,
+      stay: search,
+      nights,
+      totals: selectionTotals,
+      currency: data.property.hotel.currency,
+    });
+    navigate({ to: "/hotels/$hotelId/reservation", params: { hotelId }, search });
+  }, [data, selection, nights, startSession, hotelId, search, navigate]);
+
 
   if (!data) throw notFound();
 
@@ -148,12 +168,15 @@ function RoomSelectionPage() {
               rooms are assigned by the hotel at check-in.
             </p>
 
+            <BookingStepper current="rooms" className="mt-8" />
+
             <BookingSummaryBar
               className="mt-8"
               hotelName={hotel.name}
               search={search}
               nights={nights}
             />
+
           </div>
         </section>
 
