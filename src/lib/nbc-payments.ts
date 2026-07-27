@@ -161,6 +161,17 @@ export const CONFIRMATION_SUBLINES: Record<PaymentMethodId, string> = {
   "loyalty-points": "Your loyalty redemption covers this reservation in full.",
 };
 
+/** Human payment status shown on the Booking Confirmation. */
+export const CONFIRMATION_STATUS_LABELS: Record<PaymentMethodId, string> = {
+  card: "Paid",
+  "mobile-money": "Paid",
+  bnpl: "Financed by NBC",
+  "save-to-buy": "Paid from Savings Goal",
+  "loyalty-points": "Paid with Loyalty Points",
+  "control-number": "Reservation Confirmed – Awaiting Payment",
+};
+
+
 function randomDigits(length: number): string {
   let out = "";
   for (let index = 0; index < length; index += 1) {

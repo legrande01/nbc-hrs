@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
@@ -69,7 +69,16 @@ function ReservationDetailsPage() {
     [session, profile],
   );
 
+  const [draft, setDraft] = useState<ReservationOwner>(initialOwner);
+  const [ownerValid, setOwnerValid] = useState(false);
+
+  const handleOwnerChange = useCallback((owner: ReservationOwner, valid: boolean) => {
+    setDraft(owner);
+    setOwnerValid(valid);
+  }, []);
+
   const validSession = session && session.propertyId === hotelId && session.roomLines.length > 0;
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -101,19 +110,32 @@ function ReservationDetailsPage() {
         <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
           {validSession ? (
             <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-              <ReservationOwnerForm
-                initial={initialOwner}
-                onSubmit={(owner) => {
-                  updateOwner(owner);
-                  navigate({
-                    to: "/hotels/$hotelId/payment",
-                    params: { hotelId },
-                    search,
-                  });
+              <ReservationOwnerForm initial={initialOwner} onChange={handleOwnerChange} />
+              <ReservationReview
+                className="lg:sticky lg:top-24"
+                session={session}
+                modifiable
+                action={{
+                  label: "Continue to Payment",
+                  disabled: !ownerValid,
+                  onClick: () => {
+                    if (!ownerValid) return;
+                    updateOwner(draft);
+                    navigate({
+                      to: "/hotels/$hotelId/payment",
+                      params: { hotelId },
+                      search,
+                    });
+                  },
                 }}
+                actionHint={
+                  ownerValid
+                    ? undefined
+                    : "Complete your contact and traveller details to continue."
+                }
               />
-              <ReservationReview className="lg:sticky lg:top-24" session={session} modifiable />
             </div>
+
           ) : (
             <div className="mx-auto max-w-xl rounded-2xl border border-border/70 bg-card p-8 text-center shadow-card">
               <h2 className="text-xl font-semibold tracking-tight text-foreground">
