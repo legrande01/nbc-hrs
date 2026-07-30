@@ -92,8 +92,23 @@ function RoomSelectionPage() {
 
   const data = useMemo(() => getRoomSelectionData(hotelId), [hotelId]);
   const [selection, setSelection] = useState<Record<string, number>>({});
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [detailsRoomId, setDetailsRoomId] = useState<string | null>(null);
+  const [notifyTarget, setNotifyTarget] = useState<{ id: string; name: string } | null>(null);
 
   const nights = nightsBetween(search.checkIn, search.checkOut);
+
+  const toggleCompare = useCallback((roomId: string) => {
+    setCompareIds((prev) => {
+      if (prev.includes(roomId)) return prev.filter((id) => id !== roomId);
+      if (prev.length >= 3) {
+        toast.error("You can compare up to 3 rooms at a time.");
+        return prev;
+      }
+      return [...prev, roomId];
+    });
+  }, []);
+
 
 
   const increment = useCallback((roomId: string) => {
