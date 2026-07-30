@@ -157,6 +157,11 @@ function RoomSelectionPage() {
   const { property, categories } = data;
   const { hotel } = property;
   const totals = buildTotals(categories, selection, nights);
+  const compareRooms = compareIds
+    .map((id) => categories.find((room) => room.id === id))
+    .filter((room): room is (typeof categories)[number] => Boolean(room));
+  const detailsRoom = categories.find((room) => room.id === detailsRoomId) ?? null;
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
