@@ -129,10 +129,13 @@ export function GlobalNav() {
                     <Globe aria-hidden="true" />
                     Language · {language}
                   </Button>
-                  <Button variant="outline" className="justify-start gap-2">
-                    <User aria-hidden="true" />
-                    Login
+                  <Button variant="outline" className="justify-start gap-2" asChild>
+                    <Link to="/auth" search={{ next: "/" }} onClick={() => setMenuOpen(false)}>
+                      <User aria-hidden="true" />
+                      Login
+                    </Link>
                   </Button>
+
                   <Button variant="scarlet" size="lg">
                     Find Your Stay
                   </Button>
