@@ -1,8 +1,20 @@
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Minus, Plus, Sparkles, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import { formatPrice } from "@/lib/nbc-discovery-filters";
 import { chargedNights, TAX_RATE, type SelectionTotals } from "@/lib/nbc-room-selection";
+import {
+  applyCoupon,
+  LOYALTY_BALANCE,
+  LOYALTY_POINT_VALUE,
+  loyaltyValue,
+  maxRedeemablePoints,
+  type CouponResult,
+} from "@/lib/nbc-savings";
 import { cn } from "@/lib/utils";
 
 interface ReservationSummaryProps {
@@ -16,7 +28,7 @@ interface ReservationSummaryProps {
   className?: string;
 }
 
-/** Live reservation summary with per-category quantities and a grand total. */
+/** Live reservation summary with per-category quantities, savings and a grand total. */
 export function ReservationSummary({
   totals,
   currency,
@@ -29,6 +41,26 @@ export function ReservationSummary({
 }: ReservationSummaryProps) {
   const effectiveNights = Math.max(nights, 1);
   const empty = totals.lines.length === 0;
+
+  const [code, setCode] = useState("");
+  const [coupon, setCoupon] = useState<CouponResult | null>(null);
+  const [points, setPoints] = useState(0);
+
+  const maxPoints = useMemo(() => maxRedeemablePoints(totals.subtotal), [totals.subtotal]);
+
+  // Savings depend on the live subtotal; re-validate whenever the selection changes.
+  useEffect(() => {
+    setCoupon((prev) => (prev && prev.status === "valid" ? applyCoupon(code, totals.subtotal) : prev));
+    setPoints((prev) => Math.min(prev, maxRedeemablePoints(totals.subtotal)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totals.subtotal]);
+
+  const couponDiscount = coupon?.status === "valid" ? Math.min(coupon.discount, totals.subtotal) : 0;
+  const pointsDiscount = Math.min(loyaltyValue(points), Math.max(totals.subtotal - couponDiscount, 0));
+  const discountedSubtotal = Math.max(totals.subtotal - couponDiscount - pointsDiscount, 0);
+  const taxes = Math.round(discountedSubtotal * TAX_RATE);
+  const grandTotal = discountedSubtotal + taxes;
+
 
   return (
     <aside
