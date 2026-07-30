@@ -26,7 +26,7 @@ export default defineTool({
       };
     }
 
-    const rooms = data.rooms.map((room) => ({
+    const rooms = data.categories.map((room: import("@/lib/nbc-room-selection").RoomCategory) => ({
       id: room.id,
       name: room.name,
       nightlyRate: room.nightlyRate,
