@@ -1,11 +1,18 @@
+import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { Star } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 
+import { AvailabilityBadge } from "@/components/nbc/AvailabilityBadge";
+import { FavouriteButton } from "@/components/nbc/FavouriteButton";
+import { ImageCarousel } from "@/components/nbc/ImageCarousel";
+import { OverflowChips, type Chip } from "@/components/nbc/OverflowChips";
 import { Button } from "@/components/ui/button";
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { formatPrice } from "@/lib/nbc-discovery-filters";
 import type { DiscoveryHotel } from "@/lib/nbc-discovery";
 import { propertyTypeLabels } from "@/lib/nbc-discovery";
+import { hotelAvailability, hotelDistanceKm, hotelImages } from "@/lib/nbc-media";
+import { getPropertyDetail } from "@/lib/nbc-property";
 import { cn } from "@/lib/utils";
 
 interface HotelResultCardProps {
@@ -20,26 +27,42 @@ interface HotelResultCardProps {
  * Optimised for side-by-side comparison rather than storytelling.
  */
 export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps) {
+  const images = useMemo(() => hotelImages(hotel), [hotel]);
+  const availability = hotelAvailability(hotel);
+  const distance = hotelDistanceKm(hotel);
+  const soldOut = availability === "sold-out";
+
+  const categoryChips: Chip[] = useMemo(() => {
+    const rooms = getPropertyDetail(hotel.id)?.rooms ?? [];
+    return rooms.map((room) => ({ key: room.id, label: room.name }));
+  }, [hotel.id]);
+
+  const amenityChips: Chip[] = hotel.amenities.map((key) => ({
+    key,
+    label: amenityMeta[key].label,
+    icon: amenityMeta[key].icon,
+  }));
 
   return (
     <article
       className={cn(
-        "group grid overflow-hidden rounded-xl border border-border/70 bg-card shadow-card transition-all duration-500 ease-out hover:-translate-y-0.5 hover:shadow-elevated md:grid-cols-[18rem_minmax(0,1fr)] lg:grid-cols-[22rem_minmax(0,1fr)]",
+        "grid overflow-hidden rounded-xl border border-border/70 bg-card shadow-card transition-shadow duration-500 ease-out hover:shadow-elevated md:grid-cols-[18rem_minmax(0,1fr)] lg:grid-cols-[22rem_minmax(0,1fr)]",
         className,
       )}
     >
-      <div className="relative aspect-4/3 overflow-hidden md:aspect-auto md:h-full">
-        <img
-          src={hotel.image}
-          alt={`${hotel.name} in ${hotel.area}, ${hotel.city}`}
-          width={1200}
-          height={900}
-          loading="lazy"
-          className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
-        />
-      </div>
+      <ImageCarousel
+        images={images}
+        aspectClassName="aspect-4/3 md:aspect-auto md:h-full"
+        className="md:h-full"
+        overlay={
+          <div className="absolute left-3 top-3 z-10">
+            <FavouriteButton hotelId={hotel.id} hotelName={hotel.name} />
+          </div>
+        }
+      />
 
-      <div className="flex min-w-0 flex-col gap-6 p-6 lg:p-7">
+      <div className="flex min-w-0 flex-col gap-5 p-6 lg:p-7">
+        {/* 1. Identity and credibility */}
         <div className="grid min-w-0 gap-2.5">
           <p className="nbc-eyebrow w-fit rounded-full bg-secondary/60 px-2.5 py-1 text-[0.625rem] text-nbc-royal">
             {hotel.personality}
@@ -62,6 +85,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             </p>
           </div>
 
+          {/* 2. Classification, type, location and distance */}
           <p className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
             <span
               className="flex shrink-0 items-center gap-0.5"
@@ -76,29 +100,39 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
               ))}
             </span>
             <span aria-hidden="true">·</span>
-            <span className="truncate">
+            <span className="truncate">{propertyTypeLabels[hotel.propertyType]}</span>
+            <span aria-hidden="true">·</span>
+            <span className="flex min-w-0 items-center gap-1 truncate">
+              <MapPin aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.75} />
               {hotel.area}, {hotel.city}
             </span>
             <span aria-hidden="true">·</span>
-            <span className="truncate">{propertyTypeLabels[hotel.propertyType]}</span>
+            <span className="shrink-0">{distance} km from centre</span>
           </p>
         </div>
 
-        <ul className="flex flex-wrap gap-2" aria-label={`${hotel.name} amenities`}>
-          {hotel.amenities.slice(0, 4).map((key) => {
-            const { label, icon: Icon } = amenityMeta[key];
-            return (
-              <li
-                key={key}
-                className="flex min-w-0 items-center gap-1.5 rounded-full border border-border/70 bg-secondary/40 px-2.5 py-1 text-xs font-medium text-muted-foreground"
-              >
-                <Icon aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.75} />
-                <span className="truncate">{label}</span>
-              </li>
-            );
-          })}
-        </ul>
+        {/* 3. Availability */}
+        <AvailabilityBadge status={availability} />
 
+        {/* 4. Room categories */}
+        {categoryChips.length > 0 && (
+          <div className="grid gap-2">
+            <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">Room Categories</p>
+            <OverflowChips
+              chips={categoryChips}
+              limit={3}
+              ariaLabel={`${hotel.name} room categories`}
+            />
+          </div>
+        )}
+
+        {/* 5. Amenities */}
+        <div className="grid gap-2">
+          <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">Amenities</p>
+          <OverflowChips chips={amenityChips} limit={3} ariaLabel={`${hotel.name} amenities`} />
+        </div>
+
+        {/* 6. Price and actions */}
         <div className="mt-auto grid gap-4 border-t border-border pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
           <div className="min-w-0">
             <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">From</p>
@@ -108,12 +142,27 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             <p className="mt-0.5 text-xs text-muted-foreground">per night</p>
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-            <Button variant="default" asChild>
+            <Button variant="outline" asChild>
               <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }} search={stay ?? {}}>
                 View Details
               </Link>
             </Button>
-            <Button variant="outline">Find Your Stay</Button>
+            {soldOut ? (
+              <Button disabled title="No rooms available for these dates">
+                Book Now
+              </Button>
+            ) : (
+              <Button asChild>
+                <Link
+                  to="/hotels/$hotelId"
+                  params={{ hotelId: hotel.id }}
+                  search={stay ?? {}}
+                  hash="rooms"
+                >
+                  Book Now
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>

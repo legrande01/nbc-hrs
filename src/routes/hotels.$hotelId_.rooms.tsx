@@ -17,7 +17,11 @@ import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
+import { RoomDetailsModal } from "@/components/nbc/RoomDetailsModal";
+import { NotifyMeModal } from "@/components/nbc/NotifyMeModal";
+import { CompareRoomsDrawer } from "@/components/nbc/CompareRoomsDrawer";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
+
 import { useBookingFlow } from "@/lib/nbc-booking-flow";
 import {
   buildTotals,
@@ -92,8 +96,23 @@ function RoomSelectionPage() {
 
   const data = useMemo(() => getRoomSelectionData(hotelId), [hotelId]);
   const [selection, setSelection] = useState<Record<string, number>>({});
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [detailsRoomId, setDetailsRoomId] = useState<string | null>(null);
+  const [notifyTarget, setNotifyTarget] = useState<{ id: string; name: string } | null>(null);
 
   const nights = nightsBetween(search.checkIn, search.checkOut);
+
+  const toggleCompare = useCallback((roomId: string) => {
+    setCompareIds((prev) => {
+      if (prev.includes(roomId)) return prev.filter((id) => id !== roomId);
+      if (prev.length >= 3) {
+        toast.error("You can compare up to 3 rooms at a time.");
+        return prev;
+      }
+      return [...prev, roomId];
+    });
+  }, []);
+
 
 
   const increment = useCallback((roomId: string) => {
@@ -142,6 +161,11 @@ function RoomSelectionPage() {
   const { property, categories } = data;
   const { hotel } = property;
   const totals = buildTotals(categories, selection, nights);
+  const compareRooms = compareIds
+    .map((id) => categories.find((room) => room.id === id))
+    .filter((room): room is (typeof categories)[number] => Boolean(room));
+  const detailsRoom = categories.find((room) => room.id === detailsRoomId) ?? null;
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -200,6 +224,13 @@ function RoomSelectionPage() {
                   quantity={selection[room.id] ?? 0}
                   onAdd={() => increment(room.id)}
                   onRemove={() => decrement(room.id)}
+                  comparing={compareIds.includes(room.id)}
+                  compareDisabled={compareIds.length >= 3}
+                  onToggleCompare={() => toggleCompare(room.id)}
+                  onViewDetails={() => setDetailsRoomId(room.id)}
+                  onNotify={(variant) =>
+                    setNotifyTarget({ id: variant.id, name: `${room.name} — ${variant.label}` })
+                  }
                 />
               ))}
             </div>
@@ -216,6 +247,7 @@ function RoomSelectionPage() {
             />
           </div>
         </section>
+
 
         {/* Continue CTA */}
         <section className="relative isolate overflow-hidden nbc-royal-gradient">
@@ -251,9 +283,40 @@ function RoomSelectionPage() {
         </section>
       </main>
 
+      <RoomDetailsModal
+        room={detailsRoom}
+        currency={hotel.currency}
+        hasDates
+        open={Boolean(detailsRoom)}
+        onOpenChange={(open) => !open && setDetailsRoomId(null)}
+        bookDisabled={detailsRoom ? detailsRoom.roomsLeft <= 0 : false}
+        onBook={() => {
+          if (detailsRoom) increment(detailsRoom.id);
+          setDetailsRoomId(null);
+        }}
+      />
+
+      <NotifyMeModal
+        open={Boolean(notifyTarget)}
+        onOpenChange={(open) => !open && setNotifyTarget(null)}
+        hotelId={hotelId}
+        roomId={notifyTarget?.id ?? ""}
+        roomName={notifyTarget?.name ?? ""}
+      />
+
+      <CompareRoomsDrawer
+        rooms={compareRooms}
+        currency={hotel.currency}
+        hasDates
+        onRemove={(roomId) => setCompareIds((prev) => prev.filter((id) => id !== roomId))}
+        onClear={() => setCompareIds([])}
+        onBook={(roomId) => increment(roomId)}
+      />
+
       <GlobalFooter />
     </div>
   );
 }
+
 
 

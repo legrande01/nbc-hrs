@@ -1,12 +1,28 @@
-import { BedDouble, Check, Croissant, Info, Maximize2, Minus, Plus, ShieldCheck, Users } from "lucide-react";
+import {
+  BedDouble,
+  Bell,
+  Check,
+  Croissant,
+  Info,
+  Maximize2,
+  Minus,
+  Plus,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 
+import { AvailabilityBadge } from "@/components/nbc/AvailabilityBadge";
+import { ImageCarousel } from "@/components/nbc/ImageCarousel";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { formatPrice } from "@/lib/nbc-discovery-filters";
+import { availabilityFromRoomsLeft } from "@/lib/nbc-media";
 import {
   chargedNights,
   type OccupancyCheck,
   type RoomCategory,
+  type RoomVariant,
 } from "@/lib/nbc-room-selection";
 import { cn } from "@/lib/utils";
 
@@ -20,29 +36,13 @@ interface RoomCategoryCardProps {
   quantity: number;
   onAdd: () => void;
   onRemove: () => void;
+  /** Comparison tray state. */
+  comparing: boolean;
+  compareDisabled: boolean;
+  onToggleCompare: () => void;
+  onViewDetails: () => void;
+  onNotify: (variant: RoomVariant) => void;
   className?: string;
-}
-
-function AvailabilityBadge({ room }: { room: RoomCategory }) {
-  if (room.roomsLeft <= 2) {
-    return (
-      <span className="rounded-full bg-nbc-scarlet/10 px-3 py-1 text-xs font-semibold text-nbc-scarlet">
-        Only {room.roomsLeft} room{room.roomsLeft === 1 ? "" : "s"} left
-      </span>
-    );
-  }
-  if (room.highDemand) {
-    return (
-      <span className="rounded-full bg-nbc-gold/20 px-3 py-1 text-xs font-semibold text-foreground">
-        High demand
-      </span>
-    );
-  }
-  return (
-    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-nbc-royal">
-      Available
-    </span>
-  );
 }
 
 /** Comparison-focused room category card with occupancy validation and selection. */
@@ -55,6 +55,11 @@ export function RoomCategoryCard({
   quantity,
   onAdd,
   onRemove,
+  comparing,
+  compareDisabled,
+  onToggleCompare,
+  onViewDetails,
+  onNotify,
   className,
 }: RoomCategoryCardProps) {
   const effectiveNights = Math.max(nights, 1);
@@ -64,30 +69,29 @@ export function RoomCategoryCard({
     : room.nightlyRate;
   const hasRateDiscount = discountedRate !== room.nightlyRate;
   const stayTotal = discountedRate * billableNights;
+  const availability = availabilityFromRoomsLeft(room.roomsLeft);
+  const soldOut = availability === "sold-out";
 
   return (
     <article
       className={cn(
-        "group grid overflow-hidden rounded-2xl border border-border/70 bg-card shadow-card transition-all duration-500 ease-out hover:shadow-elevated lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]",
+        "grid overflow-hidden rounded-2xl border border-border/70 bg-card shadow-card transition-shadow duration-500 ease-out hover:shadow-elevated lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]",
         !occupancy.fits && "opacity-95",
         className,
       )}
     >
-      <div className="relative overflow-hidden">
-        <img
-          src={room.image}
-          alt={room.name}
-          width={1200}
-          height={900}
-          loading="lazy"
-          className="aspect-4/3 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05] lg:aspect-auto"
-        />
-        {room.promotion && (
-          <span className="absolute left-4 top-4 rounded-full bg-nbc-scarlet px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-elevated">
-            {room.promotion.label}
-          </span>
-        )}
-      </div>
+      <ImageCarousel
+        images={room.images}
+        aspectClassName="aspect-4/3 lg:aspect-auto lg:h-full"
+        className="lg:h-full"
+        overlay={
+          room.promotion ? (
+            <span className="absolute left-4 top-4 z-10 rounded-full bg-nbc-scarlet px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-elevated">
+              {room.promotion.label}
+            </span>
+          ) : undefined
+        }
+      />
 
       <div className="grid content-start gap-6 p-6 lg:p-8">
         {/* Room information */}
@@ -99,8 +103,10 @@ export function RoomCategoryCard({
                 Room category · physical room assigned at check-in
               </p>
             </div>
-            {hasDates && <AvailabilityBadge room={room} />}
+            {hasDates && <AvailabilityBadge status={availability} roomsLeft={room.roomsLeft} />}
           </div>
+
+          <p className="text-sm leading-relaxed text-muted-foreground">{room.description}</p>
 
           <ul className="grid gap-2.5 text-sm text-muted-foreground sm:grid-cols-2">
             <li className="flex items-center gap-2">
@@ -120,6 +126,79 @@ export function RoomCategoryCard({
               <Croissant aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
               {room.breakfast}
             </li>
+          </ul>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="outline" size="sm" onClick={onViewDetails}>
+              View Room Details
+            </Button>
+            <label
+              className={cn(
+                "flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground",
+                compareDisabled && !comparing && "cursor-not-allowed opacity-50",
+              )}
+            >
+              <Checkbox
+                checked={comparing}
+                disabled={compareDisabled && !comparing}
+                onCheckedChange={onToggleCompare}
+                aria-label={`Compare ${room.name}`}
+              />
+              Compare
+            </label>
+          </div>
+        </div>
+
+        {/* Room variations */}
+        <div className="grid gap-3 border-t border-border/60 pt-5">
+          <p className="nbc-eyebrow text-[0.5625rem] text-muted-foreground">Room Variations</p>
+          <ul className="grid gap-3">
+            {room.variants.map((variant) => {
+              const variantAvailability = availabilityFromRoomsLeft(variant.roomsLeft);
+              const variantSoldOut = variantAvailability === "sold-out";
+              return (
+                <li
+                  key={variant.id}
+                  className="grid gap-3 rounded-xl border border-border/60 bg-secondary/25 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <p className="text-sm font-semibold text-foreground">{variant.label}</p>
+                      <AvailabilityBadge
+                        status={variantAvailability}
+                        roomsLeft={variant.roomsLeft}
+                      />
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {variant.sizeSqm} sqm · {variant.bedType} · up to {variant.maxAdults} adults
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {variant.features.join(" · ")}
+                    </p>
+                  </div>
+                  {variantSoldOut ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2 sm:justify-self-end"
+                      onClick={() => onNotify(variant)}
+                    >
+                      <Bell aria-hidden="true" strokeWidth={1.75} />
+                      Notify When Available
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      className="sm:justify-self-end"
+                      onClick={onAdd}
+                      disabled={!occupancy.fits}
+                    >
+                      Book Now
+                    </Button>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -176,7 +255,6 @@ export function RoomCategoryCard({
 
         {/* Pricing + primary action */}
         <div className="grid gap-4 rounded-xl bg-secondary/30 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
-
           <div>
             <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">From</p>
             <p className="mt-1 flex flex-wrap items-baseline gap-2">
@@ -193,7 +271,8 @@ export function RoomCategoryCard({
             <p className="mt-1 text-xs text-muted-foreground">
               {formatPrice(stayTotal, currency)} for {billableNights}{" "}
               {billableNights === 1 ? "night" : "nights"}
-              {billableNights < effectiveNights ? " (promotion applied)" : ""} · excludes taxes and fees
+              {billableNights < effectiveNights ? " (promotion applied)" : ""} · excludes taxes and
+              fees
             </p>
           </div>
 
@@ -215,7 +294,7 @@ export function RoomCategoryCard({
                   variant="ghost"
                   size="icon"
                   onClick={onAdd}
-                  disabled={!occupancy.fits}
+                  disabled={!occupancy.fits || soldOut}
                   aria-label={`Add one ${room.name}`}
                 >
                   <Plus aria-hidden="true" />
@@ -228,7 +307,8 @@ export function RoomCategoryCard({
               variant="scarlet"
               size="lg"
               onClick={onAdd}
-              disabled={!occupancy.fits}
+              disabled={!occupancy.fits || soldOut}
+              title={soldOut ? "This category is sold out for your dates" : undefined}
               className="sm:justify-self-end"
             >
               Book Now

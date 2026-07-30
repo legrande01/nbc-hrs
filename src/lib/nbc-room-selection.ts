@@ -1,5 +1,7 @@
 import type { AmenityKey } from "@/lib/nbc-content";
+import { roomImages, type CarouselImage } from "@/lib/nbc-media";
 import { getPropertyDetail, type PropertyDetail } from "@/lib/nbc-property";
+
 
 /**
  * Placeholder room-selection contract.
@@ -17,10 +19,25 @@ export interface RoomPromotion {
   percentOff?: number;
 }
 
+/** A physical room variation within a category. */
+export interface RoomVariant {
+  id: string;
+  label: string;
+  sizeSqm: number;
+  bedType: string;
+  maxAdults: number;
+  maxChildren: number;
+  highlights: AmenityKey[];
+  features: string[];
+  roomsLeft: number;
+}
+
 export interface RoomCategory {
   id: string;
   name: string;
   image: string;
+  images: CarouselImage[];
+  description: string;
   /** Nightly rate before promotions and taxes. */
   nightlyRate: number;
   sizeSqm: number;
@@ -30,11 +47,17 @@ export interface RoomCategory {
   amenities: AmenityKey[];
   cancellation: string;
   breakfast: string;
+  view: string;
+  balcony: boolean;
+  smoking: string;
+  otherInfo: string[];
+  variants: RoomVariant[];
   promotion?: RoomPromotion;
   /** Rooms left for the requested dates. Only shown once dates are supplied. */
   roomsLeft: number;
   highDemand: boolean;
 }
+
 
 export interface RoomSelectionSearch {
   checkIn: string;
@@ -114,18 +137,31 @@ const promotions: Record<string, RoomPromotion> = {
   },
 };
 
-const roomProfiles: Record<
-  string,
-  {
-    sizeSqm: number;
-    maxAdults: number;
-    maxChildren: number;
-    cancellation: string;
-    breakfast: string;
+interface RoomProfile {
+  sizeSqm: number;
+  maxAdults: number;
+  maxChildren: number;
+  cancellation: string;
+  breakfast: string;
+  roomsLeft: number;
+  highDemand: boolean;
+  description: string;
+  view: string;
+  balcony: boolean;
+  smoking: string;
+  otherInfo: string[];
+  /** Variations sold under this category, e.g. King vs Twin. */
+  variants: Array<{
+    label: string;
+    bedType: string;
+    sizeDelta: number;
+    adultsDelta: number;
+    features: string[];
     roomsLeft: number;
-    highDemand: boolean;
-  }
-> = {
+  }>;
+}
+
+const roomProfiles: Record<string, RoomProfile> = {
   deluxe: {
     sizeSqm: 32,
     maxAdults: 2,
@@ -134,6 +170,42 @@ const roomProfiles: Record<
     breakfast: "Breakfast included for 2 guests",
     roomsLeft: 6,
     highDemand: true,
+    description:
+      "A calm, light-filled room finished in NBC's signature palette, with a generous work desk, rain shower and premium bedding. Designed for guests who want comfort without excess.",
+    view: "City or garden view",
+    balcony: false,
+    smoking: "Non-smoking",
+    otherInfo: [
+      "Daily housekeeping and turndown service",
+      "Complimentary bottled water replenished daily",
+      "Access to the fitness centre and pool",
+    ],
+    variants: [
+      {
+        label: "Deluxe King",
+        bedType: "1 King bed",
+        sizeDelta: 0,
+        adultsDelta: 0,
+        features: ["Work desk", "Rain shower", "City view"],
+        roomsLeft: 4,
+      },
+      {
+        label: "Deluxe Twin",
+        bedType: "2 Single beds",
+        sizeDelta: 1,
+        adultsDelta: 0,
+        features: ["Work desk", "Rain shower", "Garden view"],
+        roomsLeft: 2,
+      },
+      {
+        label: "Deluxe Accessible",
+        bedType: "1 King bed",
+        sizeDelta: 3,
+        adultsDelta: 0,
+        features: ["Step-free access", "Roll-in shower", "Support rails"],
+        roomsLeft: 0,
+      },
+    ],
   },
   "executive-suite": {
     sizeSqm: 58,
@@ -143,6 +215,34 @@ const roomProfiles: Record<
     breakfast: "Breakfast and evening canapés included",
     roomsLeft: 2,
     highDemand: false,
+    description:
+      "A separate living room, dedicated dining nook and a marble bathroom with a deep soaking tub. Executive lounge access is included throughout your stay.",
+    view: "Panoramic skyline view",
+    balcony: true,
+    smoking: "Non-smoking",
+    otherInfo: [
+      "Executive lounge access with all-day refreshments",
+      "Complimentary pressing of two garments per stay",
+      "Priority late check-out subject to availability",
+    ],
+    variants: [
+      {
+        label: "Executive Suite — Skyline",
+        bedType: "1 King bed",
+        sizeDelta: 0,
+        adultsDelta: 0,
+        features: ["Separate living room", "Balcony", "Lounge access"],
+        roomsLeft: 2,
+      },
+      {
+        label: "Executive Suite — Corner",
+        bedType: "1 King bed",
+        sizeDelta: 6,
+        adultsDelta: 1,
+        features: ["Wraparound windows", "Dining nook", "Soaking tub"],
+        roomsLeft: 1,
+      },
+    ],
   },
   "family-room": {
     sizeSqm: 46,
@@ -152,10 +252,38 @@ const roomProfiles: Record<
     breakfast: "Breakfast included for 2 adults and 2 children",
     roomsLeft: 4,
     highDemand: false,
+    description:
+      "Two connected sleeping areas, a family lounge corner and thoughtful touches for younger travellers, from bedside night lights to a stocked activity drawer.",
+    view: "Garden or pool view",
+    balcony: true,
+    smoking: "Non-smoking",
+    otherInfo: [
+      "Complimentary cot or extra bed on request",
+      "Children under 12 dine free with a paying adult",
+      "Childproofing kit available at reception",
+    ],
+    variants: [
+      {
+        label: "Family Room — Garden",
+        bedType: "1 King and 2 Single beds",
+        sizeDelta: 0,
+        adultsDelta: 0,
+        features: ["Family lounge corner", "Garden view", "Cot on request"],
+        roomsLeft: 3,
+      },
+      {
+        label: "Family Room — Poolside",
+        bedType: "2 Queen beds",
+        sizeDelta: 4,
+        adultsDelta: 0,
+        features: ["Direct pool access", "Balcony", "Extra wardrobe"],
+        roomsLeft: 1,
+      },
+    ],
   },
 };
 
-const fallbackProfile = {
+const fallbackProfile: RoomProfile = {
   sizeSqm: 30,
   maxAdults: 2,
   maxChildren: 1,
@@ -163,24 +291,61 @@ const fallbackProfile = {
   breakfast: "Breakfast available as an extra",
   roomsLeft: 5,
   highDemand: false,
+  description:
+    "A comfortable, well-appointed room with premium bedding, a dedicated work area and a full en-suite bathroom.",
+  view: "City view",
+  balcony: false,
+  smoking: "Non-smoking",
+  otherInfo: ["Daily housekeeping", "Complimentary high-speed Wi-Fi"],
+  variants: [
+    {
+      label: "Standard King",
+      bedType: "1 King bed",
+      sizeDelta: 0,
+      adultsDelta: 0,
+      features: ["Work desk", "En-suite bathroom"],
+      roomsLeft: 3,
+    },
+    {
+      label: "Standard Twin",
+      bedType: "2 Single beds",
+      sizeDelta: 0,
+      adultsDelta: 0,
+      features: ["Work desk", "En-suite bathroom"],
+      roomsLeft: 2,
+    },
+  ],
 };
 
 /** Builds the placeholder room inventory for a property. */
 export function getRoomCategories(property: PropertyDetail): RoomCategory[] {
   return property.rooms.map((room) => {
-    const profile = roomProfiles[room.id] ?? fallbackProfile;
+    const { variants, ...profile } = roomProfiles[room.id] ?? fallbackProfile;
     return {
       id: room.id,
       name: room.name,
       image: room.image,
+      images: roomImages(room.id, room.name, room.image),
       nightlyRate: room.priceFrom,
       bedType: room.bedType,
       amenities: room.amenities,
       promotion: promotions[room.id],
       ...profile,
+      variants: variants.map((variant, index) => ({
+        id: `${room.id}-v${index + 1}`,
+        label: variant.label,
+        sizeSqm: profile.sizeSqm + variant.sizeDelta,
+        bedType: variant.bedType,
+        maxAdults: profile.maxAdults + variant.adultsDelta,
+        maxChildren: profile.maxChildren,
+        highlights: room.amenities.slice(0, 4),
+        features: variant.features,
+        roomsLeft: variant.roomsLeft,
+      })),
     };
   });
 }
+
 
 export function getRoomSelectionData(hotelId: string) {
   const property = getPropertyDetail(hotelId);
