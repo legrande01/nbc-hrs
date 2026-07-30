@@ -17,7 +17,11 @@ import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { BookingSummaryBar } from "@/components/nbc/BookingSummaryBar";
 import { RoomCategoryCard } from "@/components/nbc/RoomCategoryCard";
+import { RoomDetailsModal } from "@/components/nbc/RoomDetailsModal";
+import { NotifyMeModal } from "@/components/nbc/NotifyMeModal";
+import { CompareRoomsDrawer } from "@/components/nbc/CompareRoomsDrawer";
 import { ReservationSummary } from "@/components/nbc/ReservationSummary";
+
 import { useBookingFlow } from "@/lib/nbc-booking-flow";
 import {
   buildTotals,
