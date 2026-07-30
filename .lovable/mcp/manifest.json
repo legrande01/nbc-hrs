@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "sdk_version": "0.25.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://rgiumqvbqfokermxkpcl.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "nbc-hospitality-hub",
+      "version": "0.1.0",
+      "title": "NBC Hospitality Hub"
+    },
+    "tools": [
+      {
+        "name": "search_hotels",
+        "title": "Search hotels",
+        "description": "Search NBC Hospitality properties by city, property type, star rating or nightly price range.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City name, e.g. 'Zanzibar' or 'Dar es Salaam'."
+            },
+            "propertyType": {
+              "type": "string",
+              "enum": [
+                "hotel",
+                "resort",
+                "apartment",
+                "lodge",
+                "guest-house"
+              ],
+              "description": "Property category filter."
+            },
+            "minStars": {
+              "type": "number",
+              "description": "Minimum official star classification (3-5)."
+            },
+            "maxPrice": {
+              "type": "number",
+              "description": "Maximum nightly rate in TZS."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of results to return (default 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_hotel_details",
+        "title": "Get hotel details",
+        "description": "Return the full profile of one NBC Hospitality property: overview, amenities, address, nearby places, policies and FAQs.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hotelId": {
+              "type": "string",
+              "description": "Property id returned by search_hotels, e.g. 'harbour-house'."
+            }
+          },
+          "required": [
+            "hotelId"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_room_categories",
+        "title": "List room categories",
+        "description": "List the bookable room categories for an NBC Hospitality property, including nightly rate, occupancy, promotions and cancellation terms.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hotelId": {
+              "type": "string",
+              "description": "Property id returned by search_hotels, e.g. 'harbour-house'."
+            }
+          },
+          "required": [
+            "hotelId"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
