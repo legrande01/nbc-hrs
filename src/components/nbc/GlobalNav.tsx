@@ -92,10 +92,13 @@ export function GlobalNav() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" size="sm" className="gap-2 text-foreground/80">
-            <User aria-hidden="true" />
-            Login
+          <Button variant="ghost" size="sm" className="gap-2 text-foreground/80" asChild>
+            <Link to="/auth" search={{ next: "/" }}>
+              <User aria-hidden="true" />
+              Login
+            </Link>
           </Button>
+
 
           <Button variant="scarlet" size="lg">
             Find Your Stay
