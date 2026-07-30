@@ -200,6 +200,13 @@ function RoomSelectionPage() {
                   quantity={selection[room.id] ?? 0}
                   onAdd={() => increment(room.id)}
                   onRemove={() => decrement(room.id)}
+                  comparing={compareIds.includes(room.id)}
+                  compareDisabled={compareIds.length >= 3}
+                  onToggleCompare={() => toggleCompare(room.id)}
+                  onViewDetails={() => setDetailsRoomId(room.id)}
+                  onNotify={(variant) =>
+                    setNotifyTarget({ id: variant.id, name: `${room.name} — ${variant.label}` })
+                  }
                 />
               ))}
             </div>
@@ -216,6 +223,7 @@ function RoomSelectionPage() {
             />
           </div>
         </section>
+
 
         {/* Continue CTA */}
         <section className="relative isolate overflow-hidden nbc-royal-gradient">
