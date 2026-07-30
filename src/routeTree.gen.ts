@@ -9,14 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as HotelsHotelIdRoomsRouteImport } from './routes/hotels.$hotelId_.rooms'
 import { Route as HotelsHotelIdReservationRouteImport } from './routes/hotels.$hotelId_.reservation'
 import { Route as HotelsHotelIdPaymentRouteImport } from './routes/hotels.$hotelId_.payment'
 import { Route as HotelsHotelIdConfirmationRouteImport } from './routes/hotels.$hotelId_.confirmation'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -32,6 +41,18 @@ const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   path: '/hotels/$hotelId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const HotelsHotelIdRoomsRoute = HotelsHotelIdRoomsRouteImport.update({
   id: '/hotels/$hotelId_/rooms',
   path: '/hotels/$hotelId/rooms',
@@ -54,11 +75,21 @@ const HotelsHotelIdConfirmationRoute =
     path: '/hotels/$hotelId/confirmation',
     getParentRoute: () => rootRouteImport,
   } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/mcp': typeof McpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
@@ -66,8 +97,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/mcp': typeof McpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels': typeof HotelsIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
@@ -76,8 +111,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/mcp': typeof McpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/hotels/$hotelId_/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId_/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId_/reservation': typeof HotelsHotelIdReservationRoute
@@ -87,8 +126,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/mcp'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/hotels/$hotelId'
     | '/hotels/'
+    | '/.mcp/invoke-tool/$tool'
     | '/hotels/$hotelId/confirmation'
     | '/hotels/$hotelId/payment'
     | '/hotels/$hotelId/reservation'
@@ -96,8 +139,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/mcp'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/hotels/$hotelId'
     | '/hotels'
+    | '/.mcp/invoke-tool/$tool'
     | '/hotels/$hotelId/confirmation'
     | '/hotels/$hotelId/payment'
     | '/hotels/$hotelId/reservation'
@@ -105,8 +152,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/mcp'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/hotels/$hotelId'
     | '/hotels/'
+    | '/.mcp/invoke-tool/$tool'
     | '/hotels/$hotelId_/confirmation'
     | '/hotels/$hotelId_/payment'
     | '/hotels/$hotelId_/reservation'
@@ -115,8 +166,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  McpRoute: typeof McpRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
   HotelsIndexRoute: typeof HotelsIndexRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   HotelsHotelIdConfirmationRoute: typeof HotelsHotelIdConfirmationRoute
   HotelsHotelIdPaymentRoute: typeof HotelsHotelIdPaymentRoute
   HotelsHotelIdReservationRoute: typeof HotelsHotelIdReservationRoute
@@ -125,6 +180,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -144,6 +206,20 @@ declare module '@tanstack/react-router' {
       path: '/hotels/$hotelId'
       fullPath: '/hotels/$hotelId'
       preLoaderRoute: typeof HotelsHotelIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hotels/$hotelId_/rooms': {
@@ -174,13 +250,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsHotelIdConfirmationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  McpRoute: McpRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
   HotelsIndexRoute: HotelsIndexRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   HotelsHotelIdConfirmationRoute: HotelsHotelIdConfirmationRoute,
   HotelsHotelIdPaymentRoute: HotelsHotelIdPaymentRoute,
   HotelsHotelIdReservationRoute: HotelsHotelIdReservationRoute,
