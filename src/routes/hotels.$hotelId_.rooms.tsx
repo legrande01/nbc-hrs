@@ -279,9 +279,40 @@ function RoomSelectionPage() {
         </section>
       </main>
 
+      <RoomDetailsModal
+        room={detailsRoom}
+        currency={hotel.currency}
+        hasDates
+        open={Boolean(detailsRoom)}
+        onOpenChange={(open) => !open && setDetailsRoomId(null)}
+        bookDisabled={detailsRoom ? detailsRoom.roomsLeft <= 0 : false}
+        onBook={() => {
+          if (detailsRoom) increment(detailsRoom.id);
+          setDetailsRoomId(null);
+        }}
+      />
+
+      <NotifyMeModal
+        open={Boolean(notifyTarget)}
+        onOpenChange={(open) => !open && setNotifyTarget(null)}
+        hotelId={hotelId}
+        roomId={notifyTarget?.id ?? ""}
+        roomName={notifyTarget?.name ?? ""}
+      />
+
+      <CompareRoomsDrawer
+        rooms={compareRooms}
+        currency={hotel.currency}
+        hasDates
+        onRemove={(roomId) => setCompareIds((prev) => prev.filter((id) => id !== roomId))}
+        onClear={() => setCompareIds([])}
+        onBook={(roomId) => increment(roomId)}
+      />
+
       <GlobalFooter />
     </div>
   );
 }
+
 
 
