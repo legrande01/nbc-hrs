@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { SlidersHorizontal } from "lucide-react";
 
@@ -17,6 +17,8 @@ import { GlobalFooter } from "@/components/nbc/GlobalFooter";
 import { GiraffePattern } from "@/components/nbc/GiraffePattern";
 import { HotelSearch, type HotelSearchValue } from "@/components/nbc/HotelSearch";
 import { SearchSummary } from "@/components/nbc/SearchSummary";
+import { StickySearchBar } from "@/components/nbc/StickySearchBar";
+
 import {
   ActiveFilterChips,
   buildActiveFilterChips,
@@ -79,6 +81,8 @@ function HotelDiscoveryPage() {
   const [editing, setEditing] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const heroRef = useRef<HTMLElement>(null);
+
 
   const update = useCallback(
     (patch: Partial<DiscoverySearch>, resetPage = true) => {
@@ -123,10 +127,21 @@ function HotelDiscoveryPage() {
       <AnnouncementBar />
       <GlobalNav />
 
+      <StickySearchBar
+        watchRef={heroRef}
+        destination={search.destination}
+        checkIn={search.checkIn}
+        checkOut={search.checkOut}
+        guests={search.guests}
+        rooms={search.rooms}
+        onSearch={onSearchSubmit}
+      />
+
       <main className="flex-1">
         {/* Search summary */}
-        <section className="relative isolate overflow-hidden nbc-royal-gradient">
+        <section ref={heroRef} className="relative isolate overflow-hidden nbc-royal-gradient">
           <GiraffePattern opacity={0.07} />
+
           <div className="relative mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-14">
             <p className="nbc-eyebrow text-nbc-gold">Hotel Discovery</p>
             <h1 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
