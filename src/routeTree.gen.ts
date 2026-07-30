@@ -21,6 +21,7 @@ import { Route as HotelsHotelIdReservationRouteImport } from './routes/hotels.$h
 import { Route as HotelsHotelIdPaymentRouteImport } from './routes/hotels.$hotelId_.payment'
 import { Route as HotelsHotelIdConfirmationRouteImport } from './routes/hotels.$hotelId_.confirmation'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
@@ -87,6 +88,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels': typeof HotelsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/hotels/$hotelId_/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId_/payment': typeof HotelsHotelIdPaymentRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/hotels/$hotelId'
     | '/hotels/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/hotels/$hotelId/confirmation'
     | '/hotels/$hotelId/payment'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/hotels/$hotelId'
     | '/hotels'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/hotels/$hotelId/confirmation'
     | '/hotels/$hotelId/payment'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/hotels/$hotelId'
     | '/hotels/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/hotels/$hotelId_/confirmation'
     | '/hotels/$hotelId_/payment'
@@ -184,6 +196,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
   HotelsIndexRoute: typeof HotelsIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   HotelsHotelIdConfirmationRoute: typeof HotelsHotelIdConfirmationRoute
   HotelsHotelIdPaymentRoute: typeof HotelsHotelIdPaymentRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -289,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
   HotelsIndexRoute: HotelsIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   HotelsHotelIdConfirmationRoute: HotelsHotelIdConfirmationRoute,
   HotelsHotelIdPaymentRoute: HotelsHotelIdPaymentRoute,
