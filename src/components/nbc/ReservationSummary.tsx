@@ -141,24 +141,104 @@ export function ReservationSummary({
         </ul>
       )}
 
+      {/* Savings: coupon + loyalty */}
+      <div className="grid gap-4 border-t border-border pt-5">
+        <div className="grid gap-2">
+          <Label htmlFor="coupon-code" className="text-xs font-semibold text-foreground">
+            Discount or coupon code
+          </Label>
+          <div className="flex gap-2">
+            <Input
+              id="coupon-code"
+              value={code}
+              maxLength={24}
+              placeholder="e.g. NBC10"
+              disabled={empty}
+              onChange={(event) => setCode(event.target.value.toUpperCase())}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              disabled={empty}
+              onClick={() => setCoupon(applyCoupon(code, totals.subtotal))}
+            >
+              Apply
+            </Button>
+          </div>
+          {coupon && (
+            <p
+              className={cn(
+                "text-xs",
+                coupon.status === "valid" ? "text-nbc-emerald" : "text-nbc-scarlet",
+              )}
+            >
+              {coupon.message}
+            </p>
+          )}
+        </div>
+
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between gap-3">
+            <Label htmlFor="loyalty-points" className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+              <Sparkles aria-hidden="true" className="size-3.5 text-nbc-gold" strokeWidth={2} />
+              NBC Loyalty points
+            </Label>
+            <span className="text-xs text-muted-foreground">
+              {LOYALTY_BALANCE.toLocaleString("en-US")} available
+            </span>
+          </div>
+          <Slider
+            id="loyalty-points"
+            value={[Math.min(points, maxPoints)]}
+            min={0}
+            max={Math.max(maxPoints, 1)}
+            step={100}
+            disabled={empty || maxPoints === 0}
+            onValueChange={([value]) => setPoints(value)}
+            aria-label="Loyalty points to redeem"
+          />
+          <p className="text-xs text-muted-foreground">
+            Redeeming {Math.min(points, maxPoints).toLocaleString("en-US")} points ={" "}
+            {formatPrice(pointsDiscount, currency)} · 1 point = {LOYALTY_POINT_VALUE} {currency}
+          </p>
+        </div>
+      </div>
+
       <dl className="grid gap-3 border-t border-border pt-5 text-sm">
         <div className="flex items-center justify-between gap-3">
           <dt className="text-muted-foreground">Rooms subtotal</dt>
           <dd className="font-medium text-foreground">{formatPrice(totals.subtotal, currency)}</dd>
         </div>
+        {couponDiscount > 0 && (
+          <div className="flex items-center justify-between gap-3">
+            <dt className="text-nbc-emerald">Coupon discount</dt>
+            <dd className="font-medium text-nbc-emerald">
+              −{formatPrice(couponDiscount, currency)}
+            </dd>
+          </div>
+        )}
+        {pointsDiscount > 0 && (
+          <div className="flex items-center justify-between gap-3">
+            <dt className="text-nbc-emerald">Loyalty redemption</dt>
+            <dd className="font-medium text-nbc-emerald">
+              −{formatPrice(pointsDiscount, currency)}
+            </dd>
+          </div>
+        )}
         <div className="flex items-center justify-between gap-3">
           <dt className="text-muted-foreground">
             Estimated taxes &amp; fees ({Math.round(TAX_RATE * 100)}%)
           </dt>
-          <dd className="font-medium text-foreground">{formatPrice(totals.taxes, currency)}</dd>
+          <dd className="font-medium text-foreground">{formatPrice(taxes, currency)}</dd>
         </div>
         <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
           <dt className="text-base font-semibold text-foreground">Grand Total</dt>
           <dd className="text-xl font-semibold tracking-tight text-foreground">
-            {formatPrice(totals.total, currency)}
+            {formatPrice(grandTotal, currency)}
           </dd>
         </div>
       </dl>
+
 
       <Button size="xl" disabled={empty} onClick={onContinue}>
         Continue Reservation
