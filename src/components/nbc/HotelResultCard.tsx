@@ -69,7 +69,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         {/* 1. Identity and credibility */}
         <div className="grid min-w-0 gap-2.5">
           <p className="nbc-eyebrow w-fit rounded-full bg-secondary/60 px-2.5 py-1 text-[0.625rem] text-nbc-royal">
-            {hotel.personality}jhhjhghgvghjhjghghhjghjhj
+            {hotel.personality}
           </p>
 
           <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">{hotel.name}</h3>
