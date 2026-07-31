@@ -107,7 +107,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         </div>
 
         {/* 6. Price and actions */}
-        <div className="mt-auto grid gap-4 border-t border-border pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+        <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
           <div className="min-w-0">
             <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">From</p>
             <p className="mt-1 truncate text-2xl font-semibold tracking-tight text-foreground">
