@@ -92,22 +92,21 @@ export function GlobalNav() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" size="sm" className="gap-2 text-foreground/80" asChild>
+          <Button variant="scarlet" size="lg" className="gap-2" asChild>
             <Link to="/auth" search={{ next: "/" }}>
               <User aria-hidden="true" />
               Login
             </Link>
           </Button>
-
-
-          <Button variant="scarlet" size="lg">
-            Find Your Stay
-          </Button>
         </div>
 
+
         <div className="flex items-center justify-end gap-2 lg:hidden">
-          <Button variant="scarlet" size="sm" className="hidden sm:inline-flex">
-            Find Your Stay
+          <Button variant="scarlet" size="sm" className="gap-2" asChild>
+            <Link to="/auth" search={{ next: "/" }}>
+              <User aria-hidden="true" />
+              Login
+            </Link>
           </Button>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
@@ -129,21 +128,19 @@ export function GlobalNav() {
                     <Globe aria-hidden="true" />
                     Language · {language}
                   </Button>
-                  <Button variant="outline" className="justify-start gap-2" asChild>
+
+                  <Button variant="scarlet" size="lg" className="justify-start gap-2" asChild>
                     <Link to="/auth" search={{ next: "/" }} onClick={() => setMenuOpen(false)}>
                       <User aria-hidden="true" />
                       Login
                     </Link>
-                  </Button>
-
-                  <Button variant="scarlet" size="lg">
-                    Find Your Stay
                   </Button>
                 </div>
               </div>
             </SheetContent>
           </Sheet>
         </div>
+
       </nav>
     </header>
   );
