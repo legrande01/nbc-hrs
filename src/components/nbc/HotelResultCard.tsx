@@ -49,7 +49,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         className,
       )}
     >
-      <ImageCarousel
+      {/* <ImageCarousel
         images={images}
         aspectClassName="aspect-4/3 md:aspect-auto md:h-full"
         className="md:h-full"
@@ -63,13 +63,13 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             </span>
           </div>
         }
-      />
+      /> */}
 
       <div className="flex min-w-0 flex-col gap-5 p-6 lg:p-7">
         {/* 1. Identity and credibility */}
         <div className="grid min-w-0 gap-2.5">
           <p className="nbc-eyebrow w-fit rounded-full bg-secondary/60 px-2.5 py-1 text-[0.625rem] text-nbc-royal">
-            {hotel.personality}jjhhjjhhhjh
+            {hotel.personality}
           </p>
 
           <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">{hotel.name}</h3>
