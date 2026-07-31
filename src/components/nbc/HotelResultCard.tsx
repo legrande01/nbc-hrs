@@ -65,7 +65,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         }
       />
 
-      <div className="flex min-w-0 flex-col gap-5 p-6 lg:p-7">
+      <div className="flex min-w-0 flex-col gap-5 py-6 px-6 lg:py-7 lg:px-7">
         {/* 1. Identity and credibility */}
         <div className="grid min-w-0 gap-2.5">
           <p className="nbc-eyebrow w-fit rounded-full bg-secondary/60 px-2.5 py-1 text-[0.625rem] text-nbc-royal">
