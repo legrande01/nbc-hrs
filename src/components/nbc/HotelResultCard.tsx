@@ -49,7 +49,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         className,
       )}
     >
-      {/* <ImageCarousel
+      <ImageCarousel
         images={images}
         aspectClassName="aspect-4/3 md:aspect-auto md:h-full"
         className="md:h-full"
@@ -63,7 +63,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             </span>
           </div>
         }
-      /> */}
+      />
 
       <div className="flex min-w-0 flex-col gap-5 p-6 lg:p-7">
         {/* 1. Identity and credibility */}
