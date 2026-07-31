@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { formatPrice } from "@/lib/nbc-discovery-filters";
 import type { DiscoveryHotel } from "@/lib/nbc-discovery";
-import { propertyTypeLabels } from "@/lib/nbc-discovery";
 import { hotelAvailability, hotelDistanceKm, hotelImages } from "@/lib/nbc-media";
 import { getPropertyDetail } from "@/lib/nbc-property";
 import { cn } from "@/lib/utils";
