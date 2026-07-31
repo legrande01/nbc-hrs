@@ -65,16 +65,14 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         }
       />
 
-      <div className="flex min-w-0 flex-col gap-5 p-6 lg:p-7">
+      <div className=" min-w-0 flex-col gap-5 p-6 lg:p-7">
         {/* 1. Identity and credibility */}
         <div className="grid min-w-0 gap-2.5">
           <p className="nbc-eyebrow w-fit rounded-full bg-secondary/60 px-2.5 py-1 text-[0.625rem] text-nbc-royal">
             {hotel.personality}
           </p>
 
-          <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">
-            {hotel.name}
-          </h3>
+          <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">{hotel.name}</h3>
 
           {/* Classification and location */}
           <p className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
@@ -94,16 +92,11 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
           </p>
         </div>
 
-
         {/* 4. Room categories */}
         {categoryChips.length > 0 && (
           <div className="grid gap-2">
             <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">Room Categories</p>
-            <OverflowChips
-              chips={categoryChips}
-              limit={3}
-              ariaLabel={`${hotel.name} room categories`}
-            />
+            <OverflowChips chips={categoryChips} limit={3} ariaLabel={`${hotel.name} room categories`} />
           </div>
         )}
 
@@ -134,12 +127,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
               </Button>
             ) : (
               <Button asChild>
-                <Link
-                  to="/hotels/$hotelId"
-                  params={{ hotelId: hotel.id }}
-                  search={stay ?? {}}
-                  hash="rooms"
-                >
+                <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }} search={stay ?? {}} hash="rooms">
                   Book Now
                 </Link>
               </Button>
