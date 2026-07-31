@@ -49,21 +49,23 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         className,
       )}
     >
-      <ImageCarousel
-        images={images}
-        aspectClassName="aspect-4/3 md:aspect-auto md:h-full"
-        className="md:h-full"
-        overlay={
-          <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-between gap-2">
-            <div className="pointer-events-auto">
-              <FavouriteButton hotelId={hotel.id} hotelName={hotel.name} />
+      <div className="relative md:h-full">
+        <ImageCarousel
+          images={images}
+          aspectClassName="aspect-4/3 md:aspect-auto md:h-full"
+          className="relative md:absolute md:inset-0"
+          overlay={
+            <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-between gap-2">
+              <div className="pointer-events-auto">
+                <FavouriteButton hotelId={hotel.id} hotelName={hotel.name} />
+              </div>
+              <span className="pointer-events-auto rounded-full bg-card/95 shadow-card">
+                <AvailabilityBadge status={availability} />
+              </span>
             </div>
-            <span className="pointer-events-auto rounded-full bg-card/95 shadow-card">
-              <AvailabilityBadge status={availability} />
-            </span>
-          </div>
-        }
-      />
+          }
+        />
+      </div>
 
       <div className="flex min-w-0 flex-col gap-5 py-5 px-6 lg:py-6 lg:px-7">
         {/* 1. Identity and credibility */}
@@ -72,7 +74,9 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             {hotel.personality}
           </p>
 
-          <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">{hotel.name}</h3>
+          <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">
+            {hotel.name}
+          </h3>
 
           {/* Classification and location */}
           <p className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
@@ -96,7 +100,11 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         {categoryChips.length > 0 && (
           <div className="grid gap-2">
             <p className="nbc-eyebrow text-[0.625rem] text-muted-foreground">Room Categories</p>
-            <OverflowChips chips={categoryChips} limit={3} ariaLabel={`${hotel.name} room categories`} />
+            <OverflowChips
+              chips={categoryChips}
+              limit={3}
+              ariaLabel={`${hotel.name} room categories`}
+            />
           </div>
         )}
 
@@ -127,7 +135,12 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
               </Button>
             ) : (
               <Button asChild>
-                <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }} search={stay ?? {}} hash="rooms">
+                <Link
+                  to="/hotels/$hotelId"
+                  params={{ hotelId: hotel.id }}
+                  search={stay ?? {}}
+                  hash="rooms"
+                >
                   Book Now
                 </Link>
               </Button>
