@@ -12,7 +12,7 @@ import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { DestinationCard } from "@/components/nbc/DestinationCard";
 import { HotelCard } from "@/components/nbc/HotelCard";
 import { ValueCard } from "@/components/nbc/ValueCard";
-import { NewsletterForm } from "@/components/nbc/NewsletterForm";
+
 import {
   featuredDestinations,
   featuredHotels,
@@ -214,18 +214,6 @@ function HomeExperience() {
           </div>
         </section>
 
-        {/* Newsletter */}
-        <section className="bg-muted">
-          <div className="mx-auto max-w-3xl px-5 py-20 text-center lg:px-8">
-            <SectionHeading
-              align="center"
-              eyebrow="Newsletter"
-              title="Travel notes from across Tanzania"
-              description="New openings, seasonal offers and quiet corners worth knowing about — a few times a year, never more."
-            />
-            <NewsletterForm className="mx-auto mt-10 max-w-xl text-left" />
-          </div>
-        </section>
       </main>
 
       <GlobalFooter />
