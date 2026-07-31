@@ -54,8 +54,13 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         aspectClassName="aspect-4/3 md:aspect-auto md:h-full"
         className="md:h-full"
         overlay={
-          <div className="absolute left-3 top-3 z-10">
-            <FavouriteButton hotelId={hotel.id} hotelName={hotel.name} />
+          <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-between gap-2">
+            <div className="pointer-events-auto">
+              <FavouriteButton hotelId={hotel.id} hotelName={hotel.name} />
+            </div>
+            <span className="pointer-events-auto rounded-full bg-card/95 shadow-card">
+              <AvailabilityBadge status={availability} />
+            </span>
           </div>
         }
       />
@@ -89,8 +94,6 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
           </p>
         </div>
 
-        {/* 3. Availability */}
-        <AvailabilityBadge status={availability} />
 
         {/* 4. Room categories */}
         {categoryChips.length > 0 && (
