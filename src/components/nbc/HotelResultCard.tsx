@@ -45,16 +45,15 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
   return (
     <article
       className={cn(
-        "grid items-start overflow-hidden rounded-xl border border-border/70 bg-card shadow-card transition-shadow duration-500 ease-out hover:shadow-elevated md:grid-cols-[18rem_minmax(0,1fr)] lg:grid-cols-[22rem_minmax(0,1fr)]",
+        "grid overflow-hidden rounded-xl border border-border/70 bg-card shadow-card transition-shadow duration-500 ease-out hover:shadow-elevated md:grid-cols-[18rem_minmax(0,1fr)] lg:grid-cols-[22rem_minmax(0,1fr)]",
         className,
       )}
     >
-
       <ImageCarousel
         images={images}
-        aspectClassName="aspect-4/3"
+        aspectClassName="aspect-4/3 md:aspect-auto md:h-full"
+        className="md:h-full"
         overlay={
-
           <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-between gap-2">
             <div className="pointer-events-auto">
               <FavouriteButton hotelId={hotel.id} hotelName={hotel.name} />
@@ -66,7 +65,7 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
         }
       />
 
-      <div className="flex min-w-0 flex-col gap-5 px-6 pt-6 pb-0 lg:px-7 lg:pt-7">
+      <div className="flex min-w-0 flex-col gap-5 p-6 lg:p-7">
         {/* 1. Identity and credibility */}
         <div className="grid min-w-0 gap-2.5">
           <p className="nbc-eyebrow w-fit rounded-full bg-secondary/60 px-2.5 py-1 text-[0.625rem] text-nbc-royal">
