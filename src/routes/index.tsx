@@ -12,7 +12,7 @@ import { SectionHeading } from "@/components/nbc/SectionHeading";
 import { DestinationCard } from "@/components/nbc/DestinationCard";
 import { HotelCard } from "@/components/nbc/HotelCard";
 import { ValueCard } from "@/components/nbc/ValueCard";
-import { NewsletterForm } from "@/components/nbc/NewsletterForm";
+
 import {
   featuredDestinations,
   featuredHotels,
