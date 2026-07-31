@@ -85,31 +85,23 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             </p>
           </div>
 
-          {/* 2. Classification, type, location and distance */}
-          <p className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
-            <span
-              className="flex shrink-0 items-center gap-0.5"
-              aria-label={`${hotel.stars} star property`}
-            >
-              {Array.from({ length: hotel.stars }).map((_, index) => (
-                <Star
-                  key={index}
-                  aria-hidden="true"
-                  className="size-3.5 fill-nbc-gold text-nbc-gold"
-                />
-              ))}
-            </span>
-            <span aria-hidden="true">·</span>
-            <span className="truncate">{propertyTypeLabels[hotel.propertyType]}</span>
-            <span aria-hidden="true">·</span>
-            <span className="flex min-w-0 items-center gap-1 truncate">
-              <MapPin aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.75} />
-              {hotel.area}, {hotel.city}
-            </span>
-            <span aria-hidden="true">·</span>
-            <span className="shrink-0">{distance} km from centre</span>
-          </p>
-        </div>
+        {/* Classification and location */}
+        <p className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+          <span className="flex shrink-0 items-center gap-1">
+            <Star aria-hidden="true" className="size-3.5 fill-nbc-gold text-nbc-gold" />
+            <span className="font-semibold text-foreground">{hotel.rating.toFixed(1)}</span>
+            <span className="text-muted-foreground">({hotel.reviewCount} Reviews)</span>
+            <span className="sr-only">out of 5</span>
+          </span>
+          <span aria-hidden="true">|</span>
+          <span className="flex min-w-0 items-center gap-1 truncate">
+            <MapPin aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.75} />
+            {hotel.area}, {hotel.city}
+          </span>
+          <span aria-hidden="true">|</span>
+          <span className="shrink-0">{distance} km from centre</span>
+        </p>
+      </div>
 
         {/* 3. Availability */}
         <AvailabilityBadge status={availability} />
