@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { amenityMeta } from "@/lib/nbc-amenities";
 import { formatPrice } from "@/lib/nbc-discovery-filters";
 import type { DiscoveryHotel } from "@/lib/nbc-discovery";
-import { propertyTypeLabels } from "@/lib/nbc-discovery";
 import { hotelAvailability, hotelDistanceKm, hotelImages } from "@/lib/nbc-media";
 import { getPropertyDetail } from "@/lib/nbc-property";
 import { cn } from "@/lib/utils";
@@ -68,45 +67,24 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             {hotel.personality}
           </p>
 
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-            <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">
-              {hotel.name}
-            </h3>
-            <p className="flex shrink-0 items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-sm font-semibold text-secondary-foreground">
-              <Star aria-hidden="true" className="size-3.5 fill-nbc-gold text-nbc-gold" />
-              {hotel.rating.toFixed(1)}
-              <span aria-hidden="true" className="text-muted-foreground">
-                ·
-              </span>
-              <span className="font-medium text-muted-foreground">
-                {hotel.reviewCount} Reviews
-              </span>
-              <span className="sr-only">out of 5</span>
-            </p>
-          </div>
+          <h3 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">
+            {hotel.name}
+          </h3>
 
-          {/* 2. Classification, type, location and distance */}
+          {/* Classification and location */}
           <p className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
-            <span
-              className="flex shrink-0 items-center gap-0.5"
-              aria-label={`${hotel.stars} star property`}
-            >
-              {Array.from({ length: hotel.stars }).map((_, index) => (
-                <Star
-                  key={index}
-                  aria-hidden="true"
-                  className="size-3.5 fill-nbc-gold text-nbc-gold"
-                />
-              ))}
+            <span className="flex shrink-0 items-center gap-1">
+              <Star aria-hidden="true" className="size-3.5 fill-nbc-gold text-nbc-gold" />
+              <span className="font-semibold text-foreground">{hotel.rating.toFixed(1)}</span>
+              <span className="text-muted-foreground">({hotel.reviewCount} Reviews)</span>
+              <span className="sr-only">out of 5</span>
             </span>
-            <span aria-hidden="true">·</span>
-            <span className="truncate">{propertyTypeLabels[hotel.propertyType]}</span>
-            <span aria-hidden="true">·</span>
+            <span aria-hidden="true">|</span>
             <span className="flex min-w-0 items-center gap-1 truncate">
               <MapPin aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.75} />
               {hotel.area}, {hotel.city}
             </span>
-            <span aria-hidden="true">·</span>
+            <span aria-hidden="true">|</span>
             <span className="shrink-0">{distance} km from centre</span>
           </p>
         </div>
