@@ -58,10 +58,9 @@ export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps
             <div className="pointer-events-auto">
               <FavouriteButton hotelId={hotel.id} hotelName={hotel.name} />
             </div>
-            <AvailabilityBadge
-              status={availability}
-              className="pointer-events-auto shadow-card backdrop-blur-sm"
-            />
+            <span className="pointer-events-auto rounded-full bg-card/95 shadow-card">
+              <AvailabilityBadge status={availability} />
+            </span>
           </div>
         }
       />
