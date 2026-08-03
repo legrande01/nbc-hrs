@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import {
   Building2,
-  ConciergeBell,
+  Check,
   MapPin,
   Plane,
   Sparkles,
