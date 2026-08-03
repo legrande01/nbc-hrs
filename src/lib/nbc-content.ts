@@ -34,8 +34,8 @@ export const navigationItems: NavItem[] = [
   { label: "Destinations" },
   { label: "Hotels", to: "/hotels" },
   { label: "Offers" },
-  { label: "For Hotels" },
-  { label: "Support" },
+  { label: "For Hotels", to: "/partners/register" },
+  { label: "My Reservation", to: "/find-reservation" },
 ];
 
 export const languages = ["ENG", "SWA"] as const;
