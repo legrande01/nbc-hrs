@@ -1,51 +1,58 @@
-# Hotel Listing & Hotel Details Enhancement
+Reorganise the hotel details page so the three broken-out sections (Overview, Description, Amenities, Landmarks) are merged into one cohesive "About this property" block, while keeping Property Highlights as a sidebar and moving the gallery below it.
 
-Extends existing NBC components and tokens. No new booking-flow routes; the journey stays Listing → Details → Room Selection → Reservation → Payment → Confirmation.
+## Current state
 
-## 1. Shared additions
+- `src/routes/hotels.$hotelId.tsx` renders the details page as a series of separate horizontal sections:
+  1. Overview + Property Highlights + Gallery
+  2. Description
+  3. Amenities
+  4. Landmarks
+  5. Choose Your Room
+  6. Reviews
+  7. Policies
+  8. FAQ
+- The user wants the first three content sections collapsed into one unified block, as shown in the sketch, with the gallery moved beneath it.
 
-- **`RoomImageCarousel`** — one new reusable manual-swipe carousel built on the existing `components/ui/carousel` (Embla). No autoplay; arrows on hover (desktop), swipe + dot indicators (mobile). Used by hotel cards, room category cards, variation cards and the room details modal.
-- **`AvailabilityBadge`** — one shared badge with `available` / `few-left` / `sold-out` states using existing semantic tokens. Availability is **always shown as a badge**; it never changes a CTA label.
-- **`FavouriteButton`** — heart toggle, persisted in `localStorage` (no auth required), used on listing cards and the details hero.
-- **`OverflowChips`** — small helper that renders the first N chips plus a "+X more" chip.
+## What we will build
 
-## 2. Data model (placeholder libs, same style as today)
+### New "About this property" section
 
-- `nbc-discovery.ts`: add `images: string[]` (5–6), `distanceKm`, `availability`, and room-category teasers per hotel.
-- `nbc-room-selection.ts`: add `images`, `view`, `balcony`, plus a `variants[]` array per category (size, bed, occupancy, highlights, extra features, availability) and richer `description` / `policies` for the details modal.
+A single section with a two-column desktop layout:
 
-## 3. Hotel Listing (`/hotels`)
+- Left column (main content)
+  - Eyebrow and heading "About this property"
+  - Overview paragraphs (the existing description text kept as the overview body)
+  - "Landmarks" subsection with compact horizontal cards for each nearby place
+  - "Amenities" subsection shown as a three-column checkmark list (replacing the current chip row)
+- Right column (sidebar)
+  - "Property Highlights" card (preserved from the current Overview section)
 
-`HotelResultCard` rewritten in place (no duplicate component): carousel → name → ★ rating (N Reviews) • distance → location → **2–3 room category chips + "+X more"** → **3 amenity chips + "+X more"** → starting price/night → availability badge. Favourite overlays the carousel. Single CTA "View Details"; "Find Your Stay" removed.
+### Gallery moved below
 
-**Sticky search bar**: new `StickySearchBar` revealed via `IntersectionObserver` once the hero search scrolls out. Compact row (Destination · Check-in · Check-out · Guests/Rooms) expanding into the existing `HotelSearch` in a popover/sheet. Submitting **patches only the stay fields** in the URL search state — price, star, type, amenity filters and sort are preserved (page resets to 1).
+The `PropertyGallery` component will move out of the Overview section and be rendered as a standalone "Imagery" section directly below the new combined block.
 
-## 4. Hotel Details (`/hotels/$hotelId`)
+### Removed sections
 
-- `PropertyHero` height reduced ~50%; overlay gains rating line, location, Favourite, Share (Web Share API + clipboard fallback) and primary "Book Now".
-- Gallery unchanged.
-- Section order: Property Overview → Short Description → Amenities → Nearby Landmarks & Attractions → **Choose Your Room** → Guest Reviews → Property Policies (table layout) → FAQs → Footer.
+- The standalone "Description" section will be removed.
+- The standalone "Amenities" section will be removed.
+- The standalone "Landmarks and location" section will be removed.
 
-## 5. Choose Your Room + Compare
+## Files to edit
 
-`RoomPreviewCard` upgraded: carousel, name, bed type, max guests, 3 highlight amenities, price/night, availability badge, compare checkbox, CTA "Select Room".
+- `src/routes/hotels.$hotelId.tsx` — restructure the sections, move the gallery, update the heading and labels, and render amenities as a checkmark grid.
+- `src/components/nbc/PropertyGallery.tsx` — no structural changes needed; it will be repositioned in the page.
 
-New `CompareRoomsDrawer` (existing `ui/drawer`, bottom sheet): up to 3 categories compared across images, price, size, bed, occupancy, view, balcony, breakfast, amenities, cancellation, availability, CTA. A persistent compare bar stays docked at the bottom once ≥1 room is selected and **remains until explicitly dismissed** (clear/close), surviving drawer open/close and scrolling. A 4th selection shows a friendly limit message. The drawer overlays the page, so scroll position is preserved on close.
+## Implementation notes
 
-## 6. Available Rooms (existing `/hotels/$hotelId/rooms`)
+- Use the existing `SectionHeading` component for the new combined section heading.
+- Keep the existing `nearbyIcons` and `amenityMeta` mapping for landmark and amenity icons.
+- Render amenities in a CSS grid (`grid-cols-2 sm:grid-cols-3`) with a `Check` icon for each item.
+- Keep landmarks as horizontal cards but sized compactly so they sit comfortably within the new block.
+- Maintain the same section width, padding, and responsive breakpoints as the rest of the page.
+- Ensure the heading hierarchy remains semantically correct: a single `h2` for the combined section, then `h3` for the subsections (Landmarks, Amenities).
+- No changes to data models or external APIs are required; this is a pure frontend layout change.
 
-Selecting a category deep-links here with the category preselected; the page lists that category's variations. Each variation card: carousel, size, bed, occupancy, highlight amenities, extra features, availability badge, "View Room Details" link, and CTA **"Book Now"** at all times — disabled when sold out, with a secondary "Notify When Available" action shown alongside the sold-out badge.
+## Verification
 
-- **`RoomDetailsModal`** — carousel with **image zoom** (click/tap to zoom, pinch-zoom and drag-to-pan on touch, Esc/close to reset), description, specs, full amenities, policies, cancellation, smoking, other info, bottom "Book Now".
-- **`NotifyMeModal`** — Full Name, Email, Phone with zod validation; no login required.
-
-## 7. Booking summary
-
-Existing `ReservationSummary` extended (not duplicated) with a Coupon/Discount code field and Loyalty point redemption. Demo logic in `nbc-room-selection.ts`: a small set of valid codes and a mock loyalty balance, applied as discount lines above the existing total rows. Current pricing layout untouched.
-
-## Technical notes
-
-- **Database**: one new table `public.room_notifications` (hotel id, room id, full name, email, phone). Anonymous inserts allowed, no public read — writes go through a server function with zod validation. Migration includes GRANTs and RLS policies.
-- All carousels are manual only; Embla autoplay is not installed.
-- All colors/spacing/radii via existing tokens in `src/styles.css`; no hardcoded values.
-- Responsive verification of listing, details, compare drawer and modals via Playwright at mobile and desktop widths before finishing.
+- Type-check the modified route.
+- Visually confirm the new layout matches the sketch: one combined block with highlights on the right, gallery below, and no separate Description / Amenities / Landmarks sections.
