@@ -3,7 +3,6 @@ import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-ro
 import {
   Building2,
   Check,
-  MapPin,
   Plane,
   Sparkles,
 } from "lucide-react";
