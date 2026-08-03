@@ -14,6 +14,252 @@ export type Database = {
   }
   public: {
     Tables: {
+      hotel_applications: {
+        Row: {
+          admin_email: string
+          admin_full_name: string
+          admin_phone: string
+          admin_user_id: string
+          business_email: string
+          business_phone: string
+          business_registration_number: string | null
+          country: string
+          created_at: string
+          district: string
+          hotel_name: string
+          id: string
+          license_document_path: string | null
+          physical_address: string
+          property_type: string
+          reference: string
+          region: string
+          review_notes: string | null
+          room_count: number
+          star_rating: number | null
+          status: string
+          submitted_at: string
+          tin: string
+          tin_document_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          admin_email: string
+          admin_full_name: string
+          admin_phone: string
+          admin_user_id: string
+          business_email: string
+          business_phone: string
+          business_registration_number?: string | null
+          country: string
+          created_at?: string
+          district: string
+          hotel_name: string
+          id?: string
+          license_document_path?: string | null
+          physical_address: string
+          property_type: string
+          reference: string
+          region: string
+          review_notes?: string | null
+          room_count?: number
+          star_rating?: number | null
+          status?: string
+          submitted_at?: string
+          tin: string
+          tin_document_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          admin_email?: string
+          admin_full_name?: string
+          admin_phone?: string
+          admin_user_id?: string
+          business_email?: string
+          business_phone?: string
+          business_registration_number?: string | null
+          country?: string
+          created_at?: string
+          district?: string
+          hotel_name?: string
+          id?: string
+          license_document_path?: string | null
+          physical_address?: string
+          property_type?: string
+          reference?: string
+          region?: string
+          review_notes?: string | null
+          room_count?: number
+          star_rating?: number | null
+          status?: string
+          submitted_at?: string
+          tin?: string
+          tin_document_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      otp_codes: {
+        Row: {
+          attempts: number
+          channel: string
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          identifier: string
+          purpose: string
+          user_id: string | null
+        }
+        Insert: {
+          attempts?: number
+          channel: string
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          identifier: string
+          purpose: string
+          user_id?: string | null
+        }
+        Update: {
+          attempts?: number
+          channel?: string
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          identifier?: string
+          purpose?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          country: string | null
+          created_at: string
+          email: string
+          email_verified: boolean
+          first_name: string
+          id: string
+          last_name: string
+          nbc_account_linked: boolean
+          nbc_membership_ref: string | null
+          phone: string
+          phone_verified: boolean
+          preferred_language: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string
+          email_verified?: boolean
+          first_name?: string
+          id: string
+          last_name?: string
+          nbc_account_linked?: boolean
+          nbc_membership_ref?: string | null
+          phone?: string
+          phone_verified?: boolean
+          preferred_language?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string
+          email_verified?: boolean
+          first_name?: string
+          id?: string
+          last_name?: string
+          nbc_account_linked?: boolean
+          nbc_membership_ref?: string | null
+          phone?: string
+          phone_verified?: boolean
+          preferred_language?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reservations: {
+        Row: {
+          adults: number
+          check_in: string
+          check_out: string
+          children: number
+          created_at: string
+          currency: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string
+          hotel_id: string
+          hotel_location: string | null
+          hotel_name: string
+          id: string
+          payment_method: string
+          payment_status: string
+          reference: string
+          rooms: Json
+          status_label: string | null
+          total_amount: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          adults?: number
+          check_in: string
+          check_out: string
+          children?: number
+          created_at?: string
+          currency?: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string
+          hotel_id: string
+          hotel_location?: string | null
+          hotel_name: string
+          id?: string
+          payment_method: string
+          payment_status?: string
+          reference: string
+          rooms?: Json
+          status_label?: string | null
+          total_amount?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          adults?: number
+          check_in?: string
+          check_out?: string
+          children?: number
+          created_at?: string
+          currency?: string
+          guest_email?: string
+          guest_name?: string
+          guest_phone?: string
+          hotel_id?: string
+          hotel_location?: string | null
+          hotel_name?: string
+          id?: string
+          payment_method?: string
+          payment_status?: string
+          reference?: string
+          rooms?: Json
+          status_label?: string | null
+          total_amount?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       room_notifications: {
         Row: {
           created_at: string
@@ -50,15 +296,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "customer" | "hotel_admin" | "nbc_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -185,6 +458,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["customer", "hotel_admin", "nbc_admin"],
+    },
   },
 } as const

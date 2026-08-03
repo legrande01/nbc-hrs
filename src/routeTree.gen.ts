@@ -10,10 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as FindReservationRouteImport } from './routes/find-reservation'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
+import { Route as AccountIndexRouteImport } from './routes/account.index'
+import { Route as PartnersRegisterRouteImport } from './routes/partners.register'
+import { Route as PartnersLoginRouteImport } from './routes/partners.login'
+import { Route as PartnersDashboardRouteImport } from './routes/partners.dashboard'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
+import { Route as AccountVerifyRouteImport } from './routes/account.verify'
+import { Route as AccountRegisterRouteImport } from './routes/account.register'
+import { Route as AccountLoginRouteImport } from './routes/account.login'
+import { Route as AccountForgotPasswordRouteImport } from './routes/account.forgot-password'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as HotelsHotelIdRoomsRouteImport } from './routes/hotels.$hotelId_.rooms'
@@ -26,6 +35,11 @@ import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindReservationRoute = FindReservationRouteImport.update({
+  id: '/find-reservation',
+  path: '/find-reservation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -43,9 +57,49 @@ const HotelsIndexRoute = HotelsIndexRouteImport.update({
   path: '/hotels/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRegisterRoute = PartnersRegisterRouteImport.update({
+  id: '/partners/register',
+  path: '/partners/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersLoginRoute = PartnersLoginRouteImport.update({
+  id: '/partners/login',
+  path: '/partners/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersDashboardRoute = PartnersDashboardRouteImport.update({
+  id: '/partners/dashboard',
+  path: '/partners/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   id: '/hotels/$hotelId',
   path: '/hotels/$hotelId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountVerifyRoute = AccountVerifyRouteImport.update({
+  id: '/account/verify',
+  path: '/account/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRegisterRoute = AccountRegisterRouteImport.update({
+  id: '/account/register',
+  path: '/account/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountLoginRoute = AccountLoginRouteImport.update({
+  id: '/account/login',
+  path: '/account/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountForgotPasswordRoute = AccountForgotPasswordRouteImport.update({
+  id: '/account/forgot-password',
+  path: '/account/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
@@ -97,10 +151,19 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/find-reservation': typeof FindReservationRoute
   '/mcp': typeof McpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/account/forgot-password': typeof AccountForgotPasswordRoute
+  '/account/login': typeof AccountLoginRoute
+  '/account/register': typeof AccountRegisterRoute
+  '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/partners/dashboard': typeof PartnersDashboardRoute
+  '/partners/login': typeof PartnersLoginRoute
+  '/partners/register': typeof PartnersRegisterRoute
+  '/account/': typeof AccountIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -112,10 +175,19 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/find-reservation': typeof FindReservationRoute
   '/mcp': typeof McpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/account/forgot-password': typeof AccountForgotPasswordRoute
+  '/account/login': typeof AccountLoginRoute
+  '/account/register': typeof AccountRegisterRoute
+  '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/partners/dashboard': typeof PartnersDashboardRoute
+  '/partners/login': typeof PartnersLoginRoute
+  '/partners/register': typeof PartnersRegisterRoute
+  '/account': typeof AccountIndexRoute
   '/hotels': typeof HotelsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -128,10 +200,19 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/find-reservation': typeof FindReservationRoute
   '/mcp': typeof McpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/account/forgot-password': typeof AccountForgotPasswordRoute
+  '/account/login': typeof AccountLoginRoute
+  '/account/register': typeof AccountRegisterRoute
+  '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/partners/dashboard': typeof PartnersDashboardRoute
+  '/partners/login': typeof PartnersLoginRoute
+  '/partners/register': typeof PartnersRegisterRoute
+  '/account/': typeof AccountIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -145,10 +226,19 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/find-reservation'
     | '/mcp'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/account/forgot-password'
+    | '/account/login'
+    | '/account/register'
+    | '/account/verify'
     | '/hotels/$hotelId'
+    | '/partners/dashboard'
+    | '/partners/login'
+    | '/partners/register'
+    | '/account/'
     | '/hotels/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -160,10 +250,19 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/find-reservation'
     | '/mcp'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/account/forgot-password'
+    | '/account/login'
+    | '/account/register'
+    | '/account/verify'
     | '/hotels/$hotelId'
+    | '/partners/dashboard'
+    | '/partners/login'
+    | '/partners/register'
+    | '/account'
     | '/hotels'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -175,10 +274,19 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auth'
+    | '/find-reservation'
     | '/mcp'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/account/forgot-password'
+    | '/account/login'
+    | '/account/register'
+    | '/account/verify'
     | '/hotels/$hotelId'
+    | '/partners/dashboard'
+    | '/partners/login'
+    | '/partners/register'
+    | '/account/'
     | '/hotels/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -191,10 +299,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  FindReservationRoute: typeof FindReservationRoute
   McpRoute: typeof McpRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AccountForgotPasswordRoute: typeof AccountForgotPasswordRoute
+  AccountLoginRoute: typeof AccountLoginRoute
+  AccountRegisterRoute: typeof AccountRegisterRoute
+  AccountVerifyRoute: typeof AccountVerifyRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
+  PartnersDashboardRoute: typeof PartnersDashboardRoute
+  PartnersLoginRoute: typeof PartnersLoginRoute
+  PartnersRegisterRoute: typeof PartnersRegisterRoute
+  AccountIndexRoute: typeof AccountIndexRoute
   HotelsIndexRoute: typeof HotelsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -211,6 +328,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find-reservation': {
+      id: '/find-reservation'
+      path: '/find-reservation'
+      fullPath: '/find-reservation'
+      preLoaderRoute: typeof FindReservationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -234,11 +358,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/': {
+      id: '/account/'
+      path: '/account'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners/register': {
+      id: '/partners/register'
+      path: '/partners/register'
+      fullPath: '/partners/register'
+      preLoaderRoute: typeof PartnersRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners/login': {
+      id: '/partners/login'
+      path: '/partners/login'
+      fullPath: '/partners/login'
+      preLoaderRoute: typeof PartnersLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners/dashboard': {
+      id: '/partners/dashboard'
+      path: '/partners/dashboard'
+      fullPath: '/partners/dashboard'
+      preLoaderRoute: typeof PartnersDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hotels/$hotelId': {
       id: '/hotels/$hotelId'
       path: '/hotels/$hotelId'
       fullPath: '/hotels/$hotelId'
       preLoaderRoute: typeof HotelsHotelIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/verify': {
+      id: '/account/verify'
+      path: '/account/verify'
+      fullPath: '/account/verify'
+      preLoaderRoute: typeof AccountVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/register': {
+      id: '/account/register'
+      path: '/account/register'
+      fullPath: '/account/register'
+      preLoaderRoute: typeof AccountRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/login': {
+      id: '/account/login'
+      path: '/account/login'
+      fullPath: '/account/login'
+      preLoaderRoute: typeof AccountLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/forgot-password': {
+      id: '/account/forgot-password'
+      path: '/account/forgot-password'
+      fullPath: '/account/forgot-password'
+      preLoaderRoute: typeof AccountForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.well-known/oauth-protected-resource': {
@@ -303,11 +483,20 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  FindReservationRoute: FindReservationRoute,
   McpRoute: McpRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AccountForgotPasswordRoute: AccountForgotPasswordRoute,
+  AccountLoginRoute: AccountLoginRoute,
+  AccountRegisterRoute: AccountRegisterRoute,
+  AccountVerifyRoute: AccountVerifyRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
+  PartnersDashboardRoute: PartnersDashboardRoute,
+  PartnersLoginRoute: PartnersLoginRoute,
+  PartnersRegisterRoute: PartnersRegisterRoute,
+  AccountIndexRoute: AccountIndexRoute,
   HotelsIndexRoute: HotelsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
