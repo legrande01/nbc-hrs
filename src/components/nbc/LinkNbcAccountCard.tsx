@@ -31,8 +31,8 @@ export function LinkNbcAccountCard({ onLink, className }: LinkNbcAccountCardProp
             Unlock NBC exclusive ways to pay
           </p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            Link your NBC account to finance your stay with Buy Now Pay Later, pay from a Save to
-            Buy goal, or redeem loyalty points.
+            Link your NBC account to redeem loyalty points against your stay and unlock member
+            rates across the network.
           </p>
         </div>
       </div>

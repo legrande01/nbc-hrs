@@ -85,7 +85,6 @@ function PaymentPage() {
     cardName: session?.owner?.fullName ?? "",
     cardExpiry: "",
     cardCvc: "",
-    instalments: 3,
     carrier: "M-Pesa",
   });
 
@@ -115,7 +114,6 @@ function PaymentPage() {
         selectedMethod.id === "card"
           ? details.cardNumber.replace(/\D/g, "").slice(-4)
           : undefined,
-      instalmentCount: details.instalments,
     });
     confirmSession(outcome);
     navigate({ to: "/hotels/$hotelId/confirmation", params: { hotelId }, search });
