@@ -2,8 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import {
   Building2,
-  ConciergeBell,
-  MapPin,
+  Check,
   Plane,
   Sparkles,
 } from "lucide-react";
@@ -141,19 +140,94 @@ function PropertyDetailsPage() {
       <main className="flex-1">
         <PropertyHero hotel={hotel} onViewRooms={goToRoomSelection} onShare={shareProperty} />
 
-        {/* 1. Overview — positioning, highlights and gallery */}
+        {/* 1. About this property — overview, landmarks, amenities and highlights */}
         <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-16">
-          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
-            <div className="min-w-0 max-w-2xl">
-              <p className="nbc-eyebrow text-nbc-scarlet">{property.positioning}</p>
-              <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl">
-                Property overview
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                What defines this property and everything available during your stay.
-              </p>
+          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+            {/* Left column: overview, landmarks and amenities */}
+            <div className="min-w-0">
+              <SectionHeading
+                eyebrow="Property Overview"
+                title="About this property"
+                description="What defines this property and everything available during your stay."
+              />
+
+              <div className="mt-8 grid max-w-3xl gap-5">
+                {property.overview.map((paragraph) => (
+                  <p
+                    key={paragraph.slice(0, 24)}
+                    className="text-base leading-relaxed text-muted-foreground"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+
+              {/* Landmarks */}
+              <div className="mt-10">
+                <h3 className="nbc-eyebrow text-[0.625rem] text-muted-foreground">Landmarks</h3>
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {property.nearby.map((place) => {
+                    const Icon = nearbyIcons[place.kind];
+                    return (
+                      <li
+                        key={place.id}
+                        className="flex items-start gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-card"
+                      >
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
+                          <Icon aria-hidden="true" className="size-4" strokeWidth={1.5} />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold leading-snug text-foreground">
+                            {place.label}
+                          </p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            {place.kind} · {place.distance}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+
+              {/* Amenities */}
+              <div className="mt-10">
+                <h3 className="nbc-eyebrow text-[0.625rem] text-muted-foreground">Amenities</h3>
+                <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {property.serviceAmenities.map((key) => {
+                    const { label } = amenityMeta[key];
+                    return (
+                      <li
+                        key={key}
+                        className="flex items-center gap-2 rounded-xl border border-border/70 bg-card px-3 py-2.5 text-sm font-medium text-foreground shadow-card"
+                      >
+                        <Check
+                          aria-hidden="true"
+                          className="size-4 shrink-0 text-nbc-royal"
+                          strokeWidth={2.5}
+                        />
+                        {label}
+                      </li>
+                    );
+                  })}
+                  {property.extraServices.map((service) => (
+                    <li
+                      key={service}
+                      className="flex items-center gap-2 rounded-xl border border-border/70 bg-card px-3 py-2.5 text-sm font-medium text-foreground shadow-card"
+                    >
+                      <Check
+                        aria-hidden="true"
+                        className="size-4 shrink-0 text-nbc-royal"
+                        strokeWidth={2.5}
+                      />
+                      {service}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
+            {/* Right column: highlights */}
             <div className="grid h-fit gap-4 rounded-2xl border border-border/70 bg-secondary/30 p-7">
               <h3 className="nbc-eyebrow text-[0.625rem] text-nbc-scarlet">Property Highlights</h3>
               <ul className="grid gap-3">
@@ -170,113 +244,21 @@ function PropertyDetailsPage() {
               </ul>
             </div>
           </div>
-
-          <PropertyGallery className="mt-10" images={property.gallery} />
         </section>
 
-        {/* 2. Description */}
+        {/* 2. Imagery */}
         <section className="border-y border-border bg-secondary/25">
           <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-16">
             <SectionHeading
-              eyebrow="Description"
-              title="About this property"
-              description="The character of the property, in detail."
+              eyebrow="Imagery"
+              title="Property gallery"
+              description="Explore the spaces and places that make up this property."
             />
-            <div className="mt-8 grid max-w-3xl gap-5">
-              {property.overview.map((paragraph) => (
-                <p
-                  key={paragraph.slice(0, 24)}
-                  className="text-base leading-relaxed text-muted-foreground"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <PropertyGallery className="mt-10" images={property.gallery} />
           </div>
         </section>
 
-        {/* 3. Amenities */}
-        <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-16">
-          <SectionHeading
-            eyebrow="Amenities"
-            title="Key amenities and services"
-            description="Everything included and available on request during your stay."
-          />
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {property.serviceAmenities.map((key) => {
-              const { label, icon: Icon } = amenityMeta[key];
-              return (
-                <li
-                  key={key}
-                  className="flex items-center gap-2 rounded-full border border-border/70 bg-card px-3.5 py-2 text-xs font-medium text-foreground shadow-card"
-                >
-                  <Icon aria-hidden="true" className="size-4 text-nbc-royal" strokeWidth={1.5} />
-                  {label}
-                </li>
-              );
-            })}
-            {property.extraServices.map((service) => (
-              <li
-                key={service}
-                className="flex items-center gap-2 rounded-full border border-border/70 bg-card px-3.5 py-2 text-xs font-medium text-foreground shadow-card"
-              >
-                <ConciergeBell
-                  aria-hidden="true"
-                  className="size-4 text-nbc-royal"
-                  strokeWidth={1.5}
-                />
-                {service}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* 4. Landmarks and location */}
-        <section className="border-y border-border bg-secondary/25">
-          <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-16">
-            <SectionHeading
-              eyebrow="Location"
-              title="Landmarks and what's nearby"
-              description="How close you are to the places that matter on this trip."
-            />
-
-            <div className="mt-8 flex items-start gap-3">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-card text-nbc-royal shadow-card">
-                <MapPin aria-hidden="true" className="size-4.5" strokeWidth={1.5} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-base font-semibold leading-snug text-foreground">{hotel.name}</p>
-                <p className="text-sm leading-relaxed text-muted-foreground">{property.address}</p>
-              </div>
-            </div>
-
-            <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {property.nearby.map((place) => {
-                const Icon = nearbyIcons[place.kind];
-                return (
-                  <li
-                    key={place.id}
-                    className="flex items-start gap-3 rounded-2xl border border-border/70 bg-card p-5 shadow-card"
-                  >
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-nbc-royal">
-                      <Icon aria-hidden="true" className="size-4" strokeWidth={1.5} />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold leading-snug text-foreground">
-                        {place.label}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {place.kind} · {place.distance} away
-                      </p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </section>
-
-        {/* 5. Choose Your Room */}
+        {/* 3. Choose Your Room */}
         <section
           id="rooms"
           className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 lg:px-8 lg:py-16"
