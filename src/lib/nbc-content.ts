@@ -26,7 +26,7 @@ import hotel3 from "@/assets/hotel-3.jpg";
 export interface NavItem {
   label: string;
   /** Route path once the module exists; undefined means "not yet released". */
-  to?: "/" | "/hotels";
+  to?: "/" | "/hotels" | "/find-reservation" | "/partners/register";
 }
 
 export const navigationItems: NavItem[] = [
