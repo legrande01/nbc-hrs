@@ -7,13 +7,6 @@
  * signed-in user instead of this module.
  */
 
-export interface SavingsGoal {
-  id: string;
-  name: string;
-  saved: number;
-  target: number;
-}
-
 export interface NbcCustomerProfile {
   id: string;
   fullName: string;
@@ -26,8 +19,6 @@ export interface NbcCustomerProfile {
   loyaltyPoints: number;
   /** Value of one loyalty point, in the platform currency. */
   loyaltyPointValue: number;
-  savingsGoal?: SavingsGoal;
-  bnplLimit: number;
   maskedAccount: string;
 }
 
@@ -46,13 +37,6 @@ export const demoProfile: NbcCustomerProfile = {
   nbcAccountLinked: false,
   loyaltyPoints: 184_500,
   loyaltyPointValue: 1,
-  savingsGoal: {
-    id: "goal-travel",
-    name: "Travel Goal 2026",
-    saved: 1_450_000,
-    target: 1_800_000,
-  },
-  bnplLimit: 4_000_000,
   maskedAccount: "•••• 4821",
 };
 

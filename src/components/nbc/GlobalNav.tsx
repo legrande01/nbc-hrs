@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Globe, Menu, User } from "lucide-react";
+import { Globe, LayoutDashboard, LogOut, Menu, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NbcLogo } from "@/components/nbc/NbcLogo";
 import { navigationItems, languages, type NavItem } from "@/lib/nbc-content";
+import { signOutEverywhere, useNbcSession } from "@/lib/nbc-session";
 import { cn } from "@/lib/utils";
 
 function NavLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void }) {
@@ -47,6 +48,10 @@ export function GlobalNav() {
   const [scrolled, setScrolled] = useState(false);
   const [language, setLanguage] = useState<string>(languages[0]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, profile, roles } = useNbcSession();
+  const isPartner = roles.includes("hotel_admin");
+  const accountPath = isPartner ? "/partners/dashboard" : "/account";
+  const accountLabel = profile?.firstName || "My account";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -92,20 +97,46 @@ export function GlobalNav() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="scarlet" size="lg" className="gap-2" asChild>
-            <Link to="/auth" search={{ next: "/" }}>
-              <User aria-hidden="true" />
-              Login
-            </Link>
-          </Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="scarlet" size="lg" className="gap-2">
+                  <User aria-hidden="true" />
+                  {accountLabel}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to={accountPath}>
+                    <LayoutDashboard aria-hidden="true" />
+                    {isPartner ? "Partner dashboard" : "My account"}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => void signOutEverywhere()}>
+                  <LogOut aria-hidden="true" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="scarlet" size="lg" className="gap-2" asChild>
+              <Link to="/account/login" search={{ next: "/account" }}>
+                <User aria-hidden="true" />
+                Login
+              </Link>
+            </Button>
+          )}
         </div>
 
 
         <div className="flex items-center justify-end gap-2 lg:hidden">
           <Button variant="scarlet" size="sm" className="gap-2" asChild>
-            <Link to="/auth" search={{ next: "/" }}>
+            <Link
+              to={user ? accountPath : "/account/login"}
+              search={user ? undefined : { next: "/account" }}
+            >
               <User aria-hidden="true" />
-              Login
+              {user ? "Account" : "Login"}
             </Link>
           </Button>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -130,11 +161,29 @@ export function GlobalNav() {
                   </Button>
 
                   <Button variant="scarlet" size="lg" className="justify-start gap-2" asChild>
-                    <Link to="/auth" search={{ next: "/" }} onClick={() => setMenuOpen(false)}>
+                    <Link
+                      to={user ? accountPath : "/account/login"}
+                      search={user ? undefined : { next: "/account" }}
+                      onClick={() => setMenuOpen(false)}
+                    >
                       <User aria-hidden="true" />
-                      Login
+                      {user ? (isPartner ? "Partner dashboard" : "My account") : "Login"}
                     </Link>
                   </Button>
+                  {user ? (
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="justify-start gap-2"
+                      onClick={() => {
+                        setMenuOpen(false);
+                        void signOutEverywhere();
+                      }}
+                    >
+                      <LogOut aria-hidden="true" />
+                      Sign out
+                    </Button>
+                  ) : null}
                 </div>
               </div>
             </SheetContent>

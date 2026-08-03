@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import { CheckCircle2, Clock, Download } from "lucide-react";
 import { toast } from "sonner";
 
@@ -17,6 +18,8 @@ import {
 } from "@/lib/nbc-room-selection";
 import { useBookingFlow, type BookingSession } from "@/lib/nbc-booking-flow";
 import { CONFIRMATION_STATUS_LABELS, type PaymentOutcome } from "@/lib/nbc-payments";
+import { persistReservation } from "@/lib/reservations.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/hotels/$hotelId_/confirmation")({
   validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
@@ -94,6 +97,47 @@ function ConfirmationPage() {
 
   const outcome = session?.paymentOutcome;
   const confirmed = session && outcome && session.propertyId === hotelId;
+  const persisted = useRef<string | null>(null);
+
+  // Persist the reservation once, so it can be recovered by reference later.
+  useEffect(() => {
+    if (!session || !outcome || !session.owner) return;
+    if (persisted.current === outcome.reference) return;
+    persisted.current = outcome.reference;
+
+    void (async () => {
+      const { data } = await supabase.auth.getUser();
+      await persistReservation({
+        data: {
+          reference: outcome.reference,
+          userId: data.user?.id ?? null,
+          hotelId: session.propertyId,
+          hotelName: session.propertyName,
+          guestName: session.owner!.fullName,
+          guestEmail: session.owner!.email,
+          guestPhone: session.owner!.phone,
+          checkIn: session.stay.checkIn,
+          checkOut: session.stay.checkOut,
+          adults: session.stay.adults,
+          children: session.stay.children,
+          rooms: session.roomLines.map((line) => ({
+            roomId: line.roomId,
+            roomName: line.roomName,
+            quantity: line.quantity,
+            nightlyRate: line.nightlyRate,
+            subtotal: line.subtotal,
+          })),
+          currency: outcome.currency,
+          totalAmount: outcome.amount,
+          paymentMethod: outcome.method.name,
+          paymentStatus: outcome.status,
+          statusLabel: CONFIRMATION_STATUS_LABELS[outcome.method.id],
+        },
+      }).catch(() => {
+        persisted.current = null;
+      });
+    })();
+  }, [session, outcome]);
 
   function download() {
     if (!session || !outcome) return;

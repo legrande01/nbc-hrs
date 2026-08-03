@@ -11,7 +11,6 @@ export interface PaymentDetailsState {
   cardName: string;
   cardExpiry: string;
   cardCvc: string;
-  instalments: number;
   carrier: string;
 }
 
@@ -151,46 +150,6 @@ export function PaymentDetailsPanel({
           <p className="text-sm leading-relaxed text-muted-foreground">
             Pay at any NBC branch, agent, ATM or through the NBC mobile app using that number. Your
             reservation confirms automatically once payment is received.
-          </p>
-        </div>
-      ) : null}
-
-      {method?.id === "bnpl" ? (
-        <div className="grid gap-3">
-          <Label htmlFor="instalments">Instalment plan</Label>
-          <div className="flex flex-wrap gap-2">
-            {[3, 6, 12].map((count) => (
-              <button
-                key={count}
-                type="button"
-                onClick={() => onChange("instalments", count)}
-                aria-pressed={value.instalments === count}
-                className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
-                  value.instalments === count
-                    ? "border-transparent bg-primary text-primary-foreground"
-                    : "border-border bg-background text-foreground hover:bg-secondary",
-                )}
-              >
-                {count} months
-              </button>
-            ))}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {formatPrice(Math.round(total / value.instalments), currency)} per month · first
-            payment due next month · financed by NBC.
-          </p>
-        </div>
-      ) : null}
-
-      {method?.id === "save-to-buy" && profile.savingsGoal ? (
-        <div className="grid gap-1.5">
-          <p className="text-sm font-medium text-foreground">{profile.savingsGoal.name}</p>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            {formatPrice(profile.savingsGoal.saved, currency)} saved of{" "}
-            {formatPrice(profile.savingsGoal.target, currency)}. This reservation draws{" "}
-            {formatPrice(total, currency)}, leaving{" "}
-            {formatPrice(Math.max(profile.savingsGoal.saved - total, 0), currency)} in your goal.
           </p>
         </div>
       ) : null}
