@@ -1,5 +1,16 @@
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
-import { CalendarDays, Clock3, Gift, Heart, LogOut, MapPin, Search, Sparkles, Users, Wallet } from "lucide-react";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  CalendarDays,
+  Clock3,
+  Gift,
+  Heart,
+  MapPin,
+  Search,
+  Sparkles,
+  Users,
+  Wallet,
+} from "lucide-react";
 
 import { AccountCard, AccountEmptyState, AccountLayout } from "@/components/nbc/AccountLayout";
 import { Button } from "@/components/ui/button";
@@ -14,7 +25,9 @@ import {
   rewardsSummary,
   upcomingStay,
 } from "@/lib/nbc-dashboard";
-import { signOutEverywhere, useNbcSession } from "@/lib/nbc-session";
+import { cn } from "@/lib/utils";
+import { useNbcSession } from "@/lib/nbc-session";
+
 
 export const Route = createFileRoute("/account/")({
   ssr: false,
