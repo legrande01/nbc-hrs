@@ -35,7 +35,7 @@ export function AccountLayout({ children }: AccountLayoutProps) {
               <div className="mb-4 hidden items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-card lg:flex">
                 <span
                   aria-hidden="true"
-                  className="grid size-10 shrink-0 place-items-center rounded-full bg-nbc-royal text-sm font-semibold text-nbc-royal-foreground"
+                  className="grid size-10 shrink-0 place-items-center rounded-full bg-nbc-royal text-sm font-semibold text-primary-foreground"
                 >
                   {initials}
                 </span>
