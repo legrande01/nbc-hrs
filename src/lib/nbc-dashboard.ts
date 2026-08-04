@@ -110,12 +110,16 @@ export const upcomingStay: UpcomingStay | null = {
 
 export interface RewardsSummary {
   points: number;
+  lifetimePoints: number;
+  nextMilestone: number;
   lastEarnedLabel: string;
   lastEarnedPoints: number;
 }
 
 export const rewardsSummary: RewardsSummary = {
   points: 18_450,
+  lifetimePoints: 42_000,
+  nextMilestone: 19_000,
   lastEarnedLabel: "Serena Lake Manyara · 21 July 2026",
   lastEarnedPoints: 1_250,
 };
@@ -124,18 +128,23 @@ export interface PaymentSummary {
   defaultMethod: string | null;
   defaultMethodDetail: string;
   nbcAccountLinked: boolean;
+  nbcAccountMasked: string | null;
 }
 
 export const paymentSummary: PaymentSummary = {
   defaultMethod: "Mobile Money",
   defaultMethodDetail: "M-Pesa · •••• 7412",
   nbcAccountLinked: false,
+  nbcAccountMasked: null,
 };
+
+export type ActivityTone = "success" | "info" | "pending";
 
 export interface ActivityEntry {
   title: string;
   detail: string;
   timeAgo: string;
+  tone: ActivityTone;
   icon: LucideIcon;
 }
 
@@ -144,27 +153,40 @@ export const recentActivity: ActivityEntry[] = [
     title: "Reservation Confirmed",
     detail: "The Harbour House · NBC-HRS-48210",
     timeAgo: "2 days ago",
+    tone: "success",
     icon: CalendarCheck,
   },
   {
     title: "Payment Successful",
     detail: "TZS 1,240,000 via Mobile Money",
     timeAgo: "2 days ago",
+    tone: "success",
     icon: Wallet,
   },
   {
     title: "Confirmation Email Sent",
     detail: "Sent to your registered email address",
     timeAgo: "2 days ago",
+    tone: "info",
     icon: Mail,
   },
   {
     title: "Reminder Scheduled",
     detail: "Check-in reminder for 16 August 2026",
     timeAgo: "1 day ago",
+    tone: "pending",
     icon: Bell,
   },
 ];
+
+/** Initials used by the sidebar avatar fallback. */
+export function initialsFor(firstName?: string, lastName?: string, email?: string): string {
+  const first = (firstName ?? "").trim();
+  const last = (lastName ?? "").trim();
+  const combined = `${first.charAt(0)}${last.charAt(0)}`.trim();
+  if (combined) return combined.toUpperCase();
+  return (email ?? "G").charAt(0).toUpperCase();
+}
 
 /** Time-of-day greeting used by the welcome section. */
 export function greetingFor(date: Date): string {
