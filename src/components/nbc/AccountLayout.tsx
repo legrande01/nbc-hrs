@@ -79,14 +79,6 @@ export function AccountLayout({ children }: AccountLayoutProps) {
   );
 }
 
-          <div className="min-w-0">{children}</div>
-        </div>
-      </main>
-      <GlobalFooter />
-    </div>
-  );
-}
-
 /** Card surface reused by every dashboard widget. */
 export function AccountCard({
   children,
