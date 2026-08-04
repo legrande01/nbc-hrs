@@ -20,6 +20,7 @@ import { Route as PartnersLoginRouteImport } from './routes/partners.login'
 import { Route as PartnersDashboardRouteImport } from './routes/partners.dashboard'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
 import { Route as AccountVerifyRouteImport } from './routes/account.verify'
+import { Route as AccountReservationsRouteImport } from './routes/account.reservations'
 import { Route as AccountRegisterRouteImport } from './routes/account.register'
 import { Route as AccountLoginRouteImport } from './routes/account.login'
 import { Route as AccountForgotPasswordRouteImport } from './routes/account.forgot-password'
@@ -85,6 +86,11 @@ const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
 const AccountVerifyRoute = AccountVerifyRouteImport.update({
   id: '/account/verify',
   path: '/account/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountReservationsRoute = AccountReservationsRouteImport.update({
+  id: '/account/reservations',
+  path: '/account/reservations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRegisterRoute = AccountRegisterRouteImport.update({
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/account/forgot-password': typeof AccountForgotPasswordRoute
   '/account/login': typeof AccountLoginRoute
   '/account/register': typeof AccountRegisterRoute
+  '/account/reservations': typeof AccountReservationsRoute
   '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/account/forgot-password': typeof AccountForgotPasswordRoute
   '/account/login': typeof AccountLoginRoute
   '/account/register': typeof AccountRegisterRoute
+  '/account/reservations': typeof AccountReservationsRoute
   '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/account/forgot-password': typeof AccountForgotPasswordRoute
   '/account/login': typeof AccountLoginRoute
   '/account/register': typeof AccountRegisterRoute
+  '/account/reservations': typeof AccountReservationsRoute
   '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/account/forgot-password'
     | '/account/login'
     | '/account/register'
+    | '/account/reservations'
     | '/account/verify'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/account/forgot-password'
     | '/account/login'
     | '/account/register'
+    | '/account/reservations'
     | '/account/verify'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/account/forgot-password'
     | '/account/login'
     | '/account/register'
+    | '/account/reservations'
     | '/account/verify'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
@@ -306,6 +318,7 @@ export interface RootRouteChildren {
   AccountForgotPasswordRoute: typeof AccountForgotPasswordRoute
   AccountLoginRoute: typeof AccountLoginRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
+  AccountReservationsRoute: typeof AccountReservationsRoute
   AccountVerifyRoute: typeof AccountVerifyRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
   PartnersDashboardRoute: typeof PartnersDashboardRoute
@@ -400,6 +413,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/reservations': {
+      id: '/account/reservations'
+      path: '/account/reservations'
+      fullPath: '/account/reservations'
+      preLoaderRoute: typeof AccountReservationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/register': {
       id: '/account/register'
       path: '/account/register'
@@ -491,6 +511,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountForgotPasswordRoute: AccountForgotPasswordRoute,
   AccountLoginRoute: AccountLoginRoute,
   AccountRegisterRoute: AccountRegisterRoute,
+  AccountReservationsRoute: AccountReservationsRoute,
   AccountVerifyRoute: AccountVerifyRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
   PartnersDashboardRoute: PartnersDashboardRoute,
