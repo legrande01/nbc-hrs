@@ -20,10 +20,16 @@ import { Route as PartnersLoginRouteImport } from './routes/partners.login'
 import { Route as PartnersDashboardRouteImport } from './routes/partners.dashboard'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
 import { Route as AccountVerifyRouteImport } from './routes/account.verify'
+import { Route as AccountSettingsRouteImport } from './routes/account.settings'
+import { Route as AccountRewardsRouteImport } from './routes/account.rewards'
 import { Route as AccountReservationsRouteImport } from './routes/account.reservations'
 import { Route as AccountRegisterRouteImport } from './routes/account.register'
+import { Route as AccountPaymentMethodsRouteImport } from './routes/account.payment-methods'
+import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AccountLoginRouteImport } from './routes/account.login'
 import { Route as AccountForgotPasswordRouteImport } from './routes/account.forgot-password'
+import { Route as AccountFavouritesRouteImport } from './routes/account.favourites'
+import { Route as AccountActivityRouteImport } from './routes/account.activity'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as HotelsHotelIdRoomsRouteImport } from './routes/hotels.$hotelId_.rooms'
@@ -88,6 +94,16 @@ const AccountVerifyRoute = AccountVerifyRouteImport.update({
   path: '/account/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountSettingsRoute = AccountSettingsRouteImport.update({
+  id: '/account/settings',
+  path: '/account/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRewardsRoute = AccountRewardsRouteImport.update({
+  id: '/account/rewards',
+  path: '/account/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountReservationsRoute = AccountReservationsRouteImport.update({
   id: '/account/reservations',
   path: '/account/reservations',
@@ -98,6 +114,16 @@ const AccountRegisterRoute = AccountRegisterRouteImport.update({
   path: '/account/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountPaymentMethodsRoute = AccountPaymentMethodsRouteImport.update({
+  id: '/account/payment-methods',
+  path: '/account/payment-methods',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountNotificationsRoute = AccountNotificationsRouteImport.update({
+  id: '/account/notifications',
+  path: '/account/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountLoginRoute = AccountLoginRouteImport.update({
   id: '/account/login',
   path: '/account/login',
@@ -106,6 +132,16 @@ const AccountLoginRoute = AccountLoginRouteImport.update({
 const AccountForgotPasswordRoute = AccountForgotPasswordRouteImport.update({
   id: '/account/forgot-password',
   path: '/account/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountFavouritesRoute = AccountFavouritesRouteImport.update({
+  id: '/account/favourites',
+  path: '/account/favourites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountActivityRoute = AccountActivityRouteImport.update({
+  id: '/account/activity',
+  path: '/account/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
@@ -161,10 +197,16 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/account/activity': typeof AccountActivityRoute
+  '/account/favourites': typeof AccountFavouritesRoute
   '/account/forgot-password': typeof AccountForgotPasswordRoute
   '/account/login': typeof AccountLoginRoute
+  '/account/notifications': typeof AccountNotificationsRoute
+  '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
   '/account/reservations': typeof AccountReservationsRoute
+  '/account/rewards': typeof AccountRewardsRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
@@ -186,10 +228,16 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/account/activity': typeof AccountActivityRoute
+  '/account/favourites': typeof AccountFavouritesRoute
   '/account/forgot-password': typeof AccountForgotPasswordRoute
   '/account/login': typeof AccountLoginRoute
+  '/account/notifications': typeof AccountNotificationsRoute
+  '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
   '/account/reservations': typeof AccountReservationsRoute
+  '/account/rewards': typeof AccountRewardsRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
@@ -212,10 +260,16 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/account/activity': typeof AccountActivityRoute
+  '/account/favourites': typeof AccountFavouritesRoute
   '/account/forgot-password': typeof AccountForgotPasswordRoute
   '/account/login': typeof AccountLoginRoute
+  '/account/notifications': typeof AccountNotificationsRoute
+  '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
   '/account/reservations': typeof AccountReservationsRoute
+  '/account/rewards': typeof AccountRewardsRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
@@ -239,10 +293,16 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/account/activity'
+    | '/account/favourites'
     | '/account/forgot-password'
     | '/account/login'
+    | '/account/notifications'
+    | '/account/payment-methods'
     | '/account/register'
     | '/account/reservations'
+    | '/account/rewards'
+    | '/account/settings'
     | '/account/verify'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
@@ -264,10 +324,16 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/account/activity'
+    | '/account/favourites'
     | '/account/forgot-password'
     | '/account/login'
+    | '/account/notifications'
+    | '/account/payment-methods'
     | '/account/register'
     | '/account/reservations'
+    | '/account/rewards'
+    | '/account/settings'
     | '/account/verify'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
@@ -289,10 +355,16 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/account/activity'
+    | '/account/favourites'
     | '/account/forgot-password'
     | '/account/login'
+    | '/account/notifications'
+    | '/account/payment-methods'
     | '/account/register'
     | '/account/reservations'
+    | '/account/rewards'
+    | '/account/settings'
     | '/account/verify'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
@@ -315,10 +387,16 @@ export interface RootRouteChildren {
   McpRoute: typeof McpRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AccountActivityRoute: typeof AccountActivityRoute
+  AccountFavouritesRoute: typeof AccountFavouritesRoute
   AccountForgotPasswordRoute: typeof AccountForgotPasswordRoute
   AccountLoginRoute: typeof AccountLoginRoute
+  AccountNotificationsRoute: typeof AccountNotificationsRoute
+  AccountPaymentMethodsRoute: typeof AccountPaymentMethodsRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
   AccountReservationsRoute: typeof AccountReservationsRoute
+  AccountRewardsRoute: typeof AccountRewardsRoute
+  AccountSettingsRoute: typeof AccountSettingsRoute
   AccountVerifyRoute: typeof AccountVerifyRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
   PartnersDashboardRoute: typeof PartnersDashboardRoute
@@ -413,6 +491,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/settings': {
+      id: '/account/settings'
+      path: '/account/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AccountSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/rewards': {
+      id: '/account/rewards'
+      path: '/account/rewards'
+      fullPath: '/account/rewards'
+      preLoaderRoute: typeof AccountRewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/reservations': {
       id: '/account/reservations'
       path: '/account/reservations'
@@ -427,6 +519,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/payment-methods': {
+      id: '/account/payment-methods'
+      path: '/account/payment-methods'
+      fullPath: '/account/payment-methods'
+      preLoaderRoute: typeof AccountPaymentMethodsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/notifications': {
+      id: '/account/notifications'
+      path: '/account/notifications'
+      fullPath: '/account/notifications'
+      preLoaderRoute: typeof AccountNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/login': {
       id: '/account/login'
       path: '/account/login'
@@ -439,6 +545,20 @@ declare module '@tanstack/react-router' {
       path: '/account/forgot-password'
       fullPath: '/account/forgot-password'
       preLoaderRoute: typeof AccountForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/favourites': {
+      id: '/account/favourites'
+      path: '/account/favourites'
+      fullPath: '/account/favourites'
+      preLoaderRoute: typeof AccountFavouritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/activity': {
+      id: '/account/activity'
+      path: '/account/activity'
+      fullPath: '/account/activity'
+      preLoaderRoute: typeof AccountActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.well-known/oauth-protected-resource': {
@@ -508,10 +628,16 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AccountActivityRoute: AccountActivityRoute,
+  AccountFavouritesRoute: AccountFavouritesRoute,
   AccountForgotPasswordRoute: AccountForgotPasswordRoute,
   AccountLoginRoute: AccountLoginRoute,
+  AccountNotificationsRoute: AccountNotificationsRoute,
+  AccountPaymentMethodsRoute: AccountPaymentMethodsRoute,
   AccountRegisterRoute: AccountRegisterRoute,
   AccountReservationsRoute: AccountReservationsRoute,
+  AccountRewardsRoute: AccountRewardsRoute,
+  AccountSettingsRoute: AccountSettingsRoute,
   AccountVerifyRoute: AccountVerifyRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
   PartnersDashboardRoute: PartnersDashboardRoute,
