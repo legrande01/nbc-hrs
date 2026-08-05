@@ -9,7 +9,7 @@ export const Route = createFileRoute("/auth")({
       : "/account";
     throw redirect({ to: "/account/login", search: { next: safe } });
   },
-  validateSearch: (search: Record<string, unknown>) => ({
-    next: typeof search.next === "string" ? search.next : "/account",
+  validateSearch: (search: Record<string, unknown> | undefined) => ({
+    next: typeof search?.next === "string" ? search?.next : "/account",
   }),
 });

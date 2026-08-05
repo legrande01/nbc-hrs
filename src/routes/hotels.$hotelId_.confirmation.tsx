@@ -22,7 +22,7 @@ import { persistReservation } from "@/lib/reservations.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/hotels/$hotelId_/confirmation")({
-  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  validateSearch: (search: Record<string, unknown> | undefined) => parseRoomSelectionSearch(search ?? {}),
   loader: ({ params }) => {
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();

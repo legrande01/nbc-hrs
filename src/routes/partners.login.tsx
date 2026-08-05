@@ -18,7 +18,7 @@ function safeNext(value: unknown): string {
 
 export const Route = createFileRoute("/partners/login")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>) => ({ next: safeNext(search.next) }),
+  validateSearch: (search: Record<string, unknown> | undefined) => ({ next: safeNext(search?.next) }),
   head: () => ({
     meta: [
       { title: "Hotel partner login · NBC Hospitality" },

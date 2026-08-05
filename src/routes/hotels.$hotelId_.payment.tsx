@@ -26,7 +26,7 @@ import {
 
 
 export const Route = createFileRoute("/hotels/$hotelId_/payment")({
-  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  validateSearch: (search: Record<string, unknown> | undefined) => parseRoomSelectionSearch(search ?? {}),
   loader: ({ params }) => {
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();

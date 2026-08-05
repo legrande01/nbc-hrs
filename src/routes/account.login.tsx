@@ -19,7 +19,7 @@ function safeNext(value: unknown): string {
 
 export const Route = createFileRoute("/account/login")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>) => ({ next: safeNext(search.next) }),
+  validateSearch: (search: Record<string, unknown> | undefined) => ({ next: safeNext(search?.next) }),
   head: () => ({
     meta: [
       { title: "Sign in to your account · NBC Hospitality" },

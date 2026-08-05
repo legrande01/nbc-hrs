@@ -13,7 +13,7 @@ import { useBookingFlow, type ReservationOwner } from "@/lib/nbc-booking-flow";
 import { getRoomSelectionData, parseRoomSelectionSearch } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId_/reservation")({
-  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  validateSearch: (search: Record<string, unknown> | undefined) => parseRoomSelectionSearch(search ?? {}),
   loader: ({ params }) => {
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();
