@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import type { SearchSchemaInput } from "@tanstack/react-router";
+import type { RoomSelectionSearch } from "@/lib/nbc-room-selection";
 import { ArrowLeft, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";

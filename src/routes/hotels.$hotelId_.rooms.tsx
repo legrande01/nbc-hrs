@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import type { SearchSchemaInput } from "@tanstack/react-router";
+import type { RoomSelectionSearch } from "@/lib/nbc-room-selection";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
