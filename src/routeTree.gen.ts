@@ -32,6 +32,7 @@ import { Route as AccountFavouritesRouteImport } from './routes/account.favourit
 import { Route as AccountActivityRouteImport } from './routes/account.activity'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AccountReservationsIndexRouteImport } from './routes/account.reservations.index'
 import { Route as HotelsHotelIdRoomsRouteImport } from './routes/hotels.$hotelId_.rooms'
 import { Route as HotelsHotelIdReservationRouteImport } from './routes/hotels.$hotelId_.reservation'
 import { Route as HotelsHotelIdPaymentRouteImport } from './routes/hotels.$hotelId_.payment'
@@ -156,6 +157,12 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AccountReservationsIndexRoute =
+  AccountReservationsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AccountReservationsRoute,
+  } as any)
 const HotelsHotelIdRoomsRoute = HotelsHotelIdRoomsRouteImport.update({
   id: '/hotels/$hotelId_/rooms',
   path: '/hotels/$hotelId/rooms',
@@ -204,7 +211,7 @@ export interface FileRoutesByFullPath {
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
-  '/account/reservations': typeof AccountReservationsRoute
+  '/account/reservations': typeof AccountReservationsRouteWithChildren
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
@@ -220,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId/rooms': typeof HotelsHotelIdRoomsRoute
+  '/account/reservations/': typeof AccountReservationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -235,7 +243,6 @@ export interface FileRoutesByTo {
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
-  '/account/reservations': typeof AccountReservationsRoute
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByTo {
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId/rooms': typeof HotelsHotelIdRoomsRoute
+  '/account/reservations': typeof AccountReservationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -267,7 +275,7 @@ export interface FileRoutesById {
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
-  '/account/reservations': typeof AccountReservationsRoute
+  '/account/reservations': typeof AccountReservationsRouteWithChildren
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/hotels/$hotelId_/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId_/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId_/rooms': typeof HotelsHotelIdRoomsRoute
+  '/account/reservations/': typeof AccountReservationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -316,6 +325,7 @@ export interface FileRouteTypes {
     | '/hotels/$hotelId/payment'
     | '/hotels/$hotelId/reservation'
     | '/hotels/$hotelId/rooms'
+    | '/account/reservations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -331,7 +341,6 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/account/payment-methods'
     | '/account/register'
-    | '/account/reservations'
     | '/account/rewards'
     | '/account/settings'
     | '/account/verify'
@@ -347,6 +356,7 @@ export interface FileRouteTypes {
     | '/hotels/$hotelId/payment'
     | '/hotels/$hotelId/reservation'
     | '/hotels/$hotelId/rooms'
+    | '/account/reservations'
   id:
     | '__root__'
     | '/'
@@ -378,6 +388,7 @@ export interface FileRouteTypes {
     | '/hotels/$hotelId_/payment'
     | '/hotels/$hotelId_/reservation'
     | '/hotels/$hotelId_/rooms'
+    | '/account/reservations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -394,7 +405,7 @@ export interface RootRouteChildren {
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AccountPaymentMethodsRoute: typeof AccountPaymentMethodsRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
-  AccountReservationsRoute: typeof AccountReservationsRoute
+  AccountReservationsRoute: typeof AccountReservationsRouteWithChildren
   AccountRewardsRoute: typeof AccountRewardsRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AccountVerifyRoute: typeof AccountVerifyRoute
@@ -575,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/reservations/': {
+      id: '/account/reservations/'
+      path: '/'
+      fullPath: '/account/reservations/'
+      preLoaderRoute: typeof AccountReservationsIndexRouteImport
+      parentRoute: typeof AccountReservationsRoute
+    }
     '/hotels/$hotelId_/rooms': {
       id: '/hotels/$hotelId_/rooms'
       path: '/hotels/$hotelId/rooms'
@@ -620,6 +638,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AccountReservationsRouteChildren {
+  AccountReservationsIndexRoute: typeof AccountReservationsIndexRoute
+}
+
+const AccountReservationsRouteChildren: AccountReservationsRouteChildren = {
+  AccountReservationsIndexRoute: AccountReservationsIndexRoute,
+}
+
+const AccountReservationsRouteWithChildren =
+  AccountReservationsRoute._addFileChildren(AccountReservationsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
@@ -635,7 +664,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountNotificationsRoute: AccountNotificationsRoute,
   AccountPaymentMethodsRoute: AccountPaymentMethodsRoute,
   AccountRegisterRoute: AccountRegisterRoute,
-  AccountReservationsRoute: AccountReservationsRoute,
+  AccountReservationsRoute: AccountReservationsRouteWithChildren,
   AccountRewardsRoute: AccountRewardsRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AccountVerifyRoute: AccountVerifyRoute,
