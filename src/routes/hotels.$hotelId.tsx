@@ -38,7 +38,7 @@ import {
 
 
 export const Route = createFileRoute("/hotels/$hotelId")({
-  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => parseRoomSelectionSearch(search ?? {}),
+  validateSearch: (search: Partial<RoomSelectionSearch> & SearchSchemaInput) => parseRoomSelectionSearch(search as Record<string, unknown>),
   loader: ({ params }) => {
     const property = getPropertyDetail(params.hotelId);
     if (!property) throw notFound();

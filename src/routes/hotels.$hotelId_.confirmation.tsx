@@ -23,7 +23,7 @@ import { persistReservation } from "@/lib/reservations.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/hotels/$hotelId_/confirmation")({
-  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => parseRoomSelectionSearch(search ?? {}),
+  validateSearch: (search: Partial<RoomSelectionSearch> & SearchSchemaInput) => parseRoomSelectionSearch(search as Record<string, unknown>),
   loader: ({ params }) => {
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();

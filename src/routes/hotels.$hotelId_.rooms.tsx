@@ -34,7 +34,7 @@ import {
 } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
-  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => parseRoomSelectionSearch(search ?? {}),
+  validateSearch: (search: Partial<RoomSelectionSearch> & SearchSchemaInput) => parseRoomSelectionSearch(search as Record<string, unknown>),
   /**
    * Defensive guard only. In the normal journey Hotel Details always collects
    * availability before navigating here, so this never fires.
