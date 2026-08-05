@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 
 /** Legacy sign-in path. The customer identity flow now lives under /account. */
 export const Route = createFileRoute("/auth")({
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/auth")({
       : "/account";
     throw redirect({ to: "/account/login", search: { next: safe } });
   },
-  validateSearch: (search: Record<string, unknown>) => ({
-    next: typeof search.next === "string" ? search.next : "/account",
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => ({
+    next: typeof search?.next === "string" ? search?.next : "/account",
   }),
 });

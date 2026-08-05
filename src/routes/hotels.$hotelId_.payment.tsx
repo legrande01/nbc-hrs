@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
+import type { RoomSelectionSearch } from "@/lib/nbc-room-selection";
 import { ArrowLeft, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,7 +28,7 @@ import {
 
 
 export const Route = createFileRoute("/hotels/$hotelId_/payment")({
-  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  validateSearch: (search: Partial<RoomSelectionSearch> & SearchSchemaInput) => parseRoomSelectionSearch(search as Record<string, unknown>),
   loader: ({ params }) => {
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();

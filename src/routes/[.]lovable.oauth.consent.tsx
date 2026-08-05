@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,7 @@ function oauthApi(): OAuthApi {
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   // Browser-only: the session lives in localStorage, absent during SSR.
   ssr: false,
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => ({
     authorization_id: typeof search.authorization_id === "string" ? search.authorization_id : "",
   }),
   beforeLoad: async ({ search, location }) => {

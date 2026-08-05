@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import {
   Building2,
   Check,
@@ -37,7 +38,7 @@ import {
 
 
 export const Route = createFileRoute("/hotels/$hotelId")({
-  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  validateSearch: (search: Partial<RoomSelectionSearch> & SearchSchemaInput) => parseRoomSelectionSearch(search as Record<string, unknown>),
   loader: ({ params }) => {
     const property = getPropertyDetail(params.hotelId);
     if (!property) throw notFound();

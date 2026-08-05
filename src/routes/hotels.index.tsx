@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,7 @@ import {
 const PAGE_SIZE = 5;
 
 export const Route = createFileRoute("/hotels/")({
-  validateSearch: (search: Record<string, unknown>) => parseDiscoverySearch(search),
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => parseDiscoverySearch(search ?? {}),
   component: HotelDiscoveryPage,
   errorComponent: ({ error }) => (
     <div role="alert" className="p-10 text-center text-muted-foreground">
@@ -76,7 +77,7 @@ function toDate(value: string): Date | undefined {
 
 function HotelDiscoveryPage() {
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/hotels" });
+  const navigate = useNavigate();
 
   const [editing, setEditing] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -87,11 +88,12 @@ function HotelDiscoveryPage() {
   const update = useCallback(
     (patch: Partial<DiscoverySearch>, resetPage = true) => {
       navigate({
-        search: (prev: DiscoverySearch) => ({ ...prev, ...patch, ...(resetPage ? { page: 1 } : {}) }),
+        to: "/hotels",
+        search: { ...search, ...patch, ...(resetPage ? { page: 1 } : {}) },
         replace: true,
       });
     },
-    [navigate],
+    [navigate, search],
   );
 
   const results = useMemo(() => selectHotels(search), [search]);

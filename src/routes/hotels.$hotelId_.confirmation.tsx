@@ -1,4 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
+import type { RoomSelectionSearch } from "@/lib/nbc-room-selection";
 import { useEffect, useRef } from "react";
 import { CheckCircle2, Clock, Download } from "lucide-react";
 import { toast } from "sonner";
@@ -22,7 +24,7 @@ import { persistReservation } from "@/lib/reservations.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/hotels/$hotelId_/confirmation")({
-  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  validateSearch: (search: Partial<RoomSelectionSearch> & SearchSchemaInput) => parseRoomSelectionSearch(search as Record<string, unknown>),
   loader: ({ params }) => {
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();

@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
+import type { RoomSelectionSearch } from "@/lib/nbc-room-selection";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +15,7 @@ import { useBookingFlow, type ReservationOwner } from "@/lib/nbc-booking-flow";
 import { getRoomSelectionData, parseRoomSelectionSearch } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId_/reservation")({
-  validateSearch: (search: Record<string, unknown>) => parseRoomSelectionSearch(search),
+  validateSearch: (search: Partial<RoomSelectionSearch> & SearchSchemaInput) => parseRoomSelectionSearch(search as Record<string, unknown>),
   loader: ({ params }) => {
     const data = getRoomSelectionData(params.hotelId);
     if (!data) throw notFound();
