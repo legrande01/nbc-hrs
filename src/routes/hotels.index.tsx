@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,7 @@ import {
 const PAGE_SIZE = 5;
 
 export const Route = createFileRoute("/hotels/")({
-  validateSearch: (search: Record<string, unknown> | undefined) => parseDiscoverySearch(search ?? {}),
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => parseDiscoverySearch(search ?? {}),
   component: HotelDiscoveryPage,
   errorComponent: ({ error }) => (
     <div role="alert" className="p-10 text-center text-muted-foreground">

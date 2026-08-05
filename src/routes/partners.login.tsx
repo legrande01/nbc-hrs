@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { AuthCard, AuthShell } from "@/components/nbc/AuthShell";
@@ -18,7 +19,7 @@ function safeNext(value: unknown): string {
 
 export const Route = createFileRoute("/partners/login")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown> | undefined) => ({ next: safeNext(search?.next) }),
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => ({ next: safeNext(search?.next) }),
   head: () => ({
     meta: [
       { title: "Hotel partner login · NBC Hospitality" },

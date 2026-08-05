@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { AuthCard, AuthShell } from "@/components/nbc/AuthShell";
@@ -9,7 +10,7 @@ import { resendSignupOtp, verifySignupOtp } from "@/lib/auth.functions";
 
 export const Route = createFileRoute("/account/verify")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown> | undefined) => ({
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => ({
     email: typeof search?.email === "string" ? search?.email : "",
   }),
   head: () => ({

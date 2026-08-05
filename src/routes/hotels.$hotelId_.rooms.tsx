@@ -6,6 +6,7 @@ import {
   redirect,
   useNavigate,
 } from "@tanstack/react-router";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
@@ -33,7 +34,7 @@ import {
 } from "@/lib/nbc-room-selection";
 
 export const Route = createFileRoute("/hotels/$hotelId_/rooms")({
-  validateSearch: (search: Record<string, unknown> | undefined) => parseRoomSelectionSearch(search ?? {}),
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput) => parseRoomSelectionSearch(search ?? {}),
   /**
    * Defensive guard only. In the normal journey Hotel Details always collects
    * availability before navigating here, so this never fires.
