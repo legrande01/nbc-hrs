@@ -22,7 +22,6 @@ import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
 import { Route as AccountVerifyRouteImport } from './routes/account.verify'
 import { Route as AccountSettingsRouteImport } from './routes/account.settings'
 import { Route as AccountRewardsRouteImport } from './routes/account.rewards'
-import { Route as AccountReservationsRouteImport } from './routes/account.reservations'
 import { Route as AccountRegisterRouteImport } from './routes/account.register'
 import { Route as AccountPaymentMethodsRouteImport } from './routes/account.payment-methods'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
@@ -106,11 +105,6 @@ const AccountRewardsRoute = AccountRewardsRouteImport.update({
   path: '/account/rewards',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountReservationsRoute = AccountReservationsRouteImport.update({
-  id: '/account/reservations',
-  path: '/account/reservations',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AccountRegisterRoute = AccountRegisterRouteImport.update({
   id: '/account/register',
   path: '/account/register',
@@ -160,9 +154,9 @@ const Char91DotmcpChar93ListToolsRoute =
   } as any)
 const AccountReservationsIndexRoute =
   AccountReservationsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AccountReservationsRoute,
+    id: '/account/reservations/',
+    path: '/account/reservations/',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const HotelsHotelIdRoomsRoute = HotelsHotelIdRoomsRouteImport.update({
   id: '/hotels/$hotelId_/rooms',
@@ -188,9 +182,9 @@ const HotelsHotelIdConfirmationRoute =
   } as any)
 const AccountReservationsReferenceRoute =
   AccountReservationsReferenceRouteImport.update({
-    id: '/$reference',
-    path: '/$reference',
-    getParentRoute: () => AccountReservationsRoute,
+    id: '/account/reservations/$reference',
+    path: '/account/reservations/$reference',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -218,7 +212,6 @@ export interface FileRoutesByFullPath {
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
-  '/account/reservations': typeof AccountReservationsRouteWithChildren
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
@@ -284,7 +277,6 @@ export interface FileRoutesById {
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
   '/account/register': typeof AccountRegisterRoute
-  '/account/reservations': typeof AccountReservationsRouteWithChildren
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
@@ -319,7 +311,6 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/account/payment-methods'
     | '/account/register'
-    | '/account/reservations'
     | '/account/rewards'
     | '/account/settings'
     | '/account/verify'
@@ -384,7 +375,6 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/account/payment-methods'
     | '/account/register'
-    | '/account/reservations'
     | '/account/rewards'
     | '/account/settings'
     | '/account/verify'
@@ -418,7 +408,6 @@ export interface RootRouteChildren {
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AccountPaymentMethodsRoute: typeof AccountPaymentMethodsRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
-  AccountReservationsRoute: typeof AccountReservationsRouteWithChildren
   AccountRewardsRoute: typeof AccountRewardsRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AccountVerifyRoute: typeof AccountVerifyRoute
@@ -430,10 +419,12 @@ export interface RootRouteChildren {
   HotelsIndexRoute: typeof HotelsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  AccountReservationsReferenceRoute: typeof AccountReservationsReferenceRoute
   HotelsHotelIdConfirmationRoute: typeof HotelsHotelIdConfirmationRoute
   HotelsHotelIdPaymentRoute: typeof HotelsHotelIdPaymentRoute
   HotelsHotelIdReservationRoute: typeof HotelsHotelIdReservationRoute
   HotelsHotelIdRoomsRoute: typeof HotelsHotelIdRoomsRoute
+  AccountReservationsIndexRoute: typeof AccountReservationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -529,13 +520,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountRewardsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/account/reservations': {
-      id: '/account/reservations'
-      path: '/account/reservations'
-      fullPath: '/account/reservations'
-      preLoaderRoute: typeof AccountReservationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/account/register': {
       id: '/account/register'
       path: '/account/register'
@@ -601,10 +585,10 @@ declare module '@tanstack/react-router' {
     }
     '/account/reservations/': {
       id: '/account/reservations/'
-      path: '/'
+      path: '/account/reservations'
       fullPath: '/account/reservations/'
       preLoaderRoute: typeof AccountReservationsIndexRouteImport
-      parentRoute: typeof AccountReservationsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/hotels/$hotelId_/rooms': {
       id: '/hotels/$hotelId_/rooms'
@@ -636,10 +620,10 @@ declare module '@tanstack/react-router' {
     }
     '/account/reservations/$reference': {
       id: '/account/reservations/$reference'
-      path: '/$reference'
+      path: '/account/reservations/$reference'
       fullPath: '/account/reservations/$reference'
       preLoaderRoute: typeof AccountReservationsReferenceRouteImport
-      parentRoute: typeof AccountReservationsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -658,19 +642,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AccountReservationsRouteChildren {
-  AccountReservationsReferenceRoute: typeof AccountReservationsReferenceRoute
-  AccountReservationsIndexRoute: typeof AccountReservationsIndexRoute
-}
-
-const AccountReservationsRouteChildren: AccountReservationsRouteChildren = {
-  AccountReservationsReferenceRoute: AccountReservationsReferenceRoute,
-  AccountReservationsIndexRoute: AccountReservationsIndexRoute,
-}
-
-const AccountReservationsRouteWithChildren =
-  AccountReservationsRoute._addFileChildren(AccountReservationsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
@@ -686,7 +657,6 @@ const rootRouteChildren: RootRouteChildren = {
   AccountNotificationsRoute: AccountNotificationsRoute,
   AccountPaymentMethodsRoute: AccountPaymentMethodsRoute,
   AccountRegisterRoute: AccountRegisterRoute,
-  AccountReservationsRoute: AccountReservationsRouteWithChildren,
   AccountRewardsRoute: AccountRewardsRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AccountVerifyRoute: AccountVerifyRoute,
@@ -698,10 +668,12 @@ const rootRouteChildren: RootRouteChildren = {
   HotelsIndexRoute: HotelsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  AccountReservationsReferenceRoute: AccountReservationsReferenceRoute,
   HotelsHotelIdConfirmationRoute: HotelsHotelIdConfirmationRoute,
   HotelsHotelIdPaymentRoute: HotelsHotelIdPaymentRoute,
   HotelsHotelIdReservationRoute: HotelsHotelIdReservationRoute,
   HotelsHotelIdRoomsRoute: HotelsHotelIdRoomsRoute,
+  AccountReservationsIndexRoute: AccountReservationsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
