@@ -3,9 +3,7 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import {
   ArrowLeft,
   Download,
-  ExternalLink,
   Mail,
-  MapPin,
   MessageCircle,
   Phone,
   Receipt,
@@ -19,12 +17,9 @@ import {
   HotelServicesSection,
   type ServiceBookingDetails,
 } from "@/components/nbc/HotelServicesSection";
-import {
-  PaymentStatusBadge,
-  ReservationStatusBadge,
-  SpecialRequestBadge,
-} from "@/components/nbc/ReservationBadges";
+import { SpecialRequestBadge } from "@/components/nbc/ReservationBadges";
 import { ReservationTimeline } from "@/components/nbc/ReservationTimeline";
+import { StaySummary } from "@/components/nbc/StaySummary";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -35,13 +30,12 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import {
   findReservationByReference,
-  formatDate,
-  formatMoney,
   nightsBetween,
   type AddedService,
   type HotelService,
   type Reservation,
 } from "@/lib/nbc-reservations";
+
 
 export const Route = createFileRoute("/account/reservations/$reference")({
   ssr: false,
@@ -147,7 +141,7 @@ function ReservationDetailsPage() {
   const { reservation } = Route.useLoaderData() as { reservation: Reservation };
   const [addedServices, setAddedServices] = useState<AddedService[]>(reservation.addedServices);
 
-  const balance = Math.max(0, reservation.total - reservation.amountPaid);
+  
   const nights = nightsBetween(reservation.checkIn, reservation.checkOut);
   const cancellable = reservation.status === "upcoming" || reservation.status === "pending-payment";
 
@@ -194,128 +188,18 @@ function ReservationDetailsPage() {
       </header>
 
       <div className="mt-8 grid gap-6">
-        {/* 1. Reservation overview */}
-        <SectionCard
-          title="Reservation overview"
-          action={<ReservationStatusBadge status={reservation.status} />}
-        >
-          <dl className="grid gap-4 sm:grid-cols-3">
-            <Detail label="Booking reference" value={reservation.reference} />
-            <Detail label="Booking date" value={formatDate(reservation.bookedOn)} />
-            <Detail label="Nights" value={`${nights}`} />
-          </dl>
-          <div className="mt-6 border-t border-border pt-6">
-            <ReservationTimeline reservation={reservation} />
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button variant="outline" onClick={demo("Confirmation download started")}>
-              <Download aria-hidden="true" className="size-4" strokeWidth={1.75} />
-              Download Confirmation
-            </Button>
-            <Button variant="outline" asChild>
-              <a href={`tel:${reservation.contact.reception}`}>
-                <Phone aria-hidden="true" className="size-4" strokeWidth={1.75} />
-                Contact Hotel
-              </a>
-            </Button>
-          </div>
+        {/* 1. Stay summary */}
+        <StaySummary
+          reservation={reservation}
+          onDownloadConfirmation={demo("Confirmation download started")}
+          onDownloadReceipt={demo("Receipt download started")}
+        />
+
+        {/* 2. Reservation journey */}
+        <SectionCard title="Reservation journey">
+          <ReservationTimeline reservation={reservation} />
         </SectionCard>
 
-        {/* 2. Hotel information */}
-        <SectionCard title="Hotel information">
-          <div className="grid gap-5 md:grid-cols-[minmax(0,16rem)_minmax(0,1fr)]">
-            <img
-              src={reservation.image}
-              alt={reservation.hotelName}
-              loading="lazy"
-              className="h-40 w-full rounded-xl object-cover"
-            />
-            <div className="grid content-start gap-4">
-              <div>
-                <p className="text-base font-semibold text-foreground">{reservation.hotelName}</p>
-                <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <MapPin aria-hidden="true" className="size-4" strokeWidth={1.75} />
-                  {reservation.address}
-                </p>
-              </div>
-              <dl className="grid gap-4 sm:grid-cols-2">
-                <Detail label="Phone" value={reservation.phone} />
-                <Detail label="Email" value={reservation.email} />
-              </dl>
-              <div className="flex flex-wrap gap-3">
-                <Button variant="outline" asChild>
-                  <Link to="/hotels">
-                    <ExternalLink aria-hidden="true" className="size-4" strokeWidth={1.75} />
-                    View Hotel
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(reservation.mapsQuery)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <MapPin aria-hidden="true" className="size-4" strokeWidth={1.75} />
-                    Get Directions
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </SectionCard>
-
-        {/* 3. Stay details */}
-        <SectionCard title="Stay details">
-          <dl className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <Detail label="Check-in" value={formatDate(reservation.checkIn)} />
-            <Detail label="Check-out" value={formatDate(reservation.checkOut)} />
-            <Detail
-              label="Guests"
-              value={`${reservation.guests} guest${reservation.guests === 1 ? "" : "s"}`}
-            />
-            <Detail label="Room category" value={reservation.roomCategory} />
-            <Detail label="Number of rooms" value={`${reservation.rooms}`} />
-            {reservation.roomNumber ? (
-              <Detail label="Assigned room" value={reservation.roomNumber} />
-            ) : null}
-            <Detail
-              label="Special requests"
-              value={reservation.specialRequestsSummary || "None recorded"}
-            />
-          </dl>
-          {!reservation.roomNumber ? (
-            <p className="mt-5 rounded-xl bg-secondary/40 p-4 text-xs leading-relaxed text-muted-foreground">
-              Your room number will appear here once the hotel assigns it, usually on the day of
-              arrival.
-            </p>
-          ) : null}
-        </SectionCard>
-
-        {/* 4. Payment information */}
-        <SectionCard
-          title="Payment information"
-          action={<PaymentStatusBadge status={reservation.paymentStatus} />}
-        >
-          <dl className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <Detail label="Reservation total" value={formatMoney(reservation.total)} />
-            <Detail label="Amount paid" value={formatMoney(reservation.amountPaid)} />
-            <Detail
-              label="Remaining balance"
-              value={balance > 0 ? formatMoney(balance) : "Settled"}
-            />
-            <Detail label="Payment method" value={reservation.paymentMethod} />
-            <Detail label="Transaction reference" value={reservation.transactionReference} />
-          </dl>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button variant="outline" onClick={demo("Receipt download started")}>
-              <Receipt aria-hidden="true" className="size-4" strokeWidth={1.75} />
-              Download Receipt
-            </Button>
-            <Button variant="ghost" onClick={demo("Payment history is coming soon")}>
-              View Payment History
-            </Button>
-          </div>
-        </SectionCard>
 
         {/* 5. Hotel services & experiences */}
         <SectionCard
