@@ -40,7 +40,7 @@ export interface AccountNavItem {
 export const accountNavigation: AccountNavItem[] = [
   { label: "Dashboard", to: "/account", icon: LayoutDashboard },
   { label: "My Reservations", to: "/account/reservations", icon: CalendarCheck },
-  { label: "Favourite Hotels", to: "/account/favourites", icon: Heart },
+  { label: "Favourite", to: "/account/favourites", icon: Heart },
   { label: "Payment Methods", to: "/account/payment-methods", icon: CreditCard },
   { label: "Rewards & Loyalty", to: "/account/rewards", icon: Gift },
   { label: "Notifications", to: "/account/notifications", icon: Bell },
