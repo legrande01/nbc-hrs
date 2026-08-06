@@ -3,9 +3,7 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import {
   ArrowLeft,
   Download,
-  ExternalLink,
   Mail,
-  MapPin,
   MessageCircle,
   Phone,
   Receipt,
@@ -19,12 +17,9 @@ import {
   HotelServicesSection,
   type ServiceBookingDetails,
 } from "@/components/nbc/HotelServicesSection";
-import {
-  PaymentStatusBadge,
-  ReservationStatusBadge,
-  SpecialRequestBadge,
-} from "@/components/nbc/ReservationBadges";
+import { SpecialRequestBadge } from "@/components/nbc/ReservationBadges";
 import { ReservationTimeline } from "@/components/nbc/ReservationTimeline";
+import { StaySummary } from "@/components/nbc/StaySummary";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -35,13 +30,12 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import {
   findReservationByReference,
-  formatDate,
-  formatMoney,
   nightsBetween,
   type AddedService,
   type HotelService,
   type Reservation,
 } from "@/lib/nbc-reservations";
+
 
 export const Route = createFileRoute("/account/reservations/$reference")({
   ssr: false,
