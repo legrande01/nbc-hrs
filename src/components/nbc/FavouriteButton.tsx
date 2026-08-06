@@ -1,20 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 
+import { isFavourite, toggleFavourite } from "@/lib/nbc-favourites";
 import { cn } from "@/lib/utils";
-
-const STORAGE_KEY = "nbc-favourite-hotels";
-
-function readFavourites(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === "string") : [];
-  } catch {
-    return [];
-  }
-}
 
 interface FavouriteButtonProps {
   hotelId: string;
@@ -25,7 +13,8 @@ interface FavouriteButtonProps {
 }
 
 /**
- * Guest-side favourite toggle. Stored locally so it works without an account.
+ * Guest-side favourite toggle. Backed by the shared favourite store so every
+ * surface (cards, details, Favourite module) stays in sync.
  */
 export function FavouriteButton({
   hotelId,
@@ -37,24 +26,19 @@ export function FavouriteButton({
 
   // Read after hydration so server and client markup match.
   useEffect(() => {
-    setFavourite(readFavourites().includes(hotelId));
+    const sync = () => setFavourite(isFavourite(hotelId));
+    sync();
+    window.addEventListener("nbc-favourites-change", sync);
+    return () => window.removeEventListener("nbc-favourites-change", sync);
   }, [hotelId]);
 
   const toggle = useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
-      const next = !favourite;
-      setFavourite(next);
-      const current = readFavourites().filter((id) => id !== hotelId);
-      if (next) current.push(hotelId);
-      try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
-      } catch {
-        /* storage unavailable — the in-session state still applies */
-      }
+      setFavourite(toggleFavourite(hotelId));
     },
-    [favourite, hotelId],
+    [hotelId],
   );
 
   return (
