@@ -141,7 +141,7 @@ function ReservationDetailsPage() {
   const { reservation } = Route.useLoaderData() as { reservation: Reservation };
   const [addedServices, setAddedServices] = useState<AddedService[]>(reservation.addedServices);
 
-  const balance = Math.max(0, reservation.total - reservation.amountPaid);
+  
   const nights = nightsBetween(reservation.checkIn, reservation.checkOut);
   const cancellable = reservation.status === "upcoming" || reservation.status === "pending-payment";
 
