@@ -3,6 +3,7 @@ import { Download, MapPin, Phone, Receipt, Star } from "lucide-react";
 import { AccountCard } from "@/components/nbc/AccountLayout";
 import { PaymentStatusBadge, ReservationStatusBadge } from "@/components/nbc/ReservationBadges";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { discoveryHotels } from "@/lib/nbc-discovery";
 import {
   formatDate,
