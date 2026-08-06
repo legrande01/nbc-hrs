@@ -30,7 +30,11 @@ function ColumnHeading({ children }: { children: React.ReactNode }) {
 }
 
 function SectionGroup({ children }: { children: React.ReactNode }) {
-  return <div className="grid gap-2.5">{children}</div>;
+  return (
+    <dl className="grid gap-2.5 border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
+      {children}
+    </dl>
+  );
 }
 
 /**
