@@ -107,8 +107,9 @@ export function profileCompletion(info: PersonalInformation): number {
     info.nationality,
   ];
   const filled = fields.filter((value) => value.trim().length > 0).length;
-  // Verification and travel preferences make up the remaining weighting.
-  return Math.round(((filled + 1) / (fields.length + 1.2)) * 100);
+  // Personal details carry 85% of the score; the remainder unlocks with
+  // identity documents and saved travel companions in a later release.
+  return Math.round((filled / fields.length) * 85);
 }
 
 export function formatDateOfBirth(iso: string): string {
