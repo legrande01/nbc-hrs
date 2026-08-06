@@ -11,9 +11,9 @@ import {
   type Reservation,
 } from "@/lib/nbc-reservations";
 
-function Row({ label, value }: { label: string; value: React.ReactNode }) {
+function Row({ label, value, className }: { label: string; value: React.ReactNode; className?: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-4">
+    <div className={cn("flex items-baseline justify-between gap-4", className)}>
       <dt className="text-xs text-muted-foreground">{label}</dt>
       <dd className="min-w-0 truncate text-right text-sm font-medium text-foreground">{value}</dd>
     </div>
@@ -26,6 +26,10 @@ function ColumnHeading({ children }: { children: React.ReactNode }) {
       {children}
     </p>
   );
+}
+
+function SectionGroup({ children }: { children: React.ReactNode }) {
+  return <div className="grid gap-2.5">{children}</div>;
 }
 
 /**
