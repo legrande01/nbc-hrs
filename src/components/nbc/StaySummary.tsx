@@ -72,16 +72,20 @@ export function StaySummary({
             </h2>
             <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-primary-foreground/85">
               {hotel ? (
-                <span className="inline-flex items-center gap-1">
-                  <Star
-                    aria-hidden="true"
-                    className="size-3.5 fill-nbc-gold text-nbc-gold"
-                    strokeWidth={1.75}
-                  />
-                  {hotel.rating.toFixed(1)} ({hotel.reviewCount} reviews)
-                </span>
+                <>
+                  <span className="inline-flex items-center gap-1">
+                    <Star
+                      aria-hidden="true"
+                      className="size-3.5 fill-nbc-gold text-nbc-gold"
+                      strokeWidth={1.75}
+                    />
+                    {hotel.rating.toFixed(1)} ({hotel.reviewCount} Reviews)
+                  </span>
+                  <span aria-hidden="true" className="text-primary-foreground/50">
+                    |
+                  </span>
+                </>
               ) : null}
-              <span aria-hidden="true">·</span>
               <span className="inline-flex items-center gap-1">
                 <MapPin aria-hidden="true" className="size-3.5" strokeWidth={1.75} />
                 {reservation.destination}
@@ -129,7 +133,7 @@ export function StaySummary({
               />
             </SectionGroup>
             <SectionGroup>
-              <Row label="Payment method" value={reservation.paymentMethod} />
+              <Row label="Payment method" value={reservation.paymentMethod.split("·")[0]?.trim()} />
               <Row label="Booking reference" value={reservation.reference} />
               <Row label="Transaction reference" value={reservation.transactionReference} />
             </SectionGroup>
