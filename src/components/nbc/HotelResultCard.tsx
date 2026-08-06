@@ -133,8 +133,11 @@ export function HotelResultCard({
               {formatPrice(hotel.priceFrom, hotel.currency)}
             </p>
             <p className="mt-0.5 text-xs text-muted-foreground">per night</p>
+            {meta ? <div className="mt-2 text-xs text-muted-foreground">{meta}</div> : null}
           </div>
-          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <div className="flex shrink-0 flex-wrap gap-3">
+            {extraActions}
+
             <Button variant="outline" asChild>
               <Link to="/hotels/$hotelId" params={{ hotelId: hotel.id }} search={stay ?? {}}>
                 View Details
