@@ -18,6 +18,10 @@ interface HotelResultCardProps {
   hotel: DiscoveryHotel;
   /** Stay context carried forward into Hotel Details so the CTA can skip the modal. */
   stay?: { checkIn: string; checkOut: string; adults: number; children: number; rooms: number };
+  /** Optional contextual line, e.g. "Saved on 12 Jul 2026". */
+  meta?: React.ReactNode;
+  /** Optional secondary actions rendered beside the standard CTAs. */
+  extraActions?: React.ReactNode;
   className?: string;
 }
 
@@ -25,7 +29,14 @@ interface HotelResultCardProps {
  * Standard horizontal search-result card used across the platform.
  * Optimised for side-by-side comparison rather than storytelling.
  */
-export function HotelResultCard({ hotel, stay, className }: HotelResultCardProps) {
+export function HotelResultCard({
+  hotel,
+  stay,
+  meta,
+  extraActions,
+  className,
+}: HotelResultCardProps) {
+
   const images = useMemo(() => hotelImages(hotel), [hotel]);
   const availability = hotelAvailability(hotel);
   const distance = hotelDistanceKm(hotel);
