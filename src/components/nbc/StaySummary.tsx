@@ -52,7 +52,7 @@ export function StaySummary({
 
   return (
     <AccountCard className="overflow-hidden p-0">
-      <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="grid lg:grid-cols-[minmax(0,28%)_minmax(0,34%)_minmax(0,38%)] lg:divide-x lg:divide-border/40">
         {/* Left — property identity */}
         <div className="relative">
           <img
@@ -88,40 +88,48 @@ export function StaySummary({
         </div>
 
         {/* Center — stay */}
-        <div className="grid content-start gap-3 border-border/70 p-6 sm:p-7 lg:border-l">
+        <div className="grid content-start gap-5 p-6 sm:p-7">
           <ColumnHeading>Your stay</ColumnHeading>
-          <dl className="grid gap-3">
-            <Row label="Check-in" value={formatDate(reservation.checkIn)} />
-            <Row label="Check-out" value={formatDate(reservation.checkOut)} />
-            <Row label="Length of stay" value={`${nights} night${nights === 1 ? "" : "s"}`} />
-            <Row
-              label="Guests"
-              value={`${reservation.guests} guest${reservation.guests === 1 ? "" : "s"} · ${reservation.rooms} room${reservation.rooms === 1 ? "" : "s"}`}
-            />
-            <Row label="Room category" value={reservation.roomCategory} />
-            {reservation.roomNumber ? (
-              <Row label="Assigned room" value={reservation.roomNumber} />
-            ) : null}
-          </dl>
+          <div className="grid gap-5">
+            <SectionGroup>
+              <Row label="Check-in" value={formatDate(reservation.checkIn)} />
+              <Row label="Check-out" value={formatDate(reservation.checkOut)} />
+              <Row label="Length of stay" value={`${nights} night${nights === 1 ? "" : "s"}`} />
+            </SectionGroup>
+            <SectionGroup>
+              <Row
+                label="Guests"
+                value={`${reservation.guests} guest${reservation.guests === 1 ? "" : "s"} · ${reservation.rooms} room${reservation.rooms === 1 ? "" : "s"}`}
+              />
+              <Row label="Room category" value={reservation.roomCategory} />
+              {reservation.roomNumber ? (
+                <Row label="Assigned room" value={reservation.roomNumber} />
+              ) : null}
+            </SectionGroup>
+          </div>
         </div>
 
         {/* Right — payment */}
-        <div className="grid content-start gap-3 border-t border-border/70 p-6 sm:p-7 lg:border-l lg:border-t-0">
+        <div className="grid content-start gap-5 border-t border-border/70 p-6 sm:p-7 lg:border-t-0">
           <div className="flex items-center justify-between gap-3">
             <ColumnHeading>Payment</ColumnHeading>
             <PaymentStatusBadge status={reservation.paymentStatus} />
           </div>
-          <dl className="grid gap-3">
-            <Row label="Reservation total" value={formatMoney(reservation.total)} />
-            <Row label="Amount paid" value={formatMoney(reservation.amountPaid)} />
-            <Row
-              label="Remaining balance"
-              value={balance > 0 ? formatMoney(balance) : "Settled"}
-            />
-            <Row label="Payment method" value={reservation.paymentMethod} />
-            <Row label="Booking reference" value={reservation.reference} />
-            <Row label="Transaction reference" value={reservation.transactionReference} />
-          </dl>
+          <div className="grid gap-5">
+            <SectionGroup>
+              <Row label="Reservation total" value={formatMoney(reservation.total)} />
+              <Row label="Amount paid" value={formatMoney(reservation.amountPaid)} />
+              <Row
+                label="Remaining balance"
+                value={balance > 0 ? formatMoney(balance) : "Settled"}
+              />
+            </SectionGroup>
+            <SectionGroup>
+              <Row label="Payment method" value={reservation.paymentMethod} />
+              <Row label="Booking reference" value={reservation.reference} />
+              <Row label="Transaction reference" value={reservation.transactionReference} />
+            </SectionGroup>
+          </div>
         </div>
       </div>
 
