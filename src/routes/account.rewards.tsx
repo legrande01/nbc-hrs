@@ -229,7 +229,7 @@ function RewardsPage() {
                 className="flex min-w-0 flex-col gap-3 rounded-xl border border-border/70 bg-secondary/20 p-5"
               >
                 <span className="grid size-10 place-items-center rounded-full border border-nbc-royal/15 bg-card text-nbc-royal">
-                  <Icon aria-hidden="true" className="size-4.5 size-5" strokeWidth={1.6} />
+                  <Icon aria-hidden="true" className="size-5" strokeWidth={1.6} />
                 </span>
                 <p className="text-sm font-semibold text-foreground">{method.title}</p>
                 <p className="text-sm leading-relaxed text-muted-foreground">
