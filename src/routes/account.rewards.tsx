@@ -406,7 +406,8 @@ function RewardsPage() {
       </div>
 
       {/* Membership tiers */}
-      <AccountCard className="mt-6 scroll-mt-24" id="membership-tiers">
+      <div id="membership-tiers" className="scroll-mt-24">
+        <AccountCard className="mt-6">
         <SectionTitle
           title="Membership Tiers"
           description={
@@ -458,6 +459,7 @@ function RewardsPage() {
           *Benefits marked with an asterisk are subject to availability at the hotel.
         </p>
       </AccountCard>
+      </div>
 
       {/* Next tier progress */}
       <AccountCard className="mt-6">
@@ -528,7 +530,8 @@ function RewardsPage() {
       </AccountCard>
 
       {/* FAQ */}
-      <AccountCard className="mt-6 scroll-mt-24" id="rewards-faq">
+      <div id="rewards-faq" className="scroll-mt-24">
+        <AccountCard className="mt-6">
         <SectionTitle title="Frequently Asked Questions" />
         <Accordion type="single" collapsible className="w-full">
           {rewardsFaq.map((item) => (
@@ -543,6 +546,7 @@ function RewardsPage() {
           ))}
         </Accordion>
       </AccountCard>
+      </div>
     </AccountLayout>
   );
 }
