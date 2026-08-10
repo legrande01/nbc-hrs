@@ -23,6 +23,7 @@ import { Route as AccountVerifyRouteImport } from './routes/account.verify'
 import { Route as AccountSettingsRouteImport } from './routes/account.settings'
 import { Route as AccountRewardsRouteImport } from './routes/account.rewards'
 import { Route as AccountRegisterRouteImport } from './routes/account.register'
+import { Route as AccountPaymentsRouteImport } from './routes/account.payments'
 import { Route as AccountPaymentMethodsRouteImport } from './routes/account.payment-methods'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AccountLoginRouteImport } from './routes/account.login'
@@ -108,6 +109,11 @@ const AccountRewardsRoute = AccountRewardsRouteImport.update({
 const AccountRegisterRoute = AccountRegisterRouteImport.update({
   id: '/account/register',
   path: '/account/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountPaymentsRoute = AccountPaymentsRouteImport.update({
+  id: '/account/payments',
+  path: '/account/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountPaymentMethodsRoute = AccountPaymentMethodsRouteImport.update({
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/account/login': typeof AccountLoginRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
+  '/account/payments': typeof AccountPaymentsRoute
   '/account/register': typeof AccountRegisterRoute
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
@@ -243,6 +250,7 @@ export interface FileRoutesByTo {
   '/account/login': typeof AccountLoginRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
+  '/account/payments': typeof AccountPaymentsRoute
   '/account/register': typeof AccountRegisterRoute
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
@@ -276,6 +284,7 @@ export interface FileRoutesById {
   '/account/login': typeof AccountLoginRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/account/payment-methods': typeof AccountPaymentMethodsRoute
+  '/account/payments': typeof AccountPaymentsRoute
   '/account/register': typeof AccountRegisterRoute
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
@@ -310,6 +319,7 @@ export interface FileRouteTypes {
     | '/account/login'
     | '/account/notifications'
     | '/account/payment-methods'
+    | '/account/payments'
     | '/account/register'
     | '/account/rewards'
     | '/account/settings'
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/account/login'
     | '/account/notifications'
     | '/account/payment-methods'
+    | '/account/payments'
     | '/account/register'
     | '/account/rewards'
     | '/account/settings'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/account/login'
     | '/account/notifications'
     | '/account/payment-methods'
+    | '/account/payments'
     | '/account/register'
     | '/account/rewards'
     | '/account/settings'
@@ -407,6 +419,7 @@ export interface RootRouteChildren {
   AccountLoginRoute: typeof AccountLoginRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AccountPaymentMethodsRoute: typeof AccountPaymentMethodsRoute
+  AccountPaymentsRoute: typeof AccountPaymentsRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
   AccountRewardsRoute: typeof AccountRewardsRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
@@ -525,6 +538,13 @@ declare module '@tanstack/react-router' {
       path: '/account/register'
       fullPath: '/account/register'
       preLoaderRoute: typeof AccountRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/payments': {
+      id: '/account/payments'
+      path: '/account/payments'
+      fullPath: '/account/payments'
+      preLoaderRoute: typeof AccountPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/payment-methods': {
@@ -656,6 +676,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountLoginRoute: AccountLoginRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
   AccountPaymentMethodsRoute: AccountPaymentMethodsRoute,
+  AccountPaymentsRoute: AccountPaymentsRoute,
   AccountRegisterRoute: AccountRegisterRoute,
   AccountRewardsRoute: AccountRewardsRoute,
   AccountSettingsRoute: AccountSettingsRoute,

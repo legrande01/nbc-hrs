@@ -25,7 +25,7 @@ export type AccountPath =
   | "/account"
   | "/account/reservations"
   | "/account/favourites"
-  | "/account/payment-methods"
+  | "/account/payments"
   | "/account/rewards"
   | "/account/notifications"
   | "/account/settings"
@@ -41,7 +41,7 @@ export const accountNavigation: AccountNavItem[] = [
   { label: "Dashboard", to: "/account", icon: LayoutDashboard },
   { label: "My Reservations", to: "/account/reservations", icon: CalendarCheck },
   { label: "Favourite", to: "/account/favourites", icon: Heart },
-  { label: "Payment Methods", to: "/account/payment-methods", icon: CreditCard },
+  { label: "Payments", to: "/account/payments", icon: CreditCard },
   { label: "Rewards & Loyalty", to: "/account/rewards", icon: Gift },
   { label: "Notifications", to: "/account/notifications", icon: Bell },
   { label: "Profile & Settings", to: "/account/settings", icon: Settings },
@@ -74,7 +74,7 @@ export const dashboardSummaries: DashboardSummary[] = [
     label: "Pending Payments",
     value: 0,
     hint: "Everything is settled",
-    to: "/account/payment-methods",
+    to: "/account/payments",
     icon: Receipt,
   },
   {
