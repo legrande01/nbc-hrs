@@ -125,17 +125,16 @@ function TrendChart({ data }: { data: ReservationTrendPoint[] }) {
           </span>
         ))}
       </div>
-      <div className="mt-4 flex h-48 items-end gap-3">
+      <div className="mt-4 flex items-end gap-3">
         {data.map((point) => (
-          <div key={point.label} className="flex h-full min-w-0 flex-1 flex-col items-center gap-2">
-            <div className="flex min-h-0 w-full flex-1 items-end justify-center gap-1">
-            
+          <div key={point.label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+            <div className="flex h-40 w-full items-end justify-center gap-1">
               {series.map((s) => (
                 <div
                   key={s.key}
                   title={`${s.label}: ${point[s.key]}`}
                   className={cn("w-full max-w-3 rounded-t-md", s.tone)}
-                  style={{ height: `${Math.max(4, (point[s.key] / max) * 100)}%` }}
+                  style={{ height: `${Math.max(6, Math.round((point[s.key] / max) * 160))}px` }}
                 />
               ))}
             </div>
