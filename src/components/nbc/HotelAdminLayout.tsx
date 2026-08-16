@@ -126,6 +126,12 @@ export function HotelAdminLayout({
 
   return (
     <div className="min-h-screen bg-muted/40">
+      {isHotelAdminDevBypassEnabled ? (
+        <div className="border-b border-nbc-gold/40 bg-nbc-gold/15 px-4 py-2 text-center text-xs font-medium text-foreground sm:text-sm">
+          Development preview — signed in as {demoHotelAdmin.name} ({demoHotelAdmin.propertyName}).
+          Verification, approval and role checks are bypassed in this environment only.
+        </div>
+      ) : null}
       <div className="mx-auto flex w-full max-w-[1600px]">
         <aside className="sticky top-0 hidden h-screen w-72 shrink-0 flex-col border-r border-border/70 bg-card lg:flex">
           <div className="border-b border-border/70 px-5 py-4">
