@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyPartnerApplication, updateMyPartnerApplication } from "@/lib/partner.functions";
 import type { PartnerApplication } from "@/lib/partner.server";
+import { demoHotelAdmin, isHotelAdminDevBypassEnabled } from "@/lib/nbc-dev-bypass";
 import { signOutEverywhere } from "@/lib/nbc-session";
 
 export const Route = createFileRoute("/partners/dashboard")({
@@ -266,6 +267,13 @@ function PartnerDashboardPage() {
                     Rooms, rates, bookings and reporting unlock once your property is approved.
                     Until then you can complete your documents and details.
                   </p>
+                  {isHotelAdminDevBypassEnabled ? (
+                    <Button variant="outline" className="mt-4" asChild>
+                      <Link to="/hotel/dashboard">
+                        Preview {demoHotelAdmin.name} dashboard (dev only)
+                      </Link>
+                    </Button>
+                  ) : null}
                 </div>
               ) : null}
             </aside>
