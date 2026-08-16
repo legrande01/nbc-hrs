@@ -3,6 +3,7 @@ import type { SearchSchemaInput } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { AuthCard, AuthShell } from "@/components/nbc/AuthShell";
+import { demoHotelAdmin, isHotelAdminDevBypassEnabled } from "@/lib/nbc-dev-bypass";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
