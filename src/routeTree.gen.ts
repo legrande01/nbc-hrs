@@ -14,11 +14,14 @@ import { Route as FindReservationRouteImport } from './routes/find-reservation'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
+import { Route as HotelIndexRouteImport } from './routes/hotel.index'
 import { Route as AccountIndexRouteImport } from './routes/account.index'
 import { Route as PartnersRegisterRouteImport } from './routes/partners.register'
 import { Route as PartnersLoginRouteImport } from './routes/partners.login'
 import { Route as PartnersDashboardRouteImport } from './routes/partners.dashboard'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
+import { Route as HotelDashboardRouteImport } from './routes/hotel.dashboard'
+import { Route as HotelSplatRouteImport } from './routes/hotel.$'
 import { Route as AccountVerifyRouteImport } from './routes/account.verify'
 import { Route as AccountSettingsRouteImport } from './routes/account.settings'
 import { Route as AccountRewardsRouteImport } from './routes/account.rewards'
@@ -66,6 +69,11 @@ const HotelsIndexRoute = HotelsIndexRouteImport.update({
   path: '/hotels/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HotelIndexRoute = HotelIndexRouteImport.update({
+  id: '/hotel/',
+  path: '/hotel/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountIndexRoute = AccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
@@ -89,6 +97,16 @@ const PartnersDashboardRoute = PartnersDashboardRouteImport.update({
 const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   id: '/hotels/$hotelId',
   path: '/hotels/$hotelId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HotelDashboardRoute = HotelDashboardRouteImport.update({
+  id: '/hotel/dashboard',
+  path: '/hotel/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HotelSplatRoute = HotelSplatRouteImport.update({
+  id: '/hotel/$',
+  path: '/hotel/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountVerifyRoute = AccountVerifyRouteImport.update({
@@ -222,11 +240,14 @@ export interface FileRoutesByFullPath {
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
+  '/hotel/$': typeof HotelSplatRoute
+  '/hotel/dashboard': typeof HotelDashboardRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
   '/partners/login': typeof PartnersLoginRoute
   '/partners/register': typeof PartnersRegisterRoute
   '/account/': typeof AccountIndexRoute
+  '/hotel/': typeof HotelIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -255,11 +276,14 @@ export interface FileRoutesByTo {
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
+  '/hotel/$': typeof HotelSplatRoute
+  '/hotel/dashboard': typeof HotelDashboardRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
   '/partners/login': typeof PartnersLoginRoute
   '/partners/register': typeof PartnersRegisterRoute
   '/account': typeof AccountIndexRoute
+  '/hotel': typeof HotelIndexRoute
   '/hotels': typeof HotelsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -289,11 +313,14 @@ export interface FileRoutesById {
   '/account/rewards': typeof AccountRewardsRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/verify': typeof AccountVerifyRoute
+  '/hotel/$': typeof HotelSplatRoute
+  '/hotel/dashboard': typeof HotelDashboardRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/partners/dashboard': typeof PartnersDashboardRoute
   '/partners/login': typeof PartnersLoginRoute
   '/partners/register': typeof PartnersRegisterRoute
   '/account/': typeof AccountIndexRoute
+  '/hotel/': typeof HotelIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -324,11 +351,14 @@ export interface FileRouteTypes {
     | '/account/rewards'
     | '/account/settings'
     | '/account/verify'
+    | '/hotel/$'
+    | '/hotel/dashboard'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
     | '/partners/login'
     | '/partners/register'
     | '/account/'
+    | '/hotel/'
     | '/hotels/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -357,11 +387,14 @@ export interface FileRouteTypes {
     | '/account/rewards'
     | '/account/settings'
     | '/account/verify'
+    | '/hotel/$'
+    | '/hotel/dashboard'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
     | '/partners/login'
     | '/partners/register'
     | '/account'
+    | '/hotel'
     | '/hotels'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -390,11 +423,14 @@ export interface FileRouteTypes {
     | '/account/rewards'
     | '/account/settings'
     | '/account/verify'
+    | '/hotel/$'
+    | '/hotel/dashboard'
     | '/hotels/$hotelId'
     | '/partners/dashboard'
     | '/partners/login'
     | '/partners/register'
     | '/account/'
+    | '/hotel/'
     | '/hotels/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -424,11 +460,14 @@ export interface RootRouteChildren {
   AccountRewardsRoute: typeof AccountRewardsRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AccountVerifyRoute: typeof AccountVerifyRoute
+  HotelSplatRoute: typeof HotelSplatRoute
+  HotelDashboardRoute: typeof HotelDashboardRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
   PartnersDashboardRoute: typeof PartnersDashboardRoute
   PartnersLoginRoute: typeof PartnersLoginRoute
   PartnersRegisterRoute: typeof PartnersRegisterRoute
   AccountIndexRoute: typeof AccountIndexRoute
+  HotelIndexRoute: typeof HotelIndexRoute
   HotelsIndexRoute: typeof HotelsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -477,6 +516,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotel/': {
+      id: '/hotel/'
+      path: '/hotel'
+      fullPath: '/hotel/'
+      preLoaderRoute: typeof HotelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/': {
       id: '/account/'
       path: '/account'
@@ -510,6 +556,20 @@ declare module '@tanstack/react-router' {
       path: '/hotels/$hotelId'
       fullPath: '/hotels/$hotelId'
       preLoaderRoute: typeof HotelsHotelIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hotel/dashboard': {
+      id: '/hotel/dashboard'
+      path: '/hotel/dashboard'
+      fullPath: '/hotel/dashboard'
+      preLoaderRoute: typeof HotelDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hotel/$': {
+      id: '/hotel/$'
+      path: '/hotel/$'
+      fullPath: '/hotel/$'
+      preLoaderRoute: typeof HotelSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/verify': {
@@ -681,11 +741,14 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRewardsRoute: AccountRewardsRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AccountVerifyRoute: AccountVerifyRoute,
+  HotelSplatRoute: HotelSplatRoute,
+  HotelDashboardRoute: HotelDashboardRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
   PartnersDashboardRoute: PartnersDashboardRoute,
   PartnersLoginRoute: PartnersLoginRoute,
   PartnersRegisterRoute: PartnersRegisterRoute,
   AccountIndexRoute: AccountIndexRoute,
+  HotelIndexRoute: HotelIndexRoute,
   HotelsIndexRoute: HotelsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
