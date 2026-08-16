@@ -266,6 +266,13 @@ function PartnerDashboardPage() {
                     Rooms, rates, bookings and reporting unlock once your property is approved.
                     Until then you can complete your documents and details.
                   </p>
+                  {isHotelAdminDevBypassEnabled ? (
+                    <Button variant="outline" className="mt-4" asChild>
+                      <Link to="/hotel/dashboard">
+                        Preview {demoHotelAdmin.name} dashboard (dev only)
+                      </Link>
+                    </Button>
+                  ) : null}
                 </div>
               ) : null}
             </aside>
