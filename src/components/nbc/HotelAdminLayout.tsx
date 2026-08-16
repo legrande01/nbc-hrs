@@ -4,6 +4,7 @@ import { ChevronDown, Menu, X } from "lucide-react";
 
 import { NbcLogo } from "@/components/nbc/NbcLogo";
 import { Button } from "@/components/ui/button";
+import { demoHotelAdmin, isHotelAdminDevBypassEnabled } from "@/lib/nbc-dev-bypass";
 import { navigationForRole, type HotelRole } from "@/lib/nbc-hotel-admin";
 import { cn } from "@/lib/utils";
 
