@@ -129,7 +129,7 @@ function TrendChart({ data }: { data: ReservationTrendPoint[] }) {
         {data.map((point) => (
           <div key={point.label} className="flex h-full min-w-0 flex-1 flex-col items-center gap-2">
             <div className="flex min-h-0 w-full flex-1 items-end justify-center gap-1">
-            <div className="flex h-full w-full items-end justify-center gap-1">
+            
               {series.map((s) => (
                 <div
                   key={s.key}
