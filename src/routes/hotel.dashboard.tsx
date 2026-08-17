@@ -111,7 +111,7 @@ function TrendChart({ data }: { data: ReservationTrendPoint[] }) {
   const max = Math.max(...data.flatMap((d) => [d.confirmed, d.checkedIn, d.checkedOut]));
   const series = [
     { key: "confirmed" as const, label: "Confirmed", tone: "bg-nbc-royal" },
-    { key: "checkedIn" as const, label: "Checked-in", tone: "bg-nbc-emerald" },
+    { key: "checkedIn" as const, label: "Checked-in", tone: "bg-nbc-royal/55" },
     { key: "checkedOut" as const, label: "Checked-out", tone: "bg-nbc-gold" },
   ];
 

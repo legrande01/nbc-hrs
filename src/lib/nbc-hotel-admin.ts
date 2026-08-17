@@ -262,14 +262,14 @@ export const roomStatus: RoomStatusEntry[] = [
     label: "Reserved",
     count: 12,
     to: "/hotel/rooms/availability",
-    tone: "bg-nbc-violet",
+    tone: "bg-nbc-royal/60",
   },
   {
     key: "available",
     label: "Available",
     count: 16,
     to: "/hotel/rooms/availability",
-    tone: "bg-nbc-emerald",
+    tone: "bg-nbc-royal-soft",
   },
   { key: "cleaning", label: "Cleaning", count: 6, to: "/hotel/rooms/status", tone: "bg-nbc-gold" },
   {
@@ -277,7 +277,7 @@ export const roomStatus: RoomStatusEntry[] = [
     label: "Maintenance",
     count: 3,
     to: "/hotel/rooms/maintenance",
-    tone: "bg-nbc-orange",
+    tone: "bg-nbc-scarlet/60",
   },
   {
     key: "outOfService",
