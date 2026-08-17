@@ -20,6 +20,8 @@ import {
   propertyInfoSchema,
   propertyTypeOptions,
 } from "@/lib/auth-schemas";
+import { supabase } from "@/integrations/supabase/client";
+import { isHotelAdminDevBypassEnabled } from "@/lib/nbc-dev-bypass";
 import { submitPartnerApplication } from "@/lib/partner.functions";
 
 export const Route = createFileRoute("/partners/register")({
@@ -161,8 +163,18 @@ function PartnerRegisterPage() {
           adminEmail: values.adminEmail,
           adminPhone: values.adminPhone,
           password: values.password,
+          devBypass: isHotelAdminDevBypassEnabled,
         },
       });
+      if (result.approved) {
+        await supabase.auth.signInWithPassword({
+          email: values.adminEmail.trim().toLowerCase(),
+          password: values.password,
+        });
+        window.location.assign("/hotel/dashboard");
+        return;
+      }
+
       setReference(result.reference);
       setStep(3);
     } catch (cause) {
