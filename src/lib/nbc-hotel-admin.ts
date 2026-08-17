@@ -120,14 +120,6 @@ export const hotelNavigation: HotelNavItem[] = [
     to: "/hotel/reservations",
     icon: CalendarCheck,
     module: "reservations",
-    children: [
-      { label: "All Reservations", to: "/hotel/reservations" },
-      { label: "Pending", to: "/hotel/reservations/pending" },
-      { label: "Confirmed", to: "/hotel/reservations/confirmed" },
-      { label: "Checked-in", to: "/hotel/reservations/checked-in" },
-      { label: "Checked-out", to: "/hotel/reservations/checked-out" },
-      { label: "Cancelled", to: "/hotel/reservations/cancelled" },
-    ],
   },
   {
     label: "Rooms & Inventory",
