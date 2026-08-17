@@ -35,6 +35,7 @@ import { Route as AccountFavouritesRouteImport } from './routes/account.favourit
 import { Route as AccountActivityRouteImport } from './routes/account.activity'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as HotelReservationsIndexRouteImport } from './routes/hotel.reservations.index'
 import { Route as AccountReservationsIndexRouteImport } from './routes/account.reservations.index'
 import { Route as HotelsHotelIdRoomsRouteImport } from './routes/hotels.$hotelId_.rooms'
 import { Route as HotelsHotelIdReservationRouteImport } from './routes/hotels.$hotelId_.reservation'
@@ -176,6 +177,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const HotelReservationsIndexRoute = HotelReservationsIndexRouteImport.update({
+  id: '/hotel/reservations/',
+  path: '/hotel/reservations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountReservationsIndexRoute =
   AccountReservationsIndexRouteImport.update({
     id: '/account/reservations/',
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId/rooms': typeof HotelsHotelIdRoomsRoute
   '/account/reservations/': typeof AccountReservationsIndexRoute
+  '/hotel/reservations/': typeof HotelReservationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -293,6 +300,7 @@ export interface FileRoutesByTo {
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId/rooms': typeof HotelsHotelIdRoomsRoute
   '/account/reservations': typeof AccountReservationsIndexRoute
+  '/hotel/reservations': typeof HotelReservationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/hotels/$hotelId_/reservation': typeof HotelsHotelIdReservationRoute
   '/hotels/$hotelId_/rooms': typeof HotelsHotelIdRoomsRoute
   '/account/reservations/': typeof AccountReservationsIndexRoute
+  '/hotel/reservations/': typeof HotelReservationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -368,6 +377,7 @@ export interface FileRouteTypes {
     | '/hotels/$hotelId/reservation'
     | '/hotels/$hotelId/rooms'
     | '/account/reservations/'
+    | '/hotel/reservations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -404,6 +414,7 @@ export interface FileRouteTypes {
     | '/hotels/$hotelId/reservation'
     | '/hotels/$hotelId/rooms'
     | '/account/reservations'
+    | '/hotel/reservations'
   id:
     | '__root__'
     | '/'
@@ -440,6 +451,7 @@ export interface FileRouteTypes {
     | '/hotels/$hotelId_/reservation'
     | '/hotels/$hotelId_/rooms'
     | '/account/reservations/'
+    | '/hotel/reservations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -477,6 +489,7 @@ export interface RootRouteChildren {
   HotelsHotelIdReservationRoute: typeof HotelsHotelIdReservationRoute
   HotelsHotelIdRoomsRoute: typeof HotelsHotelIdRoomsRoute
   AccountReservationsIndexRoute: typeof AccountReservationsIndexRoute
+  HotelReservationsIndexRoute: typeof HotelReservationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -663,6 +676,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotel/reservations/': {
+      id: '/hotel/reservations/'
+      path: '/hotel/reservations'
+      fullPath: '/hotel/reservations/'
+      preLoaderRoute: typeof HotelReservationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/reservations/': {
       id: '/account/reservations/'
       path: '/account/reservations'
@@ -758,6 +778,7 @@ const rootRouteChildren: RootRouteChildren = {
   HotelsHotelIdReservationRoute: HotelsHotelIdReservationRoute,
   HotelsHotelIdRoomsRoute: HotelsHotelIdRoomsRoute,
   AccountReservationsIndexRoute: AccountReservationsIndexRoute,
+  HotelReservationsIndexRoute: HotelReservationsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
