@@ -257,7 +257,24 @@ function PartnerDashboardPage() {
                 ) : null}
               </div>
 
+              {!restricted ? (
+                <div className="rounded-2xl border border-border/70 bg-card p-6 shadow-card">
+                  <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
+                    <ShieldCheck aria-hidden="true" className="size-5 text-nbc-royal" />
+                    Property verified
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    Your operations tools are unlocked. Manage rooms, rates, bookings and reporting
+                    from the hotel dashboard.
+                  </p>
+                  <Button variant="scarlet" className="mt-4" asChild>
+                    <Link to="/hotel/dashboard">Open hotel dashboard</Link>
+                  </Button>
+                </div>
+              ) : null}
+
               {restricted ? (
+
                 <div className="rounded-2xl border border-nbc-gold/40 bg-nbc-gold/10 p-6">
                   <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
                     <ShieldCheck aria-hidden="true" className="size-5 text-nbc-royal" />
