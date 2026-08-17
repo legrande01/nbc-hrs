@@ -79,8 +79,8 @@ function toApplication(row: Record<string, unknown>): PartnerApplication {
 }
 
 export async function submitApplication(
-  input: PartnerApplicationInput,
-): Promise<{ reference: string; email: string }> {
+  input: PartnerApplicationInput & { devBypass?: boolean },
+): Promise<{ reference: string; email: string; approved: boolean }> {
   const [firstName, ...rest] = input.adminFullName.trim().split(/\s+/);
   const { userId } = await createAccount({
     email: input.adminEmail,
@@ -93,6 +93,10 @@ export async function submitApplication(
 
   const db = await admin();
   const reference = generateReference("NBC-HP");
+
+  // Development/preview only: skip manual verification so hotel modules can be
+  // built against a working partner account. Never true in production.
+  const approved = input.devBypass === true && process.env["NODE_ENV"] !== "production";
 
   const { error } = await db.from("hotel_applications").insert({
     reference,
@@ -112,11 +116,24 @@ export async function submitApplication(
     admin_full_name: input.adminFullName,
     admin_email: input.adminEmail.trim().toLowerCase(),
     admin_phone: normalisePhone(input.adminPhone),
+    ...(approved ? { status: "approved" } : {}),
   });
 
   if (error) throw new Error(error.message);
-  return { reference, email: input.adminEmail.trim().toLowerCase() };
+
+  if (approved) {
+    await db
+      .from("profiles")
+      .update({ email_verified: true, phone_verified: true })
+      .eq("id", userId);
+    await db
+      .from("user_roles")
+      .upsert({ user_id: userId, role: "hotel_admin" }, { onConflict: "user_id,role" });
+  }
+
+  return { reference, email: input.adminEmail.trim().toLowerCase(), approved };
 }
+
 
 export async function getApplicationForUser(userId: string): Promise<PartnerApplication | null> {
   const db = await admin();

@@ -9,8 +9,9 @@ import {
 } from "@/lib/partner.server";
 
 export const submitPartnerApplication = createServerFn({ method: "POST" })
-  .inputValidator((data: PartnerApplicationInput) => data)
+  .inputValidator((data: PartnerApplicationInput & { devBypass?: boolean }) => data)
   .handler(async ({ data }) => submitApplication(data));
+
 
 export const getMyPartnerApplication = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
