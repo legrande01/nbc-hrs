@@ -6,6 +6,7 @@ import { NbcLogo } from "@/components/nbc/NbcLogo";
 import { Button } from "@/components/ui/button";
 import { demoHotelAdmin, isHotelAdminDevBypassEnabled } from "@/lib/nbc-dev-bypass";
 import { navigationForRole, type HotelRole } from "@/lib/nbc-hotel-admin";
+import { defaultReservationsSearch } from "@/lib/nbc-hotel-reservations";
 import { cn } from "@/lib/utils";
 
 /**
@@ -21,7 +22,7 @@ export function AdminLink({
     return <Link to="/hotel/dashboard" {...props} />;
   }
   if (to === "/hotel/reservations") {
-    return <Link to="/hotel/reservations" {...(props as object)} />;
+    return <Link to="/hotel/reservations" search={defaultReservationsSearch} {...(props as object)} />;
   }
   const splat = to.replace(/^\/hotel\/?/, "");
   return <Link to="/hotel/$" params={{ _splat: splat } as never} {...props} />;
