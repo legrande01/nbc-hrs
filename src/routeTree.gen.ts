@@ -41,6 +41,7 @@ import { Route as HotelsHotelIdRoomsRouteImport } from './routes/hotels.$hotelId
 import { Route as HotelsHotelIdReservationRouteImport } from './routes/hotels.$hotelId_.reservation'
 import { Route as HotelsHotelIdPaymentRouteImport } from './routes/hotels.$hotelId_.payment'
 import { Route as HotelsHotelIdConfirmationRouteImport } from './routes/hotels.$hotelId_.confirmation'
+import { Route as HotelReservationsReferenceRouteImport } from './routes/hotel.reservations.$reference'
 import { Route as AccountReservationsReferenceRouteImport } from './routes/account.reservations.$reference'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -210,6 +211,12 @@ const HotelsHotelIdConfirmationRoute =
     path: '/hotels/$hotelId/confirmation',
     getParentRoute: () => rootRouteImport,
   } as any)
+const HotelReservationsReferenceRoute =
+  HotelReservationsReferenceRouteImport.update({
+    id: '/hotel/reservations/$reference',
+    path: '/hotel/reservations/$reference',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AccountReservationsReferenceRoute =
   AccountReservationsReferenceRouteImport.update({
     id: '/account/reservations/$reference',
@@ -258,6 +265,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/account/reservations/$reference': typeof AccountReservationsReferenceRoute
+  '/hotel/reservations/$reference': typeof HotelReservationsReferenceRoute
   '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
@@ -295,6 +303,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/account/reservations/$reference': typeof AccountReservationsReferenceRoute
+  '/hotel/reservations/$reference': typeof HotelReservationsReferenceRoute
   '/hotels/$hotelId/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId/reservation': typeof HotelsHotelIdReservationRoute
@@ -333,6 +342,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/account/reservations/$reference': typeof AccountReservationsReferenceRoute
+  '/hotel/reservations/$reference': typeof HotelReservationsReferenceRoute
   '/hotels/$hotelId_/confirmation': typeof HotelsHotelIdConfirmationRoute
   '/hotels/$hotelId_/payment': typeof HotelsHotelIdPaymentRoute
   '/hotels/$hotelId_/reservation': typeof HotelsHotelIdReservationRoute
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/account/reservations/$reference'
+    | '/hotel/reservations/$reference'
     | '/hotels/$hotelId/confirmation'
     | '/hotels/$hotelId/payment'
     | '/hotels/$hotelId/reservation'
@@ -409,6 +420,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/account/reservations/$reference'
+    | '/hotel/reservations/$reference'
     | '/hotels/$hotelId/confirmation'
     | '/hotels/$hotelId/payment'
     | '/hotels/$hotelId/reservation'
@@ -446,6 +458,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/account/reservations/$reference'
+    | '/hotel/reservations/$reference'
     | '/hotels/$hotelId_/confirmation'
     | '/hotels/$hotelId_/payment'
     | '/hotels/$hotelId_/reservation'
@@ -484,6 +497,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   AccountReservationsReferenceRoute: typeof AccountReservationsReferenceRoute
+  HotelReservationsReferenceRoute: typeof HotelReservationsReferenceRoute
   HotelsHotelIdConfirmationRoute: typeof HotelsHotelIdConfirmationRoute
   HotelsHotelIdPaymentRoute: typeof HotelsHotelIdPaymentRoute
   HotelsHotelIdReservationRoute: typeof HotelsHotelIdReservationRoute
@@ -718,6 +732,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsHotelIdConfirmationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotel/reservations/$reference': {
+      id: '/hotel/reservations/$reference'
+      path: '/hotel/reservations/$reference'
+      fullPath: '/hotel/reservations/$reference'
+      preLoaderRoute: typeof HotelReservationsReferenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/reservations/$reference': {
       id: '/account/reservations/$reference'
       path: '/account/reservations/$reference'
@@ -773,6 +794,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   AccountReservationsReferenceRoute: AccountReservationsReferenceRoute,
+  HotelReservationsReferenceRoute: HotelReservationsReferenceRoute,
   HotelsHotelIdConfirmationRoute: HotelsHotelIdConfirmationRoute,
   HotelsHotelIdPaymentRoute: HotelsHotelIdPaymentRoute,
   HotelsHotelIdReservationRoute: HotelsHotelIdReservationRoute,
