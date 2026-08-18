@@ -21,7 +21,7 @@ export function AdminLink({
     return <Link to="/hotel/dashboard" {...props} />;
   }
   if (to === "/hotel/reservations") {
-    return <Link to="/hotel/reservations" {...(props as object)} />;
+    return <Link to="/hotel/reservations/" {...(props as object)} />;
   }
   const splat = to.replace(/^\/hotel\/?/, "");
   return <Link to="/hotel/$" params={{ _splat: splat } as never} {...props} />;
