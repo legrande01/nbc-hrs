@@ -122,17 +122,6 @@ function ReservationWorkspace() {
     <HotelAdminLayout propertyName={hotelProperty.name}>
       <Link
         to="/hotel/reservations"
-        search={{
-          q: "",
-          status: "All",
-          payment: "All",
-          room: "All",
-          source: "All",
-          from: "",
-          to: "",
-          sort: "newest",
-          page: 1,
-        }}
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
