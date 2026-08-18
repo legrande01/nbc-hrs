@@ -86,7 +86,7 @@ function ReservationWorkspace() {
             {reference} does not exist for this property.
           </p>
           <Button variant="outline" className="mt-4" asChild>
-            <Link to="/hotel/reservations" search={{}}>Back to reservations</Link>
+            <Link to="/hotel/reservations" search={defaultReservationsSearch}>Back to reservations</Link>
           </Button>
         </AdminCard>
       </HotelAdminLayout>
@@ -121,7 +121,7 @@ function ReservationWorkspace() {
   return (
     <HotelAdminLayout propertyName={hotelProperty.name}>
       <Link
-        to="/hotel/reservations" search={{}}
+        to="/hotel/reservations" search={defaultReservationsSearch}
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />

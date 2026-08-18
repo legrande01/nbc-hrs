@@ -1152,3 +1152,16 @@ export function journeyFor(reservation: HotelReservation): JourneyStage[] {
 }
 
 export const todayIso = today;
+
+/** Default search state for the reservations list — used by links into the module. */
+export const defaultReservationsSearch = {
+  q: "",
+  status: "All",
+  payment: "All",
+  room: "All",
+  source: "All",
+  from: "",
+  to: "",
+  sort: "newest",
+  page: 1,
+};
