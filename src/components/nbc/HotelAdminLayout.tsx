@@ -6,6 +6,7 @@ import { NbcLogo } from "@/components/nbc/NbcLogo";
 import { Button } from "@/components/ui/button";
 import { demoHotelAdmin, isHotelAdminDevBypassEnabled } from "@/lib/nbc-dev-bypass";
 import { navigationForRole, type HotelRole } from "@/lib/nbc-hotel-admin";
+import { defaultReservationsSearch } from "@/lib/nbc-hotel-reservations";
 import { cn } from "@/lib/utils";
 
 /**
