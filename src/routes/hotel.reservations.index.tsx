@@ -151,7 +151,7 @@ function PaymentBadge({ status }: { status: HotelPaymentStatus }) {
 
 function ReservationsPage() {
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/hotel/reservations" });
+  const navigate = useNavigate({ from: "/hotel/reservations/" });
 
   const update = (patch: Partial<ReservationsSearch>) =>
     navigate({
