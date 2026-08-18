@@ -61,7 +61,9 @@ function str(value: unknown, fallback = ""): string {
 
 export const Route = createFileRoute("/hotel/reservations/")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>): ReservationsSearch => ({
+  validateSearch: (
+    search: Partial<Record<keyof ReservationsSearch, unknown>>,
+  ): ReservationsSearch => ({
     q: str(search.q),
     status: str(search.status, "All"),
     payment: str(search.payment, "All"),
