@@ -288,7 +288,7 @@ function ReservationsPage() {
       </AdminCard>
 
       <AdminCard className="mt-6 p-0">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 px-5 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 px-4 py-4">
           <h2 className="text-base font-semibold tracking-tight text-foreground">
             Reservation list
           </h2>
@@ -315,18 +315,18 @@ function ReservationsPage() {
           <>
             {/* Desktop table */}
             <div className="hidden overflow-x-auto lg:block">
-              <table className="w-full min-w-[62rem] text-sm">
+              <table className="w-full min-w-[68rem] text-sm">
                 <thead>
                   <tr className="border-b border-border/70 text-left text-xs tracking-wide text-muted-foreground uppercase">
-                    <th className="px-5 py-3 font-medium">Reference</th>
-                    <th className="px-5 py-3 font-medium">Guest</th>
-                    <th className="px-5 py-3 font-medium">Room</th>
-                    <th className="px-5 py-3 font-medium">Stay</th>
-                    <th className="px-5 py-3 font-medium">Nights</th>
-                    <th className="px-5 py-3 text-right font-medium">Amount</th>
-                    <th className="px-5 py-3 font-medium">Payment</th>
-                    <th className="px-5 py-3 font-medium">Status</th>
-                    <th className="px-5 py-3 text-right font-medium">Action</th>
+                    <th className="px-4 py-3 font-medium">Reference</th>
+                    <th className="px-4 py-3 font-medium">Guest</th>
+                    <th className="px-4 py-3 font-medium">Room</th>
+                    <th className="px-4 py-3 font-medium">Stay</th>
+                    <th className="px-4 py-3 font-medium">Nights</th>
+                    <th className="px-4 py-3 text-right font-medium">Amount</th>
+                    <th className="px-4 py-3 font-medium">Payment</th>
+                    <th className="px-4 py-3 font-medium">Status</th>
+                    <th className="px-4 py-3 text-right font-medium">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -337,7 +337,7 @@ function ReservationsPage() {
                         key={reservation.reference}
                         className="border-b border-border/50 last:border-0 hover:bg-secondary/40"
                       >
-                        <td className="px-5 py-4 font-medium text-nbc-royal">
+                        <td className="px-4 py-4 font-medium text-nbc-royal">
                           <Link
                             to="/hotel/reservations/$reference"
                             params={{ reference: reservation.reference }}
@@ -346,11 +346,11 @@ function ReservationsPage() {
                             {reservation.reference}
                           </Link>
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-4">
                           <p className="font-medium text-foreground">{reservation.guest.name}</p>
                           <p className="text-xs text-muted-foreground">{reservation.guest.phone}</p>
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-4">
                           <p className="text-foreground">
                             {reservation.assignedRoom
                               ? `Room ${reservation.assignedRoom}`
@@ -360,20 +360,20 @@ function ReservationsPage() {
                             {reservation.roomCategory}
                           </p>
                         </td>
-                        <td className="px-5 py-4 whitespace-nowrap text-muted-foreground">
+                        <td className="px-4 py-4 whitespace-nowrap text-muted-foreground">
                           {formatDay(reservation.checkIn)} → {formatDay(reservation.checkOut)}
                         </td>
-                        <td className="px-5 py-4 text-muted-foreground">{reservation.nights}</td>
-                        <td className="px-5 py-4 text-right whitespace-nowrap text-foreground">
+                        <td className="px-4 py-4 text-muted-foreground">{reservation.nights}</td>
+                        <td className="px-4 py-4 text-right whitespace-nowrap text-foreground">
                           {formatTzs(reservation.total)}
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-4">
                           <PaymentBadge status={reservation.paymentStatus} />
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-4">
                           <StatusBadge status={reservation.status} />
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-4">
                           <div className="flex items-center justify-end gap-2">
                             {rowAction ? (
                               <Button size="sm" asChild>
@@ -477,7 +477,7 @@ function ReservationsPage() {
               })}
             </ul>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 px-5 py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 px-4 py-4">
               <p className="text-sm text-muted-foreground">
                 Page {page} of {totalPages}
               </p>
